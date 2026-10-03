@@ -108,6 +108,19 @@ hijacks every install and build. The `ignoreWorkspace: true` key is what pnpm
 pins. Do not delete either, and do not turn this repository into a real
 workspace without thinking about it.
 
+`packages: []` in that file is **not** redundant. pnpm 9 parses the file as a
+workspace manifest whether or not `ignoreWorkspace` is set, and refuses every
+command — including the `pnpm store path` that `actions/setup-node` calls for
+its cache — when `packages` is missing. Dropping it failed the first deploy
+with "packages field missing or empty" before any project code ran.
+
+A local pnpm ≥ 10 does **not** catch this. Verify a change to that file with
+the version CI actually pins:
+
+```bash
+npx -y pnpm@9 store path
+```
+
 ## Keep the tsconfig aligned with the app
 
 `tsconfig.json` mirrors the app's frontend workspace. Adding

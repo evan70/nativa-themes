@@ -7,9 +7,24 @@
 # packages this project does not depend on, or "Headless installation requires
 # a pnpm-lock.yaml".
 #
-# `ignoreWorkspace: true` is the knob pnpm >= 10 honours (it ignores
-# .npmrc's `ignore-workspace`); .npmrc carries the same setting for pnpm 9,
-# which CI pins.
+# `ignoreWorkspace: true` is the knob pnpm >= 10 honours (it ignores .npmrc's
+# `ignore-workspace`); .npmrc carries the same setting for pnpm 9, which CI
+# pins.
 #
 # This is a single-package repo — there is no workspace to resolve.
 ignoreWorkspace: true
+
+# `packages: []` looks redundant next to the comment above. It is not, and
+# removing it breaks CI.
+#
+# pnpm 9 parses this file as a workspace manifest regardless of
+# `ignoreWorkspace`, and refuses to run any command at all when the field is
+# absent or empty — including the `pnpm store path` that
+# `actions/setup-node` calls for its cache setup. That is what failed the first
+# deployment: "ERROR packages field missing or empty", before a single line of
+# this project ran.
+#
+# An empty list is the honest value: there are no member packages. pnpm >= 10
+# and pnpm 9 both accept it, and neither treats the root package as a
+# workspace member.
+packages: []
