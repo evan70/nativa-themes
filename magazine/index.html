@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nativa Starter — Magazine theme</title>
+    <meta
+      name="description"
+      content="Magazine theme — serif headings, amber accents on the starter's neutral base."
+    />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/magazine/magazine.ts"></script>
+  </head>
+  <body class="magazine-shell">
+    <header class="mag-header">
+      <div class="mag-container">
+        <div class="mag-header__inner">
+          <div class="mag-header__left">
+            <a class="mag-header__logo" href="./">
+              <span>Nativa Starter</span>
+            </a>
+          </div>
+          <nav class="mag-header__nav" aria-label="Main">
+            <a class="mag-header__link active" href="./">Domov</a>
+            <a class="mag-header__link" href="blog/">Blog</a>
+            <a class="mag-header__link" href="tags/">Značky</a>
+            <a class="mag-header__link" href="author/">Autor</a>
+          </nav>
+          <div class="mag-header__right navbar__actions">
+            <form class="mag-search" method="get" action="blog/" role="search">
+              <label class="mag-search__label" for="mag-search-input">Search articles</label>
+              <input
+                class="mag-search__input"
+                id="mag-search-input"
+                name="q"
+                type="search"
+                autocomplete="off"
+                placeholder="Search articles…"
+              />
+              <button class="mag-search-btn" type="submit" aria-label="Search articles" title="Search articles">
+                <span class="mag-search-btn__text">Search articles</span>
+              </button>
+            </form>
+            <button type="button" class="mag-theme-btn" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+              <span class="st-theme-toggle__icon st-theme-toggle__icon--sun" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                </svg>
+              </span>
+              <span class="st-theme-toggle__icon st-theme-toggle__icon--moon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              </span>
+            </button>
+            <a class="mag-login-btn" href="#" aria-label="Prihlásiť sa" title="Prihlásiť sa">
+              <span class="mag-login-btn__text">Prihlásiť sa</span>
+            </a>
+            <button
+              type="button"
+              class="mag-mobile-btn"
+              id="mag-mobile-btn"
+              aria-label="Toggle menu"
+              aria-expanded="false"
+              aria-controls="mag-mobile-menu"
+            >
+              <span aria-hidden="true">&#9776;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="mag-mobile-menu" id="mag-mobile-menu">
+        <div class="mag-container">
+          <nav class="mag-mobile-nav" aria-label="Main">
+            <a class="mag-mobile-link active" href="./">Domov</a>
+            <a class="mag-mobile-link" href="blog/">Blog</a>
+            <a class="mag-mobile-link" href="tags/">Značky</a>
+            <a class="mag-mobile-link" href="author/">Autor</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="mag-container">
+      <section class="mag-home-hero">
+        <div class="mag-container">
+          <span class="mag-home-hero__eyebrow">Nativa Minimal</span>
+          <h1 class="mag-home-hero__title">Minimálny PHP 8.5 starter kit</h1>
+          <p class="mag-home-hero__description">
+            Malý a čitateľný základ: modulárny monolit, per-module SQLite,
+            routovanie na atribútoch a prísna bezpečnosť — postavené od nuly.
+          </p>
+          <div class="mag-home-hero__actions">
+            <a class="mag-btn mag-btn--primary mag-btn--lg" href="blog/">Čítať blog</a>
+            <a class="mag-btn mag-btn--outline mag-btn--lg" href="../">Galéria tém</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="mag-home-features">
+        <div class="mag-section-header">
+          <h2>Menej vrstiev</h2>
+        </div>
+        <div class="mag-home-features__grid">
+          <article class="mag-home-feature-card">
+            <h3 class="mag-home-feature-card__title">Zero dependencies</h3>
+            <p class="mag-home-feature-card__desc">
+              Žiadny Composer runtime, žiadny framework. Hand-rolled PSR-4
+              autoloader nabootuje aplikáciu aj bez vendor/.
+            </p>
+            <a class="st-card__link" href="article/">Čítať článok</a>
+          </article>
+          <article class="mag-home-feature-card">
+            <h3 class="mag-home-feature-card__title">Čitateľný povrch</h3>
+            <p class="mag-home-feature-card__desc">
+              C-pattern: žiadny magic, žiadne service locatory, žiadne generované
+              mapy. Každý riadok vieš prečítať a overiť.
+            </p>
+            <a class="st-card__link" href="article/">Čítať článok</a>
+          </article>
+          <article class="mag-home-feature-card">
+            <h3 class="mag-home-feature-card__title">Per-module SQLite</h3>
+            <p class="mag-home-feature-card__desc">
+              Jeden databázový súbor na modul — users.db, config.db, locales.db.
+              Žiadna infraštruktúra, žiadny ORM.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="mag-home-features">
+        <div class="mag-section-header">
+          <h2>Super rýchle PHP</h2>
+        </div>
+        <div class="mag-home-features__grid">
+          <article class="mag-home-feature-card">
+            <h3 class="mag-home-feature-card__title">PHP 8.5 + OPcache/JIT</h3>
+            <p class="mag-home-feature-card__desc">
+              Prekompilácia na úrovni jazyka: OPcache drží opcody v pamäti, JIT
+              prekladá horúce cesty do strojového kódu.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </article>
+          <article class="mag-home-feature-card">
+            <h3 class="mag-home-feature-card__title">Dáta cez C</h3>
+            <p class="mag-home-feature-card__desc">
+              SQLite je celé v C — najrýchlejšia cesta k dátam bez ORM vrstvy.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </article>
+          <article class="mag-home-feature-card">
+            <h3 class="mag-home-feature-card__title">Bez cache vrstvy</h3>
+            <p class="mag-home-feature-card__desc">
+              Vyhodili sme cache a dostali 100/100 PageSpeed. Rýchlosť nepochádza
+              z cache, ale z odstránenia vrstiev.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <footer class="mag-footer">
+      <div class="mag-container">
+        <div class="mag-footer__grid">
+          <div class="mag-footer__col">
+            <h3 class="mag-footer__heading">Nativa Starter</h3>
+            <p class="mag-footer__text">
+              Minimal PHP 8.5 starter kit — zero dependencies, per-module SQLite,
+              attribute routing.
+            </p>
+          </div>
+          <div class="mag-footer__col">
+            <h3 class="mag-footer__heading">Rýchle odkazy</h3>
+            <nav class="mag-footer__nav" aria-label="Footer">
+              <a class="mag-footer__link" href="./">Domov</a>
+              <a class="mag-footer__link" href="blog/">Blog</a>
+              <a class="mag-footer__link" href="tags/">Značky</a>
+              <a class="mag-footer__link" href="author/">Autor</a>
+            </nav>
+          </div>
+          <div class="mag-footer__col">
+            <h3 class="mag-footer__heading">Sledovať</h3>
+            <nav class="mag-footer__nav" aria-label="Feeds">
+              <a class="mag-footer__link" href="../feed.atom" type="application/atom+xml">Atom</a>
+              <a class="mag-footer__link" href="../feed.xml" type="application/rss+xml">RSS</a>
+            </nav>
+          </div>
+        </div>
+        <div class="mag-footer__bottom">
+          <p class="mag-footer__copyright">
+            © 2026 Nativa Starter — PHP 8.5, zero dependencies
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <button type="button" class="mag-backtotop" id="mag-backtotop" aria-label="Back to top" title="Back to top">
+      <span aria-hidden="true">↑</span>
+    </button>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nativa Dev — Erik theme</title>
+    <meta name="description" content="Erik theme — author profile header and the author's article grid." />
+    <meta name="theme-color" content="#0b1220" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/erik/erik.ts"></script>
+  </head>
+  <body class="erik-shell">
+    <header class="er-header">
+      <div class="er-header__inner">
+        <input type="checkbox" id="er-nav-toggle" class="er-nav__toggle-input" aria-label="Toggle menu" />
+        <a class="er-header__brand" href="../">Nativa</a>
+        <nav class="er-nav" aria-label="Main">
+          <a class="er-nav__link" href="../">About</a>
+          <a class="er-nav__link" href="../blog/">Articles</a>
+          <a class="er-nav__link" href="../tags/">Tags</a>
+          <a class="er-nav__link er-nav__link--active" href="./">Author</a>
+          <a class="er-nav__link" href="../../">Gallery</a>
+        </nav>
+        <div class="er-header__utilities">
+          <nav class="er-locale m-pubswitch__track" aria-label="Language">
+            <a class="er-locale__link er-locale__link--active" href="./" hreflang="en" lang="en">EN</a>
+            <a class="er-locale__link" href="../../" hreflang="sk" lang="sk">SK</a>
+          </nav>
+          <button type="button" class="er-theme-toggle" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--light" aria-hidden="true">Light</span>
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--dark" aria-hidden="true">Dark</span>
+          </button>
+          <a class="er-login-btn" href="#" aria-label="Sign in" title="Sign in">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="er-login-btn__text">Sign in</span>
+          </a>
+        </div>
+        <label for="er-nav-toggle" class="er-nav__toggle"><span aria-hidden="true">&#9776;</span></label>
+      </div>
+    </header>
+
+    <main class="er-main">
+      <section class="er-blog-index er-author">
+        <h1 class="er-blog-index__title">Nativa Dev</h1>
+        <p class="er-blog-index__meta">Member since 2026-09-10 · 94 articles</p>
+      </section>
+
+      <div class="er-layout-with-sidebar">
+        <div>
+          <div class="er-grid">
+            <article class="er-card er-card--medium">
+              <div class="er-card__media">
+                <a class="er-card__media-link" href="../article/">
+                  <img class="er-card__image" src="/covers/sudo-posledne-pre-deti.svg" alt="" width="720" height="360" loading="lazy" decoding="async" />
+                </a>
+              </div>
+              <div class="er-card__body">
+                <a class="er-badge" href="#">Security</a>
+                <h3 class="er-card__title">
+                  <a class="er-card__title-link" href="../article/">Arch packages for kids ... part 6: sudo LAST</a>
+                </h3>
+                <p class="er-card__text">
+                  The sixth lesson: when sudo belongs, when it does not, and why
+                  it is also the least sudo you can use.
+                </p>
+                <div class="er-card__meta">
+                  <time datetime="2026-10-03">3 Oct 2026</time>
+                  <span class="er-card__meta-dot"></span>
+                  <span><a href="../tags/">arch</a>, <a href="../tags/">linux</a></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="er-card er-card--medium">
+              <div class="er-card__media">
+                <a class="er-card__media-link" href="../article/">
+                  <img class="er-card__image" src="/covers/kontrakt-bez-zakaznikov.svg" alt="" width="720" height="360" loading="lazy" decoding="async" />
+                </a>
+              </div>
+              <div class="er-card__body">
+                <a class="er-badge" href="#">Architecture</a>
+                <h3 class="er-card__title">
+                  <a class="er-card__title-link" href="../article/">Themes for kids ... part 3: a contract with no callers</a>
+                </h3>
+                <p class="er-card__text">
+                  ThemeRenderer had two implementations and zero call sites, and
+                  no test noticed.
+                </p>
+                <div class="er-card__meta">
+                  <time datetime="2026-10-03">3 Oct 2026</time>
+                  <span class="er-card__meta-dot"></span>
+                  <span><a href="../tags/">architecture</a>, <a href="../tags/">themes</a></span>
+                </div>
+              </div>
+            </article>
+
+            <article class="er-card er-card--medium">
+              <div class="er-card__media">
+                <a class="er-card__media-link" href="../article/">
+                  <img class="er-card__image" src="/covers/temy-ako-moduly-pre-deti.svg" alt="" width="720" height="360" loading="lazy" decoding="async" />
+                </a>
+              </div>
+              <div class="er-card__body">
+                <a class="er-badge" href="#">Architecture</a>
+                <h3 class="er-card__title">
+                  <a class="er-card__title-link" href="../article/">Themes for kids ... part 1: a theme as a module</a>
+                </h3>
+                <p class="er-card__text">
+                  A theme was not a thing but a scattered mixture. The first part
+                  draws the line.
+                </p>
+                <div class="er-card__meta">
+                  <time datetime="2026-10-02">2 Oct 2026</time>
+                  <span class="er-card__meta-dot"></span>
+                  <span><a href="../tags/">php</a>, <a href="../tags/">themes</a></span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="er-sidebar">
+          <h2 class="er-sidebar__title">Most read</h2>
+          <a class="er-sidebar-tag" href="../article/">Fewer layers (3 090)</a>
+          <a class="er-sidebar-tag" href="../article/">Themes as modules (2 411)</a>
+          <a class="er-sidebar-tag" href="../article/">OPcache and JIT (1 806)</a>
+          <a class="er-sidebar-tag" href="../article/">C extensions (1 244)</a>
+        </div>
+      </div>
+    </main>
+
+    <footer class="er-footer">
+      <div class="er-footer__inner">
+        <span>&copy; 2026 Nativa</span>
+        <nav class="er-footer__nav" aria-label="Footer">
+          <a class="er-footer__link" href="../blog/">All articles</a>
+          <a class="er-footer__link" href="../../">Themes</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

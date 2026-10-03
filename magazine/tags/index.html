@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Značky — Magazine theme</title>
+    <meta name="description" content="Magazine theme — tag cloud, sized by article count." />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/magazine/magazine.ts"></script>
+  </head>
+  <body class="magazine-shell">
+    <header class="mag-header">
+      <div class="mag-container">
+        <div class="mag-header__inner">
+          <div class="mag-header__left">
+            <a class="mag-header__logo" href="../"><span>Nativa Starter</span></a>
+          </div>
+          <nav class="mag-header__nav" aria-label="Main">
+            <a class="mag-header__link" href="../">Domov</a>
+            <a class="mag-header__link" href="../blog/">Blog</a>
+            <a class="mag-header__link active" href="./">Značky</a>
+            <a class="mag-header__link" href="../author/">Autor</a>
+          </nav>
+          <div class="mag-header__right navbar__actions">
+            <form class="mag-search" method="get" action="../blog/" role="search">
+              <label class="mag-search__label" for="mag-search-input">Search articles</label>
+              <input class="mag-search__input" id="mag-search-input" name="q" type="search" autocomplete="off" placeholder="Search articles…" />
+              <button class="mag-search-btn" type="submit" aria-label="Search articles" title="Search articles">
+                <span class="mag-search-btn__text">Search articles</span>
+              </button>
+            </form>
+            <button type="button" class="mag-theme-btn" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+              <span class="st-theme-toggle__icon st-theme-toggle__icon--sun" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                </svg>
+              </span>
+              <span class="st-theme-toggle__icon st-theme-toggle__icon--moon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+              </span>
+            </button>
+            <a class="mag-login-btn" href="#" aria-label="Prihlásiť sa" title="Prihlásiť sa">
+              <span class="mag-login-btn__text">Prihlásiť sa</span>
+            </a>
+            <button type="button" class="mag-mobile-btn" id="mag-mobile-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mag-mobile-menu">
+              <span aria-hidden="true">&#9776;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="mag-mobile-menu" id="mag-mobile-menu">
+        <div class="mag-container">
+          <nav class="mag-mobile-nav" aria-label="Main">
+            <a class="mag-mobile-link" href="../">Domov</a>
+            <a class="mag-mobile-link" href="../blog/">Blog</a>
+            <a class="mag-mobile-link active" href="./">Značky</a>
+            <a class="mag-mobile-link" href="../author/">Autor</a>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="mag-container">
+      <div class="mag-section-header">
+        <h1>Značky</h1>
+      </div>
+
+      <div class="mag-tags-cloud">
+        <a class="mag-tag-cloud__item mag-tag-cloud__xl" href="#">php<span class="mag-tag-cloud__count">57</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__lg" href="#">architecture<span class="mag-tag-cloud__count">35</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__md" href="#">security<span class="mag-tag-cloud__count">19</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__md" href="#">rust<span class="mag-tag-cloud__count">20</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__md" href="#">lekalo<span class="mag-tag-cloud__count">19</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__md" href="#">clean-code<span class="mag-tag-cloud__count">16</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">openspec<span class="mag-tag-cloud__count">9</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">beginners<span class="mag-tag-cloud__count">9</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">arch<span class="mag-tag-cloud__count">8</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">linux<span class="mag-tag-cloud__count">8</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">cachyos<span class="mag-tag-cloud__count">8</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">themes<span class="mag-tag-cloud__count">7</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">refactoring<span class="mag-tag-cloud__count">6</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">agents<span class="mag-tag-cloud__count">6</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">testing<span class="mag-tag-cloud__count">6</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">semanticky-model<span class="mag-tag-cloud__count">7</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">vite<span class="mag-tag-cloud__count">4</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">ai<span class="mag-tag-cloud__count">4</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">ci<span class="mag-tag-cloud__count">3</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">frontend<span class="mag-tag-cloud__count">3</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">determinizmus<span class="mag-tag-cloud__count">2</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">comments<span class="mag-tag-cloud__count">2</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">wcag<span class="mag-tag-cloud__count">2</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">trace-manifest<span class="mag-tag-cloud__count">2</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">contracts<span class="mag-tag-cloud__count">1</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">moduly<span class="mag-tag-cloud__count">1</span></a>
+        <a class="mag-tag-cloud__item mag-tag-cloud__sm" href="#">bilingual<span class="mag-tag-cloud__count">2</span></a>
+      </div>
+    </div>
+
+    <footer class="mag-footer">
+      <div class="mag-container">
+        <div class="mag-footer__grid">
+          <div class="mag-footer__col">
+            <h3 class="mag-footer__heading">Nativa Starter</h3>
+            <p class="mag-footer__text">Minimal PHP 8.5 starter kit — zero dependencies.</p>
+          </div>
+          <div class="mag-footer__col">
+            <h3 class="mag-footer__heading">Rýchle odkazy</h3>
+            <nav class="mag-footer__nav" aria-label="Footer">
+              <a class="mag-footer__link" href="../">Domov</a>
+              <a class="mag-footer__link" href="../blog/">Blog</a>
+              <a class="mag-footer__link" href="../author/">Autor</a>
+            </nav>
+          </div>
+          <div class="mag-footer__col">
+            <h3 class="mag-footer__heading">Sledovať</h3>
+            <nav class="mag-footer__nav" aria-label="Feeds">
+              <a class="mag-footer__link" href="../feed.atom" type="application/atom+xml">Atom</a>
+              <a class="mag-footer__link" href="../feed.xml" type="application/rss+xml">RSS</a>
+            </nav>
+          </div>
+        </div>
+        <div class="mag-footer__bottom">
+          <p class="mag-footer__copyright">© 2026 Nativa Starter — PHP 8.5, zero dependencies</p>
+        </div>
+      </div>
+    </footer>
+
+    <button type="button" class="mag-backtotop" id="mag-backtotop" aria-label="Back to top" title="Back to top">
+      <span aria-hidden="true">↑</span>
+    </button>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

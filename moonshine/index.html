@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Moonshine — admin theme — Nativa Themes</title>
+    <meta
+      name="description"
+      content="Moonshine, the Nativa Minimal admin theme — a static design demo inspired by the MoonShine design language. Not a live admin."
+    />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/entries/mark.ts"></script>
+
+  </head>
+  <body>
+    <!-- First thing on the page. This shows an admin panel, and it is not one:
+         no session, no data, no forms, every control inert. Say so before the
+         chrome can be mistaken for a real back office. -->
+    <div class="mgal-notice" role="note">
+      <strong>Static design demo — not a live admin.</strong>
+      No session, no data, no forms; every control is inert and the figures are
+      placeholders. Moonshine's design language is inspired by
+      <a class="mgal-notice__link" href="https://getmoonshine.app/" rel="noopener" target="_blank">MoonShine</a>.
+      <a class="mgal-notice__link" href="../">← Theme gallery</a>
+    </div>
+
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="layout-sidebar" id="layout-sidebar" aria-label="Admin sidebar">
+      <a class="layout-sidebar__brand" href="./">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2 2 7l10 5 10-5-10-5Z" />
+          <path d="m2 17 10 5 10-5" />
+          <path d="m2 12 10 5 10-5" />
+        </svg>
+        <span>Mark</span>
+      </a>
+
+      <nav class="layout-sidebar__nav" aria-label="Admin navigation">
+        <a class="layout-sidebar__link layout-sidebar__link--active" href="#dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="7" height="9" x="3" y="3" rx="1" />
+            <rect width="7" height="5" x="14" y="3" rx="1" />
+            <rect width="7" height="9" x="14" y="12" rx="1" />
+            <rect width="7" height="5" x="3" y="16" rx="1" />
+          </svg>
+          <span class="layout-sidebar__link-label">Dashboard</span>
+        </a>
+
+        <div class="layout-sidebar__group" data-group="blog">
+          <button
+            type="button"
+            class="layout-sidebar__link layout-sidebar__link--group"
+            data-toggle-group="blog"
+            aria-expanded="false"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 11a9 9 0 0 1 9 9" />
+              <path d="M4 4a16 16 0 0 1 16 16" />
+              <circle cx="5" cy="19" r="1" />
+            </svg>
+            <span class="layout-sidebar__link-label">Blog</span>
+            <svg class="layout-sidebar__chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+          <div class="layout-sidebar__children">
+            <div class="layout-sidebar__children-inner">
+              <a class="layout-sidebar__link layout-sidebar__link--child" href="#articles">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+                  <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+                  <path d="M10 9H8" />
+                  <path d="M16 13H8" />
+                  <path d="M16 17H8" />
+                </svg>
+                <span class="layout-sidebar__link-label">Articles</span>
+              </a>
+              <a class="layout-sidebar__link layout-sidebar__link--child" href="#categories">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />
+                </svg>
+                <span class="layout-sidebar__link-label">Categories</span>
+              </a>
+              <a class="layout-sidebar__link layout-sidebar__link--child" href="#tags">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />
+                  <circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />
+                </svg>
+                <span class="layout-sidebar__link-label">Tags</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <a class="layout-sidebar__link" href="#users">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          <span class="layout-sidebar__link-label">Users</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#roles">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+          </svg>
+          <span class="layout-sidebar__link-label">Roles</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#media">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+            <circle cx="9" cy="9" r="2" />
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+          </svg>
+          <span class="layout-sidebar__link-label">Media</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#pages">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
+            <path d="M14 2v4a2 2 0 0 0 2 2h4" />
+          </svg>
+          <span class="layout-sidebar__link-label">Pages</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#comments">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+          </svg>
+          <span class="layout-sidebar__link-label">Comments</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#settings">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 1 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span class="layout-sidebar__link-label">Settings</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#locales">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+          <span class="layout-sidebar__link-label">Locales</span>
+        </a>
+
+        <a class="layout-sidebar__link" href="#audit">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+          </svg>
+          <span class="layout-sidebar__link-label">Audit</span>
+        </a>
+      </nav>
+
+      <div class="layout-sidebar__footer">
+        <div class="layout-sidebar__actions">
+          <button type="button" class="cba-theme-toggle" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+            <span class="cba-theme-toggle__icon cba-theme-toggle__icon--sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+              </svg>
+            </span>
+            <span class="cba-theme-toggle__icon cba-theme-toggle__icon--moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </button>
+          <button type="button" class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar" title="Collapse sidebar">
+            <span class="sidebar-toggle--open" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+              </svg>
+            </span>
+            <span class="sidebar-toggle--close" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 3v18" />
+                <path d="m14 9 3 3-3 3" />
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <div class="layout-sidebar__user">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Administrator</span>
+        </div>
+
+        <form method="POST" action="#" class="m-form--bare">
+          <button type="submit" class="layout-sidebar__link layout-sidebar__link--button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span class="layout-sidebar__link-label">Logout</span>
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    <main class="layout-page" id="layout-page" role="main">
+      <button
+        type="button"
+        class="sidebar-hamburger"
+        id="sidebar-hamburger"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="layout-sidebar"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+
+      <div class="cba-wrap" id="main-content">
+        <div class="cba-head">
+          <h1>Nativa PHP Starter — Dashboard</h1>
+        </div>
+
+        <div class="m-card">
+          <div class="m-filter-bar">
+            <a class="m-btn m-btn--active" href="#period-7">7 days</a>
+            <a class="m-btn" href="#period-30">30 days</a>
+            <a class="m-btn" href="#period-90">90 days</a>
+          </div>
+        </div>
+
+        <div class="m-grid">
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Users</h3>
+              <span class="m-trend m-trend--up">↑ +100%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">69</div>
+                <div class="m-stat-subtitle">new in 7 days</div>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#users">List</a>
+              <a class="m-stat-link" href="#users-create">New</a>
+            </footer>
+          </article>
+
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Roles</h3>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">1</div>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#roles">List</a>
+              <a class="m-stat-link" href="#login">Login</a>
+            </footer>
+          </article>
+
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Sessions</h3>
+              <span class="m-trend m-trend--up">↑ +670%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">1</div>
+                <div class="m-stat-subtitle">new in 7 days</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Permissions</h3>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">5</div>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#roles">Manage</a>
+            </footer>
+          </article>
+
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Article Views</h3>
+              <span class="m-trend m-trend--up">↑ +22.5%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">6751</div>
+                <div class="m-stat-subtitle">in 7 days</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="m-stat m-stat--with-chart">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Articles</h3>
+              <span class="m-trend m-trend--down">↓ -47.8%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">251</div>
+                <div class="m-stat-subtitle">published in 7 days — 126 SK · 125 EN</div>
+              </div>
+              <div class="m-stat__chart">
+                <svg class="m-chart m-chart--donut" width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="var(--m-primary)" stroke-width="6" vector-effect="non-scaling-stroke" stroke-dasharray="47.31 46.94" stroke-dashoffset="-0" transform="rotate(-90 18 18)" />
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="var(--m-info)" stroke-width="6" vector-effect="non-scaling-stroke" stroke-dasharray="46.94 47.31" stroke-dashoffset="-47.31" transform="rotate(-90 18 18)" />
+                </svg>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#articles">List</a>
+              <a class="m-stat-link" href="#articles-create">New</a>
+            </footer>
+          </article>
+
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Comments</h3>
+              <span class="m-trend m-trend--flat">— 0%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">0</div>
+                <div class="m-stat-subtitle">in 7 days — 0 pending · 0 approved · 0 rejected</div>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#comments">Moderate</a>
+            </footer>
+          </article>
+
+          <article class="m-stat">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Media files</h3>
+              <span class="m-trend m-trend--up">↑ +100%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">233</div>
+                <div class="m-stat-subtitle">uploads in 7 days</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="m-stat m-stat--with-chart">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Admin Actions</h3>
+              <span class="m-trend m-trend--up">↑ +408.8%</span>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">5653</div>
+                <div class="m-stat-subtitle">in 7 days</div>
+              </div>
+              <div class="m-stat__chart">
+                <svg class="m-chart m-chart--bars" width="80" height="32" viewBox="0 0 80 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2" y="0" width="14" height="32" rx="1" fill="var(--m-primary)" />
+                  <rect x="18" y="6" width="14" height="26" rx="1" fill="var(--m-info)" />
+                  <rect x="34" y="7" width="14" height="25" rx="1" fill="var(--m-success)" />
+                  <rect x="50" y="13" width="14" height="19" rx="1" fill="var(--m-warning)" />
+                  <rect x="66" y="13" width="14" height="19" rx="1" fill="var(--m-muted)" />
+                </svg>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#audit">View Log</a>
+            </footer>
+          </article>
+
+          <article class="m-stat m-stat--with-chart">
+            <header class="m-stat__head">
+              <h3 class="m-stat__label">Pages</h3>
+            </header>
+            <div class="m-stat__body">
+              <div class="m-stat__main">
+                <div class="m-stat__value">8</div>
+                <div class="m-stat-subtitle">4 SK · 4 EN</div>
+              </div>
+              <div class="m-stat__chart">
+                <svg class="m-chart m-chart--donut" width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="var(--m-primary)" stroke-width="6" vector-effect="non-scaling-stroke" stroke-dasharray="47.12 47.13" stroke-dashoffset="-0" transform="rotate(-90 18 18)" />
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="var(--m-info)" stroke-width="6" vector-effect="non-scaling-stroke" stroke-dasharray="47.12 47.13" stroke-dashoffset="-47.12" transform="rotate(-90 18 18)" />
+                </svg>
+              </div>
+            </div>
+            <footer class="m-stat__foot">
+              <a class="m-stat-link" href="#pages">List</a>
+              <a class="m-stat-link" href="#pages-create">New</a>
+            </footer>
+          </article>
+        </div>
+
+        <div class="m-card">
+          <h2 class="m-heading">Quick actions</h2>
+          <div class="m-filter-bar">
+            <a class="m-btn m-btn-primary" href="#users-create">New user</a>
+            <a class="m-btn m-btn-primary" href="#articles-create">New article</a>
+            <a class="m-btn m-btn-primary" href="#pages-create">New page</a>
+            <a class="m-btn m-btn-primary" href="#media-upload">Upload media</a>
+            <a class="m-btn m-btn-primary" href="#settings">Settings</a>
+          </div>
+        </div>
+
+        <div class="m-card">
+          <h2 class="m-heading">System info</h2>
+          <table class="m-table">
+            <tbody>
+              <tr><td>PHP version</td><td class="m-mono">8.5.10</td></tr>
+              <tr><td>SAPI</td><td class="m-mono">cli-server</td></tr>
+              <tr><td>Memory limit</td><td class="m-mono">128M</td></tr>
+              <tr><td>Upload max</td><td class="m-mono">2M</td></tr>
+              <tr><td>Max execution</td><td class="m-mono">30s</td></tr>
+              <tr><td>Server software</td><td class="m-mono">PHP/8.5.10 (Development Server)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <dialog class="m-dialog" id="m-dialog">
+      <div class="m-dialog__body">
+        <p class="m-dialog__title" id="m-dialog-title"></p>
+        <p class="m-dialog__desc" id="m-dialog-desc"></p>
+      </div>
+      <div class="m-dialog__actions">
+        <button class="m-btn m-btn-ghost" id="m-dialog-cancel" type="button">Cancel</button>
+        <button class="m-btn m-btn-error" id="m-dialog-confirm" type="button">Confirm</button>
+      </div>
+    </dialog>
+
+    <div class="m-palette-overlay" id="m-palette-overlay">
+      <div class="m-palette">
+        <div class="m-palette__header">
+          <svg class="m-palette__search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input type="text" id="m-palette-input" class="m-palette__input" placeholder="Type a command..." autocomplete="off" spellcheck="false" />
+          <kbd class="m-palette__kbd">Esc</kbd>
+        </div>
+        <div class="m-palette__body" id="m-palette-list"></div>
+        <div class="m-palette__footer">
+          <span class="m-palette__hint"><kbd class="m-palette__kbd">↑↓</kbd> navigate</span>
+          <span class="m-palette__hint"><kbd class="m-palette__kbd">↵</kbd> select</span>
+          <span class="m-palette__hint"><kbd class="m-palette__kbd">esc</kbd> close</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="mgal-note">
+      <kbd>Ctrl</kbd>+<kbd>K</kbd> for commands ·
+      <a class="mgal-note__link" href="../">Theme gallery</a>
+    </p>
+
+  </body>
+</html>

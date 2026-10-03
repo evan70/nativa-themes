@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Themes as modules, for kids — Erik theme</title>
+    <meta
+      name="description"
+      content="Erik theme — article page with a flat, scrollspy-driven 'On this page' sidebar."
+    />
+    <meta name="theme-color" content="#0b1220" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/erik/erik.ts"></script>
+  </head>
+  <body class="erik-shell">
+    <header class="er-header">
+      <div class="er-header__inner">
+        <input type="checkbox" id="er-nav-toggle" class="er-nav__toggle-input" aria-label="Toggle menu" />
+        <a class="er-header__brand" href="../">Nativa</a>
+        <nav class="er-nav" aria-label="Main">
+          <a class="er-nav__link" href="../">About</a>
+          <a class="er-nav__link" href="../blog/">Articles</a>
+          <a class="er-nav__link" href="../tags/">Tags</a>
+          <a class="er-nav__link" href="../author/">Author</a>
+          <a class="er-nav__link" href="../../">Gallery</a>
+        </nav>
+        <div class="er-header__utilities">
+          <nav class="er-locale m-pubswitch__track" aria-label="Language">
+            <a class="er-locale__link er-locale__link--active" href="./" hreflang="en" lang="en">EN</a>
+            <a class="er-locale__link" href="../../" hreflang="sk" lang="sk">SK</a>
+          </nav>
+          <button type="button" class="er-theme-toggle" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--light" aria-hidden="true">Light</span>
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--dark" aria-hidden="true">Dark</span>
+          </button>
+          <a class="er-login-btn" href="#" aria-label="Sign in" title="Sign in">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="er-login-btn__text">Sign in</span>
+          </a>
+        </div>
+        <label for="er-nav-toggle" class="er-nav__toggle"><span aria-hidden="true">&#9776;</span></label>
+      </div>
+    </header>
+
+    <main class="er-main">
+      <div class="er-article-layout">
+        <article class="er-article">
+          <img
+            class="st-article__cover"
+            src="/covers/temy-ako-moduly-pre-deti.svg"
+            alt="Themes as modules, for kids"
+            width="720"
+            height="360"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+          <header class="er-article__header">
+            <h1 class="er-article__title">Themes as modules, for kids</h1>
+            <p class="er-article__meta">
+              2026-10-02 · Architecture ·
+              <a class="st-author-link" href="../author/">
+                <img class="st-author-avatar" src="/covers/avatar.svg" alt="" width="20" height="20" loading="lazy" />
+                Nativa Dev
+              </a>
+            </p>
+          </header>
+
+          <p>
+            A theme used to be a thing rather than a place. Not a class, not a
+            file — a decision, a colour and a padding, scattered across
+            whichever template happened to need them.
+          </p>
+          <p>
+            The first part of this series is about how a scattered mixture
+            becomes a <em>module</em>: one place you can open and read.
+          </p>
+          <h2 id="what-it-was-before">What it was before</h2>
+          <p>
+            Three reasons the mixture spread. Each looked entirely reasonable,
+            which is exactly why it lasted so long.
+          </p>
+          <ul>
+            <li>Colours inline in markup, where nobody went looking for them.</li>
+            <li>Margin decisions living in a template instead of a token.</li>
+            <li>Branches on whether something was “our” theme or not.</li>
+          </ul>
+          <blockquote>
+            <p>
+              <strong>A theme was not a thing. It was a mixture that looked like
+              one.</strong>
+            </p>
+          </blockquote>
+          <h2 id="the-contract">The contract</h2>
+          <p>
+            An interface. Sixteen methods: eight for identity and assets, three
+            for the chrome, and one per public surface.
+          </p>
+          <pre><code>public function header(ShellContext $context): string;
+public function footer(ShellContext $context): string;
+public function pageWrap(string $content): string;
+public function homepage(PageContext $context): string;
+public function blogIndex(PageContext $context): string;
+public function blogArticle(PageContext $context): string;</code></pre>
+          <h2 id="the-connector">The connector</h2>
+          <p>
+            One file knows that <code>erik</code> means <code>ErikTheme</code>.
+            Nothing else knows anything about themes — and an architecture test
+            enforces it.
+          </p>
+          <h3 id="what-stays-in-the-core">What stays in the core</h3>
+          <p>
+            The head connector. Metadata, JSON-LD, the nonce — that belongs to
+            the kernel, not the theme. A theme starts after
+            <code>&lt;body&gt;</code>.
+          </p>
+          <p class="st-blog-index__tags">
+            <a class="st-article__tag" href="../tags/">php</a>
+            <a class="st-article__tag" href="../tags/">themes</a>
+            <a class="st-article__tag" href="../tags/">architecture</a>
+            <a class="st-article__tag" href="../tags/">refactoring</a>
+          </p>
+        </article>
+
+        <aside class="er-toc" aria-label="On this page">
+          <p class="er-toc__title">On this page</p>
+          <nav class="er-toc__nav">
+            <a class="er-toc__link" href="#what-it-was-before" data-toc-link data-heading="what-it-was-before">
+              What it was before
+            </a>
+            <a class="er-toc__link" href="#the-contract" data-toc-link data-heading="the-contract">
+              The contract
+            </a>
+            <a class="er-toc__link" href="#the-connector" data-toc-link data-heading="the-connector">
+              The connector
+            </a>
+            <a class="er-toc__link" href="#what-stays-in-the-core" data-toc-link data-heading="what-stays-in-the-core">
+              What stays in the core
+            </a>
+          </nav>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="er-footer">
+      <div class="er-footer__inner">
+        <span>&copy; 2026 Nativa</span>
+        <nav class="er-footer__nav" aria-label="Footer">
+          <a class="er-footer__link" href="../blog/">All articles</a>
+          <a class="er-footer__link" href="../../">Themes</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

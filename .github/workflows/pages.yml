@@ -1,0 +1,65 @@
+name: Deploy theme gallery to Pages
+
+# The gallery is a static build of the demo pages plus the real theme
+# stylesheets, so publishing is: verify the theme copy is fresh, typecheck,
+# build, upload dist/. No runtime, no PHP.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time — a second push must not race the first upload.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # NOTE: `pnpm run sync:check` (copied theme sources still match
+      # natura-minimal) is deliberately NOT a step here. natura-minimal is a
+      # private repository, so a fresh runner has no sibling checkout and the
+      # check can only ever report "skipped". Run it locally — `pnpm verify`
+      # is the real gate before pushing.
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Build
+        run: pnpm run build
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

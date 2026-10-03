@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nativa — Erik theme</title>
+    <meta
+      name="description"
+      content="Erik theme — editorial hero, feature grid and a numbered steps section on a lime-on-navy palette."
+    />
+    <meta name="theme-color" content="#0b1220" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/erik/erik.ts"></script>
+  </head>
+  <body class="erik-shell">
+    <header class="er-header">
+      <div class="er-header__inner">
+        <input type="checkbox" id="er-nav-toggle" class="er-nav__toggle-input" aria-label="Toggle menu" />
+        <a class="er-header__brand" href="./">Nativa</a>
+        <nav class="er-nav" aria-label="Main">
+          <a class="er-nav__link" href="./">About</a>
+          <a class="er-nav__link" href="blog/">Articles</a>
+          <a class="er-nav__link" href="tags/">Tags</a>
+          <a class="er-nav__link" href="author/">Author</a>
+          <a class="er-nav__link" href="../">Gallery</a>
+        </nav>
+        <div class="er-header__utilities">
+          <nav class="er-locale m-pubswitch__track" aria-label="Language">
+            <a class="er-locale__link er-locale__link--active" href="./" hreflang="en" lang="en">EN</a>
+            <a class="er-locale__link" href="../" hreflang="sk" lang="sk">SK</a>
+          </nav>
+          <button type="button" class="er-theme-toggle" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--light" aria-hidden="true">Light</span>
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--dark" aria-hidden="true">Dark</span>
+          </button>
+          <a class="er-login-btn" href="#" aria-label="Sign in" title="Sign in">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="er-login-btn__text">Sign in</span>
+          </a>
+        </div>
+        <label for="er-nav-toggle" class="er-nav__toggle"><span aria-hidden="true">&#9776;</span></label>
+      </div>
+    </header>
+
+    <main class="er-main">
+      <section class="er-hero">
+        <div class="er-container">
+          <p class="er-hero__eyebrow">NATIVA MINIMAL</p>
+          <article class="er-card">
+            <h1 class="er-hero__title">Fewer layers. More control.</h1>
+            <p class="er-hero__desc">
+              A minimal PHP foundation for products that should stay
+              understandable as they grow.
+            </p>
+            <div class="er-hero__actions">
+              <a class="er-button er-button--primary" href="blog/">Read the blog</a>
+              <a class="er-button er-button--outline" href="../">Open gallery</a>
+            </div>
+          </article>
+          <div class="er-hero__visual" aria-hidden="true">
+            <img
+              class="er-hero__image"
+              src="/images/erik-hero-underlay.webp"
+              alt=""
+              width="1600"
+              height="1000"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+            <svg class="er-hero__svg" viewBox="0 0 900 620" role="presentation" focusable="false">
+              <defs>
+                <linearGradient id="er-glow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#d9f99d" stop-opacity=".9" />
+                  <stop offset="1" stop-color="#bef264" stop-opacity=".05" />
+                </linearGradient>
+              </defs>
+              <circle cx="680" cy="170" r="150" fill="url(#er-glow)" opacity=".35" />
+              <path d="M80 470 310 240l110 110 180-210 220 240" fill="none" stroke="currentColor" stroke-width="2" opacity=".5" />
+              <path d="M80 510h720M80 550h560" fill="none" stroke="currentColor" stroke-width="1" opacity=".3" />
+              <circle cx="310" cy="240" r="7" fill="#d9f99d" />
+              <circle cx="600" cy="140" r="7" fill="#d9f99d" />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section class="er-section er-section--features">
+        <p class="er-section__eyebrow">What you get</p>
+        <h2 class="er-section__title">A foundation that gets out of your way.</h2>
+        <div class="er-feature-grid">
+          <article class="er-feature-card">
+            <span class="er-feature-card__number">01</span>
+            <h3>Fewer layers</h3>
+            <p>
+              A transparent PHP runtime with explicit seams and no hidden
+              framework magic.
+            </p>
+          </article>
+          <article class="er-feature-card">
+            <span class="er-feature-card__number">02</span>
+            <h3>Fast by default</h3>
+            <p>
+              SQLite, native PHP and a small production surface keep the path to
+              first paint short.
+            </p>
+          </article>
+          <article class="er-feature-card">
+            <span class="er-feature-card__number">03</span>
+            <h3>Ready to shape</h3>
+            <p>
+              Modules, themes and admin screens stay small enough to understand
+              and change.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="er-section er-section--steps">
+        <p class="er-section__eyebrow">How it works</p>
+        <h2 class="er-section__title">From first route to production artifact.</h2>
+        <div class="er-steps">
+          <article class="er-step">
+            <span>1</span>
+            <div>
+              <h3>Choose a surface</h3>
+              <p>Start with a public page, a blog article or the Mark admin panel.</p>
+            </div>
+          </article>
+          <article class="er-step">
+            <span>2</span>
+            <div>
+              <h3>Compose a module</h3>
+              <p>Keep the boundaries honest — one module, one reason to change.</p>
+            </div>
+          </article>
+          <article class="er-step">
+            <span>3</span>
+            <div>
+              <h3>Pick a theme</h3>
+              <p>Swap the whole presentation layer without touching a single action.</p>
+            </div>
+          </article>
+          <article class="er-step">
+            <span>4</span>
+            <div>
+              <h3>Ship the artifact</h3>
+              <p>Zero dependencies, per-module SQLite, no migration network.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="er-footer">
+      <div class="er-footer__inner">
+        <span>&copy; 2026 Nativa</span>
+        <nav class="er-footer__nav" aria-label="Footer">
+          <a class="er-footer__link" href="blog/">Articles</a>
+          <a class="er-footer__link" href="../">Themes</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

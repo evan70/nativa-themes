@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tags — Nativa Starter</title>
+    <meta name="description" content="Starter theme — tag cloud across every article in the locale." />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/starter/main.ts"></script>
+  </head>
+  <body class="starter-shell">
+    <header class="st-header">
+      <div class="st-header__inner">
+        <input
+          type="checkbox"
+          id="st-nav-toggle"
+          class="st-nav__toggle-input"
+          aria-label="Toggle menu"
+        />
+        <a class="st-header__brand" href="../">Nativa Starter</a>
+        <nav class="st-nav" aria-label="Main">
+          <a class="st-nav__link" href="../">Home</a>
+          <a class="st-nav__link" href="../blog/">Articles</a>
+          <a class="st-nav__link st-nav__link--active" href="./">Tags</a>
+          <a class="st-nav__link" href="../author/">Author</a>
+          <a class="st-nav__link" href="../../">Gallery</a>
+        </nav>
+        <nav class="st-locale" aria-label="Language">
+          <a class="st-locale__link st-locale__link--active" href="./" hreflang="sk" lang="sk">SK</a>
+          <a class="st-locale__link" href="../../" hreflang="en" lang="en">EN</a>
+        </nav>
+        <div class="navbar__actions">
+          <button
+            type="button"
+            class="st-theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle theme"
+            title="Toggle theme"
+          >
+            <span class="st-theme-toggle__icon st-theme-toggle__icon--sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+              </svg>
+            </span>
+            <span class="st-theme-toggle__icon st-theme-toggle__icon--moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </button>
+          <a class="st-login-btn" href="#" aria-label="Prihlásiť sa" title="Prihlásiť sa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="st-login-btn__text">Prihlásiť sa</span>
+          </a>
+        </div>
+        <label for="st-nav-toggle" class="st-nav__toggle" title="Toggle menu">
+          <span class="st-nav__toggle-icon st-nav__toggle-icon--open" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </span>
+          <span class="st-nav__toggle-icon st-nav__toggle-icon--close" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </span>
+        </label>
+        <label for="st-nav-toggle" class="st-nav__overlay" aria-hidden="true"></label>
+      </div>
+    </header>
+
+    <main class="st-main">
+      <section class="st-blog-index">
+        <h1 class="st-blog-index__title">Tags</h1>
+        <p class="st-blog-index__subtitle">Browse articles by tag.</p>
+        <p class="st-article__tags">
+          <a class="st-article__tag" href="#">php (57)</a>
+          <a class="st-article__tag" href="#">architecture (35)</a>
+          <a class="st-article__tag" href="#">clean-code (16)</a>
+          <a class="st-article__tag" href="#">rust (20)</a>
+          <a class="st-article__tag" href="#">security (19)</a>
+          <a class="st-article__tag" href="#">lekalo (19)</a>
+          <a class="st-article__tag" href="#">beginners (9)</a>
+          <a class="st-article__tag" href="#">linux (8)</a>
+          <a class="st-article__tag" href="#">arch (8)</a>
+          <a class="st-article__tag" href="#">cachyos (8)</a>
+          <a class="st-article__tag" href="#">themes (7)</a>
+          <a class="st-article__tag" href="#">refactoring (6)</a>
+          <a class="st-article__tag" href="#">agents (6)</a>
+          <a class="st-article__tag" href="#">semanticky-model (7)</a>
+          <a class="st-article__tag" href="#">vite (4)</a>
+          <a class="st-article__tag" href="#">ai (4)</a>
+          <a class="st-article__tag" href="#">determinizmus (2)</a>
+          <a class="st-article__tag" href="#">contracts (1)</a>
+          <a class="st-article__tag" href="#">wcag (2)</a>
+          <a class="st-article__tag" href="#">moduly (1)</a>
+        </p>
+      </section>
+    </main>
+
+    <footer class="st-footer">
+      <div class="st-footer__inner">
+        <span>© 2026 Nativa Starter</span>
+        <nav class="st-footer__nav" aria-label="Footer">
+          <a class="st-footer__link" href="../blog/">Všetky články</a>
+          <a class="st-footer__link" href="../../">Témy</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

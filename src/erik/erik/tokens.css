@@ -1,0 +1,46 @@
+@font-face {
+  font-family: 'Gilroy';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/mark/Gilroy-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  font-style: normal;
+  font-weight: 700 900;
+  font-display: swap;
+  src: url('/fonts/mark/Gilroy-Bold.woff2') format('woff2');
+}
+
+:root {
+  --er-bg: #0b1220;
+  --er-surface: #111c2e;
+  --er-surface-raised: #17243a;
+  --er-ink: #f3f7ff;
+  --er-muted: #aebbd0;
+  --er-border: #33445f;
+  --er-accent-strong: #d9f99d;
+  --er-accent-hover: #bef264;
+  --er-accent-soft: #d9f99d;
+  --er-accent-ink: #08111f;
+  --er-focus: #fbbf24;
+  --er-container: 72rem;
+  --er-radius: .5rem;
+  --er-shadow: 0 1rem 3rem rgba(0, 0, 0, .24);
+}
+
+:root[data-theme="light"] {
+  --er-bg: #f4f7fb;
+  --er-surface: #ffffff;
+  --er-surface-raised: #e8eef7;
+  --er-ink: #142033;
+  --er-muted: #53647b;
+  --er-border: #b6c4d8;
+  --er-accent-strong: #3f6212;
+  --er-accent-hover: #365314;
+  --er-accent-soft: #365314;
+  --er-accent-ink: #ffffff;
+  --er-focus: #92400e;
+}

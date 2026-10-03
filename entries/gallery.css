@@ -1,0 +1,372 @@
+/*
+ * gallery.css — the shell around the theme demos.
+ *
+ * Deliberately its own design with its own tokens: a gallery that borrowed a
+ * theme's stylesheet could not show that theme honestly. Everything here is
+ * `gal-*` prefixed so it can never collide with the `st-` / `er-` / `mag-` /
+ * `ms-` vocabularies the demo pages use.
+ *
+ * Chrome 70 baseline: no @layer, `gap` rules ship an @supports fallback.
+ */
+
+:root {
+  --gal-bg: #0b0d12;
+  --gal-surface: #141821;
+  --gal-surface-raised: #1c212c;
+  --gal-ink: #eef2f8;
+  --gal-muted: #98a3b8;
+  --gal-border: #29303d;
+  --gal-accent: #7dd3fc;
+  --gal-accent-strong: #38bdf8;
+  --gal-accent-ink: #04121c;
+}
+
+:root[data-theme='light'] {
+  --gal-bg: #f7f8fb;
+  --gal-surface: #ffffff;
+  --gal-surface-raised: #f1f3f8;
+  --gal-ink: #131822;
+  --gal-muted: #5a6478;
+  --gal-border: #dfe3ec;
+  --gal-accent: #0369a1;
+  --gal-accent-strong: #0284c7;
+  --gal-accent-ink: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--gal-bg);
+  color: var(--gal-ink);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--gal-accent);
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875em;
+  background: var(--gal-surface-raised);
+  border: 1px solid var(--gal-border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+/* ── Header ────────────────────────────────────────────────────── */
+
+.gal-header {
+  border-bottom: 1px solid var(--gal-border);
+  background: var(--gal-surface);
+}
+
+.gal-header__inner,
+.gal-main,
+.gal-footer__inner {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.gal-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 60px;
+}
+
+.gal-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  color: var(--gal-ink);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+
+.gal-brand__mark {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--gal-accent-strong);
+  color: var(--gal-accent-ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.gal-header__spacer {
+  flex: 1;
+}
+
+/* ── Hero ──────────────────────────────────────────────────────── */
+
+.gal-hero {
+  padding: 3.5rem 0 2.5rem;
+}
+
+.gal-eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gal-accent);
+}
+
+.gal-hero__title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  max-width: 22ch;
+}
+
+.gal-hero__lead {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--gal-muted);
+  font-size: 1.05rem;
+}
+
+.gal-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gal-hero__facts li {
+  margin: 0 1.75rem 0 0;
+}
+
+.gal-fact__value {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.gal-fact__label {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--gal-muted);
+}
+
+/* ── Theme cards ───────────────────────────────────────────────── */
+
+.gal-section {
+  margin: 0 0 3rem;
+}
+
+.gal-section__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+.gal-section__note {
+  margin: 0 0 1.5rem;
+  color: var(--gal-muted);
+  font-size: 0.95rem;
+}
+
+.gal-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1.25rem;
+}
+
+@supports not (gap: 1rem) {
+  .gal-cards {
+    margin: -0.625rem;
+  }
+  .gal-cards > * {
+    margin: 0.625rem;
+  }
+}
+
+.gal-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--gal-surface);
+  border: 1px solid var(--gal-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.gal-card__head {
+  padding: 1.25rem 1.25rem 0;
+}
+
+.gal-card__title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.gal-card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.gal-card__kind {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gal-muted);
+  border: 1px solid var(--gal-border);
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+}
+
+.gal-card__desc {
+  margin: 0;
+  color: var(--gal-muted);
+  font-size: 0.92rem;
+}
+
+/* Live palette — the real token values, inlined so the card reads the same
+   in both themes without loading four stylesheets. */
+.gal-swatches {
+  display: flex;
+  gap: 0.4rem;
+  padding: 1.1rem 1.25rem 0;
+}
+
+@supports not (gap: 0.4rem) {
+  .gal-swatches > * + * {
+    margin-left: 0.4rem;
+  }
+}
+
+.gal-swatch {
+  flex: 1;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid var(--gal-border);
+}
+
+.gal-card__body {
+  padding: 1.1rem 1.25rem 1.25rem;
+}
+
+/*
+ * The admin card carries a warning: the page it links to looks like a real
+ * back office, and someone should not have to click to find out otherwise.
+ */
+.gal-card__warning {
+  margin: 0 0 0.85rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--gal-border);
+  border-left: 3px solid var(--gal-accent);
+  border-radius: 6px;
+  background: var(--gal-surface-raised);
+  color: var(--gal-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.gal-card__warning strong {
+  color: var(--gal-ink);
+}
+
+.gal-links {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@supports not (gap: 0.5rem) {
+  .gal-links > * + * {
+    margin-left: 0.5rem;
+    margin-top: 0.5rem;
+  }
+}
+
+.gal-link {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  border-radius: 7px;
+  border: 1px solid var(--gal-border);
+  background: var(--gal-surface-raised);
+  color: var(--gal-ink);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.gal-link:hover,
+.gal-link:focus-visible {
+  border-color: var(--gal-accent);
+  color: var(--gal-accent);
+}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+
+.gal-footer {
+  border-top: 1px solid var(--gal-border);
+  background: var(--gal-surface);
+  font-size: 0.9rem;
+}
+
+.gal-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  color: var(--gal-muted);
+}
+
+.gal-footer__spacer {
+  flex: 1;
+}
+
+/* ── Theme toggle (shared chrome) ──────────────────────────────── */
+
+.gal-toggle {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--gal-border);
+  background: var(--gal-surface-raised);
+  color: var(--gal-ink);
+  cursor: pointer;
+}
+
+.gal-toggle:hover {
+  border-color: var(--gal-accent);
+  color: var(--gal-accent);
+}
+
+.gal-toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.gal-toggle__moon,
+:root[data-theme='light'] .gal-toggle__sun {
+  display: none;
+}
+
+:root[data-theme='light'] .gal-toggle__moon {
+  display: block;
+}

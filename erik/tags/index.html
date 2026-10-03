@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tags — Erik theme</title>
+    <meta name="description" content="Erik theme — tag list, rendered as the flat sidebar tag vocabulary." />
+    <meta name="theme-color" content="#0b1220" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/erik/erik.ts"></script>
+  </head>
+  <body class="erik-shell">
+    <header class="er-header">
+      <div class="er-header__inner">
+        <input type="checkbox" id="er-nav-toggle" class="er-nav__toggle-input" aria-label="Toggle menu" />
+        <a class="er-header__brand" href="../">Nativa</a>
+        <nav class="er-nav" aria-label="Main">
+          <a class="er-nav__link" href="../">About</a>
+          <a class="er-nav__link" href="../blog/">Articles</a>
+          <a class="er-nav__link er-nav__link--active" href="./">Tags</a>
+          <a class="er-nav__link" href="../author/">Author</a>
+          <a class="er-nav__link" href="../../">Gallery</a>
+        </nav>
+        <div class="er-header__utilities">
+          <nav class="er-locale m-pubswitch__track" aria-label="Language">
+            <a class="er-locale__link er-locale__link--active" href="./" hreflang="en" lang="en">EN</a>
+            <a class="er-locale__link" href="../../" hreflang="sk" lang="sk">SK</a>
+          </nav>
+          <button type="button" class="er-theme-toggle" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--light" aria-hidden="true">Light</span>
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--dark" aria-hidden="true">Dark</span>
+          </button>
+          <a class="er-login-btn" href="#" aria-label="Sign in" title="Sign in">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="er-login-btn__text">Sign in</span>
+          </a>
+        </div>
+        <label for="er-nav-toggle" class="er-nav__toggle"><span aria-hidden="true">&#9776;</span></label>
+      </div>
+    </header>
+
+    <main class="er-main">
+      <section class="er-blog-index">
+        <h1 class="er-blog-index__title">Tags</h1>
+      </section>
+
+      <div class="er-sidebar-tags">
+        <a class="er-sidebar-tag" href="#">php (57)</a>
+        <a class="er-sidebar-tag" href="#">architecture (35)</a>
+        <a class="er-sidebar-tag" href="#">rust (20)</a>
+        <a class="er-sidebar-tag" href="#">security (19)</a>
+        <a class="er-sidebar-tag" href="#">lekalo (19)</a>
+        <a class="er-sidebar-tag" href="#">beginners (9)</a>
+        <a class="er-sidebar-tag" href="#">linux (8)</a>
+        <a class="er-sidebar-tag" href="#">arch (8)</a>
+        <a class="er-sidebar-tag" href="#">cachyos (8)</a>
+        <a class="er-sidebar-tag" href="#">themes (7)</a>
+        <a class="er-sidebar-tag" href="#">refactoring (6)</a>
+        <a class="er-sidebar-tag" href="#">agents (6)</a>
+        <a class="er-sidebar-tag" href="#">testing (6)</a>
+        <a class="er-sidebar-tag" href="#">semanticky-model (7)</a>
+        <a class="er-sidebar-tag" href="#">vite (4)</a>
+        <a class="er-sidebar-tag" href="#">ai (4)</a>
+        <a class="er-sidebar-tag" href="#">clean-code (16)</a>
+        <a class="er-sidebar-tag" href="#">openspec (9)</a>
+        <a class="er-sidebar-tag" href="#">ci (3)</a>
+        <a class="er-sidebar-tag" href="#">frontend (3)</a>
+        <a class="er-sidebar-tag" href="#">determinizmus (2)</a>
+        <a class="er-sidebar-tag" href="#">comments (2)</a>
+        <a class="er-sidebar-tag" href="#">bilingual (2)</a>
+        <a class="er-sidebar-tag" href="#">wcag (2)</a>
+        <a class="er-sidebar-tag" href="#">contracts (1)</a>
+        <a class="er-sidebar-tag" href="#">moduly (1)</a>
+        <a class="er-sidebar-tag" href="#">trace-manifest (2)</a>
+      </div>
+    </main>
+
+    <footer class="er-footer">
+      <div class="er-footer__inner">
+        <span>&copy; 2026 Nativa</span>
+        <nav class="er-footer__nav" aria-label="Footer">
+          <a class="er-footer__link" href="../blog/">All articles</a>
+          <a class="er-footer__link" href="../../">Themes</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

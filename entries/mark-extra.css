@@ -1,0 +1,80 @@
+/*
+ * mark-extra.css — demo-only chrome for the moonshine page.
+ *
+ * NOT part of the moonshine theme. The theme's own vocabulary is `m-*`,
+ * `layout-*` and `cba-*`; a class defined here that starts with one of those
+ * prefixes would claim to be theme CSS when it is not. Everything below is
+ * prefixed `mgal-` (mark gallery) so the boundary stays obvious.
+ *
+ * It exists for one reason: the page is a demo, and a visitor arriving from
+ * GitHub needs a way back to the gallery that does not pretend to be part of
+ * the admin panel it is showing off.
+ */
+
+/*
+ * The banner that has to be the first thing on the page.
+ *
+ * This URL sits where an admin panel would sit. Someone opening it cold has no
+ * way to know it is a static design demo, so the page says so before the
+ * sidebar can be read as a real admin. It is pinned above everything and sits
+ * over the sidebar's top edge rather than pushing the layout around.
+ */
+.mgal-notice {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  margin: 0;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--m-warning-ink, #b45309);
+  background: var(--m-warning-bg, #fef3c7);
+  color: var(--m-warning-ink, #92400e);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.mgal-notice strong {
+  font-weight: 700;
+}
+
+.mgal-notice__link {
+  margin-left: 0.35rem;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.mgal-note {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--m-border);
+  border-radius: var(--m-r-md, 8px);
+  background: var(--m-surface);
+  color: var(--m-muted);
+  font-size: 0.8rem;
+  box-shadow: var(--m-shadow-md);
+}
+
+.mgal-note kbd {
+  padding: 0.05em 0.35em;
+  border: 1px solid var(--m-border);
+  border-radius: 4px;
+  background: var(--m-surface-2);
+  color: var(--m-ink);
+  font-family: var(--m-mono);
+  font-size: 0.75rem;
+}
+
+.mgal-note__link {
+  color: var(--m-primary-ink);
+  text-decoration: none;
+}
+
+.mgal-note__link:hover {
+  text-decoration: underline;
+}

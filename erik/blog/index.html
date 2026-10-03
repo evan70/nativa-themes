@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog — Erik theme</title>
+    <meta
+      name="description"
+      content="Erik theme — blog index with a featured hero card, side cards and a category grid."
+    />
+    <meta name="theme-color" content="#0b1220" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/erik/erik.ts"></script>
+  </head>
+  <body class="erik-shell">
+    <header class="er-header">
+      <div class="er-header__inner">
+        <input type="checkbox" id="er-nav-toggle" class="er-nav__toggle-input" aria-label="Toggle menu" />
+        <a class="er-header__brand" href="../">Nativa</a>
+        <nav class="er-nav" aria-label="Main">
+          <a class="er-nav__link" href="../">About</a>
+          <a class="er-nav__link er-nav__link--active" href="./">Articles</a>
+          <a class="er-nav__link" href="../tags/">Tags</a>
+          <a class="er-nav__link" href="../author/">Author</a>
+          <a class="er-nav__link" href="../../">Gallery</a>
+        </nav>
+        <div class="er-header__utilities">
+          <nav class="er-locale m-pubswitch__track" aria-label="Language">
+            <a class="er-locale__link er-locale__link--active" href="./" hreflang="en" lang="en">EN</a>
+            <a class="er-locale__link" href="../../" hreflang="sk" lang="sk">SK</a>
+          </nav>
+          <button type="button" class="er-theme-toggle" data-theme-toggle aria-label="Toggle theme" title="Toggle theme">
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--light" aria-hidden="true">Light</span>
+            <span class="er-theme-toggle__opt er-theme-toggle__opt--dark" aria-hidden="true">Dark</span>
+          </button>
+          <a class="er-login-btn" href="#" aria-label="Sign in" title="Sign in">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="er-login-btn__text">Sign in</span>
+          </a>
+        </div>
+        <label for="er-nav-toggle" class="er-nav__toggle"><span aria-hidden="true">&#9776;</span></label>
+      </div>
+    </header>
+
+    <main class="er-main">
+      <section class="er-blog-index">
+        <h1 class="er-blog-index__title">Blog</h1>
+      </section>
+
+      <section class="er-hero-section">
+        <div class="er-hero-grid">
+          <article class="er-card er-card--hero">
+            <div class="er-card__media">
+              <a class="er-card__media-link" href="../article/">
+                <img
+                  class="er-card__image"
+                  src="/covers/sudo-posledne-pre-deti.svg"
+                  alt=""
+                  width="720"
+                  height="360"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+              </a>
+              <div class="er-card__overlay"></div>
+            </div>
+            <div class="er-card__body">
+              <a class="er-badge" href="#">Security</a>
+              <h2 class="er-card__title">
+                <a class="er-card__title-link" href="../article/">Arch balíky pre deti ... diel 6: sudo LAST</a>
+              </h2>
+              <p class="er-card__text">
+                Šiesta lekcia série: posledné pravidlo motto. Kedy sudo patrí,
+                kedy nie, prečo je sudo aj sudo najmenej a čo robí timestamp
+                cache.
+              </p>
+              <div class="er-card__meta">
+                <time datetime="2026-10-03">3 Oct 2026</time>
+                <span class="er-card__meta-dot"></span>
+                <span>
+                  <a href="../tags/">arch</a>, <a href="../tags/">linux</a>
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <div class="er-hero-side">
+            <article class="er-card er-card--small">
+              <div class="er-card__media">
+                <a class="er-card__media-link" href="../article/">
+                  <img
+                    class="er-card__image"
+                    src="/covers/kontrakt-bez-zakaznikov.svg"
+                    alt=""
+                    width="720"
+                    height="360"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              </div>
+              <div class="er-card__body">
+                <a class="er-badge" href="#">Architecture</a>
+                <h3 class="er-card__title">
+                  <a class="er-card__title-link" href="../article/">Témy pre deti ... diel 3: kontrakt bez zákazníka</a>
+                </h3>
+                <div class="er-card__meta">
+                  <time datetime="2026-10-03">3 Oct 2026</time>
+                  <span class="er-card__meta-dot"></span>
+                  <span>
+                    <a href="../tags/">architecture</a>, <a href="../tags/">themes</a>
+                  </span>
+                </div>
+              </div>
+            </article>
+
+            <article class="er-card er-card--small">
+              <div class="er-card__media">
+                <a class="er-card__media-link" href="../article/">
+                  <img
+                    class="er-card__image"
+                    src="/covers/temy-ako-moduly-pre-deti.svg"
+                    alt=""
+                    width="720"
+                    height="360"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </a>
+              </div>
+              <div class="er-card__body">
+                <a class="er-badge" href="#">Architecture</a>
+                <h3 class="er-card__title">
+                  <a class="er-card__title-link" href="../article/">Témy pre deti ... diel 1: téma ako modul</a>
+                </h3>
+                <div class="er-card__meta">
+                  <time datetime="2026-10-02">2 Oct 2026</time>
+                  <span class="er-card__meta-dot"></span>
+                  <span>
+                    <a href="../tags/">php</a>, <a href="../tags/">themes</a>
+                  </span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="er-section">
+        <p class="er-section__eyebrow">Latest</p>
+        <h2 class="er-section__title">Everything else.</h2>
+        <div class="er-grid">
+          <article class="er-card er-card--medium">
+            <div class="er-card__media">
+              <a class="er-card__media-link" href="../article/">
+                <img class="er-card__image" src="/covers/filozofia-menej-vrstiev.svg" alt="" width="720" height="360" loading="lazy" decoding="async" />
+              </a>
+            </div>
+            <div class="er-card__body">
+              <a class="er-badge" href="#">Architecture</a>
+              <h3 class="er-card__title">
+                <a class="er-card__title-link" href="../article/">Fewer layers ... why PHP is fast</a>
+              </h3>
+              <p class="er-card__text">
+                PHP speed does not come from a better framework. It comes from C,
+                and from nothing standing between the code and the data.
+              </p>
+              <div class="er-card__meta">
+                <time datetime="2026-08-19">19 Aug 2026</time>
+                <span class="er-card__meta-dot"></span>
+                <span><a href="../tags/">performance</a>, <a href="../tags/">php</a></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="er-card er-card--medium">
+            <div class="er-card__media">
+              <a class="er-card__media-link" href="../article/">
+                <img class="er-card__image" src="/covers/opcache-a-jit-prekompilacia.svg" alt="" width="720" height="360" loading="lazy" decoding="async" />
+              </a>
+            </div>
+            <div class="er-card__body">
+              <a class="er-badge" href="#">PHP</a>
+              <h3 class="er-card__title">
+                <a class="er-card__title-link" href="../article/">OPcache and JIT: how PHP precompiles</a>
+              </h3>
+              <p class="er-card__text">
+                Precompilation at the language level: OPcache keeps opcodes in
+                memory, JIT compiles the hot path to machine code.
+              </p>
+              <div class="er-card__meta">
+                <time datetime="2026-08-12">12 Aug 2026</time>
+                <span class="er-card__meta-dot"></span>
+                <span><a href="../tags/">php</a>, <a href="../tags/">opcache</a></span>
+              </div>
+            </div>
+          </article>
+
+          <article class="er-card er-card--medium">
+            <div class="er-card__media">
+              <a class="er-card__media-link" href="../article/">
+                <img class="er-card__image" src="/covers/c-rozsirenia-php-api.svg" alt="" width="720" height="360" loading="lazy" decoding="async" />
+              </a>
+            </div>
+            <div class="er-card__body">
+              <a class="er-badge" href="#">PHP</a>
+              <h3 class="er-card__title">
+                <a class="er-card__title-link" href="../article/">C extensions in the PHP API</a>
+              </h3>
+              <p class="er-card__text">
+                PHP's built-in functions are precompiled C libraries. SQLite means
+                direct C calls to the data.
+              </p>
+              <div class="er-card__meta">
+                <time datetime="2026-08-05">5 Aug 2026</time>
+                <span class="er-card__meta-dot"></span>
+                <span><a href="../tags/">php</a>, <a href="../tags/">c</a></span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="er-footer">
+      <div class="er-footer__inner">
+        <span>&copy; 2026 Nativa</span>
+        <nav class="er-footer__nav" aria-label="Footer">
+          <a class="er-footer__link" href="../">Home</a>
+          <a class="er-footer__link" href="../../">Themes</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nativa Minimal — theme gallery</title>
+    <meta
+      name="description"
+      content="The starter, erik, magazine and moonshine themes from Nativa Minimal — a zero-dependency PHP 8.5 starter kit — rendered as a static gallery."
+    />
+    <meta name="theme-color" content="#0b0d12" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Blocking on purpose: restores data-theme before the first paint. -->
+    <script src="/scripts/theme-init.js"></script>
+
+    <link rel="stylesheet" href="/entries/gallery.css" />
+  </head>
+  <body>
+    <header class="gal-header">
+      <div class="gal-header__inner">
+        <a class="gal-brand" href="./">
+          <span class="gal-brand__mark" aria-hidden="true">N</span>
+          <span>Nativa Themes</span>
+        </a>
+        <span class="gal-header__spacer"></span>
+        <button
+          type="button"
+          class="gal-toggle"
+          data-theme-toggle
+          aria-label="Toggle colour scheme"
+        >
+          <svg class="gal-toggle__sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+          </svg>
+          <svg class="gal-toggle__moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="gal-main">
+      <section class="gal-hero">
+        <p class="gal-eyebrow">Nativa Minimal</p>
+        <h1 class="gal-hero__title">Four themes, one contract.</h1>
+        <p class="gal-hero__lead">
+          Every theme in Nativa Minimal is a self-contained module behind one
+          interface — sixteen methods, from shell chrome to one per page surface.
+          The pages below are hand-written markup wearing each theme's real
+          BEM vocabulary, styled by the theme's real stylesheet.
+        </p>
+        <ul class="gal-hero__facts">
+          <li>
+            <span class="gal-fact__value">16</span>
+            <span class="gal-fact__label">methods per theme</span>
+          </li>
+          <li>
+            <span class="gal-fact__value">0</span>
+            <span class="gal-fact__label">runtime dependencies</span>
+          </li>
+          <li>
+            <span class="gal-fact__value">ES2015</span>
+            <span class="gal-fact__label">Chrome 70 baseline</span>
+          </li>
+          <li>
+            <span class="gal-fact__value">AA</span>
+            <span class="gal-fact__label">contrast, both schemes</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="gal-section">
+        <h2 class="gal-section__title">Public themes</h2>
+        <p class="gal-section__note">
+          Selected in the admin panel under Settings → theme. The first is the
+          default and the only one wired in the shipping kit.
+        </p>
+
+        <div class="gal-cards">
+          <article class="gal-card">
+            <div class="gal-card__head">
+              <div class="gal-card__title-row">
+                <h3 class="gal-card__title">Starter</h3>
+                <span class="gal-card__kind">default</span>
+              </div>
+              <p class="gal-card__desc">
+                The shell the kit ships with. Blue accent, dark-first, a
+                checkbox-driven mobile nav and a floating table of contents.
+                Its <code>st-*</code> vocabulary is the widest of the four.
+              </p>
+            </div>
+            <div class="gal-swatches" aria-hidden="true">
+              <span class="gal-swatch" style="background: #0f172a"></span>
+              <span class="gal-swatch" style="background: #1e293b"></span>
+              <span class="gal-swatch" style="background: #2563eb"></span>
+              <span class="gal-swatch" style="background: #60a5fa"></span>
+              <span class="gal-swatch" style="background: #e2e8f0"></span>
+            </div>
+            <div class="gal-card__body">
+              <ul class="gal-links">
+                <li><a class="gal-link" href="./starter/">Home</a></li>
+                <li><a class="gal-link" href="./starter/blog/">Blog index</a></li>
+                <li><a class="gal-link" href="./starter/article/">Article</a></li>
+                <li><a class="gal-link" href="./starter/tags/">Tags</a></li>
+                <li><a class="gal-link" href="./starter/author/">Author</a></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="gal-card">
+            <div class="gal-card__head">
+              <div class="gal-card__title-row">
+                <h3 class="gal-card__title">Erik</h3>
+                <span class="gal-card__kind">public</span>
+              </div>
+              <p class="gal-card__desc">
+                Editorial and image-led: a featured hero grid, category
+                sections and a persistent sidebar. Lime accent on deep navy,
+                Gilroy for headings. Its <code>er-*</code> vocabulary.
+              </p>
+            </div>
+            <div class="gal-swatches" aria-hidden="true">
+              <span class="gal-swatch" style="background: #0b1220"></span>
+              <span class="gal-swatch" style="background: #111c2e"></span>
+              <span class="gal-swatch" style="background: #d9f99d"></span>
+              <span class="gal-swatch" style="background: #bef264"></span>
+              <span class="gal-swatch" style="background: #f3f7ff"></span>
+            </div>
+            <div class="gal-card__body">
+              <ul class="gal-links">
+                <li><a class="gal-link" href="./erik/">Home</a></li>
+                <li><a class="gal-link" href="./erik/blog/">Blog index</a></li>
+                <li><a class="gal-link" href="./erik/article/">Article</a></li>
+                <li><a class="gal-link" href="./erik/tags/">Tags</a></li>
+                <li><a class="gal-link" href="./erik/author/">Author</a></li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="gal-card">
+            <div class="gal-card__head">
+              <div class="gal-card__title-row">
+                <h3 class="gal-card__title">Magazine</h3>
+                <span class="gal-card__kind">reference</span>
+              </div>
+              <p class="gal-card__desc">
+                Amber accents on the starter's neutral base, serif headings and
+                a three-column hero. Kept as reference code in the kit, so it
+                ships no build entry — these pages dress it by hand.
+                Its <code>mag-*</code> vocabulary.
+              </p>
+            </div>
+            <div class="gal-swatches" aria-hidden="true">
+              <span class="gal-swatch" style="background: #0f172a"></span>
+              <span class="gal-swatch" style="background: #1e293b"></span>
+              <span class="gal-swatch" style="background: #b45309"></span>
+              <span class="gal-swatch" style="background: #fbbf24"></span>
+              <span class="gal-swatch" style="background: #e2e8f0"></span>
+            </div>
+            <div class="gal-card__body">
+              <ul class="gal-links">
+                <li><a class="gal-link" href="./magazine/">Home</a></li>
+                <li><a class="gal-link" href="./magazine/blog/">Blog index</a></li>
+                <li><a class="gal-link" href="./magazine/article/">Article</a></li>
+                <li><a class="gal-link" href="./magazine/tags/">Tags</a></li>
+                <li><a class="gal-link" href="./magazine/author/">Author</a></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="gal-section">
+        <h2 class="gal-section__title">Admin</h2>
+        <p class="gal-section__note">
+          Resolved by path — in the app, every <code>/mark</code> route gets this
+          theme regardless of the public selection. The page below is a static
+          demo of that design system; it is served from a path that reads like
+          what it is, not from <code>/mark</code>.
+        </p>
+
+        <div class="gal-cards">
+          <article class="gal-card">
+            <div class="gal-card__head">
+              <div class="gal-card__title-row">
+                <h3 class="gal-card__title">Moonshine</h3>
+                <span class="gal-card__kind">admin</span>
+              </div>
+              <p class="gal-card__desc">
+                The back office. A fixed sidebar with collapsible nav groups, a
+                sticky topbar, stat cards that pair a number with its chart,
+                and a command palette on Ctrl+K. Violet accent, dark-first, its
+                <code>m-*</code> design tokens. Its design language is inspired
+                by <a href="https://getmoonshine.app/" rel="noopener" target="_blank">MoonShine</a>.
+              </p>
+            </div>
+            <div class="gal-swatches" aria-hidden="true">
+              <span class="gal-swatch" style="background: #020617"></span>
+              <span class="gal-swatch" style="background: #1e293b"></span>
+              <span class="gal-swatch" style="background: #7c3aed"></span>
+              <span class="gal-swatch" style="background: #a78bfa"></span>
+              <span class="gal-swatch" style="background: #22c55e"></span>
+            </div>
+            <div class="gal-card__body">
+              <p class="gal-card__warning">
+                A <strong>static design demo</strong> — not a live admin. No
+                session, no data, no forms; every control is inert and the
+                figures are placeholders.
+              </p>
+              <ul class="gal-links">
+                <li>
+                  <a class="gal-link" href="./moonshine/">Open the design demo</a>
+                </li>
+                <li>
+                  <a
+                    class="gal-link"
+                    href="https://getmoonshine.app/"
+                    rel="noopener"
+                    target="_blank"
+                    >MoonShine ↗</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="gal-section">
+        <h2 class="gal-section__title">How this gallery is built</h2>
+        <p class="gal-section__note">
+          No screenshots, no re-implementations. The stylesheets and scripts on
+          every page are the theme's own, copied out of the application
+          repository by a sync script; the markup is hand-written to the same
+          class names the PHP templates emit. Change a token upstream, sync,
+          and the gallery changes with it.
+        </p>
+      </section>
+    </main>
+
+    <footer class="gal-footer">
+      <div class="gal-footer__inner">
+        <span>Nativa Minimal — zero-dependency PHP 8.5 starter kit</span>
+        <span class="gal-footer__spacer"></span>
+        <a href="https://github.com/evan70/nativa-minimal">nativa-minimal</a>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

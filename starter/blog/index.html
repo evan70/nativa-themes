@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blog — Nativa Starter</title>
+    <meta
+      name="description"
+      content="Starter theme — blog index: search, featured card, card grid, pagination and the series sidebar."
+    />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <script src="/scripts/theme-init.js"></script>
+
+    <script type="module" src="/src/starter/main.ts"></script>
+  </head>
+  <body class="starter-shell">
+    <header class="st-header">
+      <div class="st-header__inner">
+        <input
+          type="checkbox"
+          id="st-nav-toggle"
+          class="st-nav__toggle-input"
+          aria-label="Toggle menu"
+        />
+        <a class="st-header__brand" href="../">Nativa Starter</a>
+        <nav class="st-nav" aria-label="Main">
+          <a class="st-nav__link" href="../">Home</a>
+          <a class="st-nav__link st-nav__link--active" href="./">Articles</a>
+          <a class="st-nav__link" href="../tags/">Tags</a>
+          <a class="st-nav__link" href="../author/">Author</a>
+          <a class="st-nav__link" href="../../">Gallery</a>
+        </nav>
+        <nav class="st-locale" aria-label="Language">
+          <a class="st-locale__link st-locale__link--active" href="./" hreflang="sk" lang="sk">SK</a>
+          <a class="st-locale__link" href="../../" hreflang="en" lang="en">EN</a>
+        </nav>
+        <div class="navbar__actions">
+          <button
+            type="button"
+            class="st-theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle theme"
+            title="Toggle theme"
+          >
+            <span class="st-theme-toggle__icon st-theme-toggle__icon--sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+              </svg>
+            </span>
+            <span class="st-theme-toggle__icon st-theme-toggle__icon--moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </button>
+          <a class="st-login-btn" href="#" aria-label="Prihlásiť sa" title="Prihlásiť sa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="st-login-btn__text">Prihlásiť sa</span>
+          </a>
+        </div>
+        <label for="st-nav-toggle" class="st-nav__toggle" title="Toggle menu">
+          <span class="st-nav__toggle-icon st-nav__toggle-icon--open" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </span>
+          <span class="st-nav__toggle-icon st-nav__toggle-icon--close" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </span>
+        </label>
+        <label for="st-nav-toggle" class="st-nav__overlay" aria-hidden="true"></label>
+      </div>
+    </header>
+
+    <main class="st-main">
+      <section class="st-blog-index">
+        <h1 class="st-blog-index__title">Blog</h1>
+        <p class="st-blog-index__subtitle">
+          Articles from storage/blog ... plain Markdown, zero dependencies.
+        </p>
+
+        <form class="st-blog-search" method="get" action="./" role="search">
+          <label class="st-blog-search__label" for="st-search-input">Search</label>
+          <input
+            class="st-blog-search__input"
+            id="st-search-input"
+            name="q"
+            placeholder="Search articles..."
+            value=""
+            autocomplete="off"
+            type="search"
+          />
+          <button class="st-blog-search__button" type="submit">Search</button>
+        </form>
+
+        <p class="st-blog-feed">
+          Subscribe:
+          <a class="st-blog-feed__link" href="../feed.atom" type="application/atom+xml">Atom</a>
+          ·
+          <a class="st-blog-feed__link" href="../feed.xml" type="application/rss+xml">RSS</a>
+        </p>
+
+        <div class="st-blog-index__layout">
+          <div class="st-blog-index__main">
+            <a class="st-featured" href="../article/">
+              <img
+                class="st-featured__image"
+                src="/covers/sudo-posledne-pre-deti.svg"
+                alt="Arch balíky pre deti ... diel 6: sudo LAST"
+                width="720"
+                height="360"
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+              />
+              <div class="st-featured__body">
+                <span class="st-featured__category">Security</span>
+                <h2 class="st-featured__title">
+                  Arch balíky pre deti ... diel 6: sudo LAST
+                </h2>
+                <p class="st-featured__excerpt">
+                  Šiesta lekcia série: posledné pravidlo motto. Kedy sudo patrí,
+                  kedy nie, prečo je sudo aj sudo najmenej a čo robí timestamp
+                  cache.
+                </p>
+                <div class="st-featured__footer">
+                  <time class="st-featured__date">2026-10-03</time>
+                  <span class="st-featured__views">6 views</span>
+                  <span class="st-featured__read-more">Read article &rarr;</span>
+                </div>
+              </div>
+            </a>
+
+            <div class="st-blog-index__list st-grid">
+              <article class="st-blog-index__card">
+                <img
+                  class="st-blog-index__card-image"
+                  src="/covers/kontrakt-bez-zakaznikov.svg"
+                  alt="Témy pre deti ... diel 3: kontrakt bez zákazníka"
+                  width="720"
+                  height="360"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+                <h2 class="st-blog-index__card-title">
+                  <a href="../article/">Témy pre deti ... diel 3: kontrakt bez zákazníka</a>
+                </h2>
+                <p class="st-blog-index__card-meta">
+                  2026-10-03 · Architecture ·
+                  <a class="st-author-link" href="../author/">
+                    <img class="st-author-avatar" src="/covers/avatar.svg" alt="" width="20" height="20" loading="lazy" />
+                    Nativa Dev
+                  </a>
+                </p>
+                <p class="st-blog-index__card-text">
+                  ThemeRenderer mal dve implementácie a nula volaní ... a žiadny test
+                  si to nevšimol.
+                </p>
+                <p class="st-blog-index__tags">
+                  <a class="st-article__tag" href="../tags/">architecture</a>
+                  <a class="st-article__tag" href="../tags/">themes</a>
+                </p>
+              </article>
+
+              <article class="st-blog-index__card">
+                <img
+                  class="st-blog-index__card-image"
+                  src="/covers/temy-ako-moduly-pre-deti.svg"
+                  alt="Témy pre deti ... diel 1: téma ako modul"
+                  width="720"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <h2 class="st-blog-index__card-title">
+                  <a href="../article/">Témy pre deti ... diel 1: téma ako modul</a>
+                </h2>
+                <p class="st-blog-index__card-meta">
+                  2026-10-02 · Architecture ·
+                  <a class="st-author-link" href="../author/">
+                    <img class="st-author-avatar" src="/covers/avatar.svg" alt="" width="20" height="20" loading="lazy" />
+                    Nativa Dev
+                  </a>
+                </p>
+                <p class="st-blog-index__card-text">
+                  Téma nebola vec, bola rozliata zmes. Prvý diel postavil hranicu,
+                  druhý rozdelil frontend.
+                </p>
+                <p class="st-blog-index__tags">
+                  <a class="st-article__tag" href="../tags/">php</a>
+                  <a class="st-article__tag" href="../tags/">themes</a>
+                </p>
+              </article>
+
+              <article class="st-blog-index__card">
+                <img
+                  class="st-blog-index__card-image"
+                  src="/covers/filozofia-menej-vrstiev.svg"
+                  alt="Menej vrstiev ... záver série o tom, prečo je PHP rýchle"
+                  width="720"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <h2 class="st-blog-index__card-title">
+                  <a href="../article/">Menej vrstiev ... záver série o tom, prečo je PHP rýchle</a>
+                </h2>
+                <p class="st-blog-index__card-meta">
+                  2026-08-19 · Architecture ·
+                  <a class="st-author-link" href="../author/">
+                    <img class="st-author-avatar" src="/covers/avatar.svg" alt="" width="20" height="20" loading="lazy" />
+                    Nativa Dev
+                  </a>
+                </p>
+                <p class="st-blog-index__card-text">
+                  Rýchlosť PHP nepochádza z „lepšieho frameworku". Pochádza z C a
+                  z toho, že medzi kódom a dátami nestojí nič navyše.
+                </p>
+                <p class="st-blog-index__tags">
+                  <a class="st-article__tag" href="../tags/">performance</a>
+                  <a class="st-article__tag" href="../tags/">php</a>
+                </p>
+              </article>
+
+              <article class="st-blog-index__card">
+                <img
+                  class="st-blog-index__card-image"
+                  src="/covers/opcache-a-jit-prekompilacia.svg"
+                  alt="OPcache a JIT: ako sa PHP prekompiluje"
+                  width="720"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <h2 class="st-blog-index__card-title">
+                  <a href="../article/">OPcache a JIT: ako sa PHP prekompiluje</a>
+                </h2>
+                <p class="st-blog-index__card-meta">
+                  2026-08-12 · PHP ·
+                  <a class="st-author-link" href="../author/">
+                    <img class="st-author-avatar" src="/covers/avatar.svg" alt="" width="20" height="20" loading="lazy" />
+                    Nativa Dev
+                  </a>
+                </p>
+                <p class="st-blog-index__card-text">
+                  Prekompilácia na úrovni jazyka: OPcache drží opcody v pamäti, JIT
+                  prekladá horúce cesty do strojového kódu.
+                </p>
+                <p class="st-blog-index__tags">
+                  <a class="st-article__tag" href="../tags/">php</a>
+                  <a class="st-article__tag" href="../tags/">opcache</a>
+                </p>
+              </article>
+
+              <article class="st-blog-index__card">
+                <img
+                  class="st-blog-index__card-image"
+                  src="/covers/c-rozsirenia-php-api.svg"
+                  alt="C rozšírenia PHP API"
+                  width="720"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <h2 class="st-blog-index__card-title">
+                  <a href="../article/">C rozšírenia PHP API</a>
+                </h2>
+                <p class="st-blog-index__card-meta">
+                  2026-08-05 · PHP ·
+                  <a class="st-author-link" href="../author/">
+                    <img class="st-author-avatar" src="/covers/avatar.svg" alt="" width="20" height="20" loading="lazy" />
+                    Nativa Dev
+                  </a>
+                </p>
+                <p class="st-blog-index__card-text">
+                  Built-in funkcie PHP sú prekompilované C knižnice. SQLite
+                  znamená priame C volania k dátam.
+                </p>
+                <p class="st-blog-index__tags">
+                  <a class="st-article__tag" href="../tags/">php</a>
+                  <a class="st-article__tag" href="../tags/">c</a>
+                </p>
+              </article>
+            </div>
+
+            <nav class="st-blog-pagination" aria-label="Blog pages">
+              <span class="st-blog-pagination__page st-blog-pagination__page--current">
+                <a href="./" aria-current="page">1</a>
+              </span>
+              <span class="st-blog-pagination__page"><a href="?page=2">2</a></span>
+              <span class="st-blog-pagination__page"><a href="?page=3">3</a></span>
+              <span class="st-blog-pagination__page"><a href="?page=4">4</a></span>
+              <span class="st-blog-pagination__page"><a href="?page=5">5</a></span>
+              <span class="st-blog-pagination__page"><a href="?page=6">6</a></span>
+              <a class="st-blog-pagination__link" href="?page=2">Older &rsaquo;</a>
+            </nav>
+          </div>
+
+          <aside class="st-blog-index__aside">
+            <h2 class="st-blog-index__aside-title">Series</h2>
+            <div class="st-series-aside">
+              <a class="st-series-aside__item" href="../article/">
+                <span class="st-series-aside__tag">Php</span>
+                <span class="st-series-aside__count">57 articles</span>
+                <span class="st-series-aside__lead">
+                  Téma nebola vec, bola rozliata zmes ... dnes je modul s
+                  kontraktom, konektorom a testom.
+                </span>
+              </a>
+              <a class="st-series-aside__item" href="../article/">
+                <span class="st-series-aside__tag">Architecture</span>
+                <span class="st-series-aside__count">35 articles</span>
+                <span class="st-series-aside__lead">
+                  ThemeRenderer mal dve implementácie a nula volaní ... a žiadny
+                  test si to nevšimol.
+                </span>
+              </a>
+              <a class="st-series-aside__item" href="../article/">
+                <span class="st-series-aside__tag">Rust</span>
+                <span class="st-series-aside__count">20 articles</span>
+                <span class="st-series-aside__lead">
+                  V modeli Lekalo stojí sedem modulov. Šesť z nich má svoj trace
+                  manifest.
+                </span>
+              </a>
+              <a class="st-series-aside__item" href="../article/">
+                <span class="st-series-aside__tag">Security</span>
+                <span class="st-series-aside__count">19 articles</span>
+                <span class="st-series-aside__lead">
+                  Šiesta lekcia série: posledné pravidlo motto. Kedy sudo patrí,
+                  kedy nie.
+                </span>
+              </a>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="st-footer">
+      <div class="st-footer__inner">
+        <span>© 2026 Nativa Starter</span>
+        <nav class="st-footer__nav" aria-label="Footer">
+          <a class="st-footer__link" href="../">Domov</a>
+          <a class="st-footer__link" href="../../">Témy</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>

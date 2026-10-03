@@ -1,0 +1,15 @@
+# pnpm walk-up guard.
+#
+# pnpm resolves the workspace root by walking UP from this directory and
+# adopts the first `pnpm-workspace.yaml` it finds. Without this file a stray
+# one in $HOME (with its own package.json and lockfile) hijacks every install
+# and build: wrong lockfile resolution, spurious ERR_PNPM_IGNORED_BUILDS for
+# packages this project does not depend on, or "Headless installation requires
+# a pnpm-lock.yaml".
+#
+# `ignoreWorkspace: true` is the knob pnpm >= 10 honours (it ignores
+# .npmrc's `ignore-workspace`); .npmrc carries the same setting for pnpm 9,
+# which CI pins.
+#
+# This is a single-package repo — there is no workspace to resolve.
+ignoreWorkspace: true

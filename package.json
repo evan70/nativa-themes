@@ -1,0 +1,24 @@
+{
+  "name": "nativa-themes",
+  "version": "1.0.0",
+  "description": "Nativa Minimal themes — a static gallery of the starter, erik, magazine and moonshine themes, published on GitHub Pages.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "sync": "node scripts/sync-themes.mjs",
+    "sync:check": "node scripts/sync-themes.mjs --check",
+    "shoot": "node scripts/shoot.mjs",
+    "interactions": "node scripts/interactions.mjs",
+    "verify": "pnpm run sync:check && pnpm run typecheck && pnpm run build && pnpm run shoot && pnpm run interactions"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "typescript": "^5.8.0",
+    "vite": "^8.2.1"
+  }
+}

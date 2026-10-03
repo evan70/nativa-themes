@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="sk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Minimálny PHP 8.5 starter kit — Nativa Starter</title>
+    <meta
+      name="description"
+      content="Starter theme — the default public shell of Nativa Minimal: hero, feature grid and a size-ratio strip."
+    />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Blocking on purpose: restores data-theme before the first paint. -->
+    <script src="/scripts/theme-init.js"></script>
+
+    <!-- The theme's real stylesheet, pulled in by its real entry script. -->
+    <script type="module" src="/src/starter/main.ts"></script>
+  </head>
+  <body class="starter-shell">
+    <header class="st-header">
+      <div class="st-header__inner">
+        <input
+          type="checkbox"
+          id="st-nav-toggle"
+          class="st-nav__toggle-input"
+          aria-label="Toggle menu"
+        />
+        <a class="st-header__brand" href="./">Nativa Starter</a>
+        <nav class="st-nav" aria-label="Main">
+          <a class="st-nav__link" href="./">Home</a>
+          <a class="st-nav__link" href="blog/">Articles</a>
+          <a class="st-nav__link" href="tags/">Tags</a>
+          <a class="st-nav__link" href="author/">Author</a>
+          <a class="st-nav__link" href="../">Gallery</a>
+        </nav>
+        <nav class="st-locale" aria-label="Language">
+          <a class="st-locale__link st-locale__link--active" href="./" hreflang="sk" lang="sk">SK</a>
+          <a class="st-locale__link" href="../" hreflang="en" lang="en">EN</a>
+        </nav>
+        <div class="navbar__actions">
+          <button
+            type="button"
+            class="st-theme-toggle"
+            data-theme-toggle
+            aria-label="Toggle theme"
+            title="Toggle theme"
+          >
+            <span class="st-theme-toggle__icon st-theme-toggle__icon--sun" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+              </svg>
+            </span>
+            <span class="st-theme-toggle__icon st-theme-toggle__icon--moon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </span>
+          </button>
+          <a class="st-login-btn" href="#" aria-label="Prihlásiť sa" title="Prihlásiť sa">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <span class="st-login-btn__text">Prihlásiť sa</span>
+          </a>
+        </div>
+        <label for="st-nav-toggle" class="st-nav__toggle" title="Toggle menu">
+          <span class="st-nav__toggle-icon st-nav__toggle-icon--open" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </span>
+          <span class="st-nav__toggle-icon st-nav__toggle-icon--close" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </span>
+        </label>
+        <label for="st-nav-toggle" class="st-nav__overlay" aria-hidden="true"></label>
+      </div>
+    </header>
+
+    <main class="st-main">
+      <section class="st-hero">
+        <h1 class="st-hero__title">Minimálny PHP 8.5 starter kit</h1>
+        <p class="st-hero__subtitle">
+          Malý a čitateľný základ: modulárny monolit, per-module SQLite,
+          routovanie na atribútoch a prísna bezpečnosť — postavené od nuly.
+        </p>
+        <img
+          class="st-hero__media"
+          src="/images/starter-hero.svg"
+          alt="Modules as horizontal slices over one runtime"
+          width="720"
+          height="360"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </section>
+
+      <section class="st-section">
+        <h2 class="st-section__title">Menej vrstiev</h2>
+        <div class="st-features st-grid" data-cq data-cq-bp="560,860">
+          <div class="st-card">
+            <h3 class="st-card__title">Zero dependencies</h3>
+            <p class="st-card__text">
+              Žiadny Composer runtime, žiadny framework. Hand-rolled PSR-4
+              autoloader nabootuje aplikáciu aj bez vendor/ — celý
+              produkčný runtime tvorí 5 PHP extensions.
+            </p>
+            <a class="st-card__link" href="article/">Čítať článok</a>
+          </div>
+          <div class="st-card">
+            <h3 class="st-card__title">Čitateľný povrch</h3>
+            <p class="st-card__text">
+              C-pattern: žiadny magic, žiadne service locatory, žiadne
+              generované mapy. Každý riadok vieš prečítať a overiť — žiadna
+              čierna skrinka.
+            </p>
+            <a class="st-card__link" href="article/">Čítať článok</a>
+          </div>
+          <div class="st-card">
+            <h3 class="st-card__title">Per-module SQLite</h3>
+            <p class="st-card__text">
+              Jeden databázový súbor na modul — users.db, config.db,
+              locales.db. Žiadna infraštruktúra, žiadny ORM, žiadna migračná
+              sieť.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="st-section">
+        <h2 class="st-section__title">Super rýchle PHP</h2>
+        <div class="st-features st-grid" data-cq data-cq-bp="560,860">
+          <div class="st-card">
+            <h3 class="st-card__title">PHP 8.5 + OPcache/JIT</h3>
+            <p class="st-card__text">
+              Prekompilácia na úrovni jazyka: OPcache drží opcody v pamäti,
+              JIT prekladá horúce cesty do natívneho strojového kódu.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </div>
+          <div class="st-card">
+            <h3 class="st-card__title">Dáta cez C</h3>
+            <p class="st-card__text">
+              SQLite je celé v C — najrýchlejšia cesta k dátam bez ORM vrstvy.
+              Built-in funkcie PHP sú prekompilované C knižnice.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </div>
+          <div class="st-card">
+            <h3 class="st-card__title">Bez cache vrstvy</h3>
+            <p class="st-card__text">
+              Vyhodili sme cache a dostali 100/100 PageSpeed. Rýchlosť nepochádza
+              z cache, ale z odstránenia vrstiev.
+            </p>
+            <a class="st-card__link" href="blog/">Čítať článok</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="st-stats">
+        <p class="st-stat__value">215 MB dev → 1,7 MB prod</p>
+        <p class="st-stat__label">
+          Pomer ~126:1 — celý produkčný runtime je menší ako jedna fotka
+          z mobilu.
+        </p>
+      </section>
+    </main>
+
+    <footer class="st-footer">
+      <div class="st-footer__inner">
+        <span>© 2026 Nativa Starter</span>
+        <nav class="st-footer__nav" aria-label="Footer">
+          <a class="st-footer__link" href="blog/">Články</a>
+          <a class="st-footer__link" href="../">Témy</a>
+        </nav>
+        <span>PHP 8.5 — zero dependencies</span>
+      </div>
+    </footer>
+
+    <script src="/scripts/theme-toggle.js"></script>
+  </body>
+</html>
