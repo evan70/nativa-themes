@@ -116,6 +116,18 @@ absolute asset URL would 404, and renaming the repository must not break the
 site. Root-absolute URLs in HTML (`/scripts/theme-init.js`, `/covers/…`) are
 fine — Vite rewrites them to be relative to each page.
 
+## One list of published pages
+
+`scripts/pages.mjs` is the only list of what the gallery publishes: `shoot`
+screenshots it, CI checks the built `dist/` against it, and the post-deploy job
+fetches those URLs from Pages. Adding a page therefore means two edits — its
+input in `vite.config.ts` and its entry in `scripts/pages.mjs` — and forgetting
+the second fails `pnpm run check:dist` ("built but not checked") instead of
+shipping a page no check ever saw. The `expect` field is what that page's own
+stylesheet must leave in the HTML: a CSS token for generated pages, the theme's
+class prefix for hand-written ones (their stylesheet is a separate asset, so no
+token appears in the HTML at all).
+
 ## `theme-init.js` must stay blocking
 
 It restores `data-theme` from `localStorage` before the first paint. A

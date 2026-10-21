@@ -48,6 +48,12 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      # The artefact must contain exactly the pages scripts/pages.mjs lists: a
+      # page added to vite.config.ts but not to the list would ship unverified,
+      # and a listed page that did not build is a 404 waiting to happen.
+      - name: Check the build contains every listed page
+        run: pnpm run check:dist
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3
@@ -60,6 +66,37 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # The deploy can succeed while the site serves something else: a stale
+  # artefact, a base path that moved, a directory uploaded one level too deep.
+  # `shoot` cannot see that (it checks a local preview), so the deployed URLs
+  # are checked here — every page in scripts/pages.mjs must answer 200, be HTML,
+  # and still contain its theme's marker (`expect` in pages.mjs).
+  verify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Pages serves the new artefact within seconds, but not always the first
+      # one. Each retry is the same assertion, not a weaker one.
+      - name: Check the deployed pages
+        run: |
+          set -o pipefail
+          url="${{ needs.deploy.outputs.page_url }}"
+          for attempt in 1 2 3 4 5 6; do
+            echo "attempt $attempt: node scripts/check-pages.mjs $url"
+            if node scripts/check-pages.mjs "$url"; then exit 0; fi
+            sleep 15
+          done
+          echo "check-pages failed 6 times against $url"
+          exit 1

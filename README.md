@@ -141,6 +141,7 @@ pnpm run verify        # everything below, in order
 | `pnpm run sync:check` | the copied theme sources still match the app |
 | `pnpm run typecheck` | `tsc --noEmit` over the entries, the build plugins and the synced sources |
 | `pnpm run build` | Vite builds the multi-page site |
+| `pnpm run check:dist` | `dist/` contains exactly the pages in `scripts/pages.mjs` — no page shipped unchecked, none listed that did not build |
 | `pnpm run shoot` | every page loads with no 404, no console error, and its theme's token on `:root` |
 | `pnpm run interactions` | the ported behaviours actually work in a browser |
 
@@ -164,6 +165,22 @@ a **local** gate; the workflow below deliberately does not pretend to run it.
 `.github/workflows/pages.yml` builds `dist/` and deploys it to GitHub Pages on
 every push to `main`. Enable it once in the repository settings
 (*Settings → Pages → Source: GitHub Actions*).
+
+A deploy can succeed while the site serves something else — a stale artefact,
+a moved base path, a directory uploaded one level too deep. `shoot` cannot see
+that (it checks a local preview), so the workflow has a third job, `verify`,
+that runs after `deploy` and fetches the **published** URLs:
+
+```bash
+pnpm run check:pages https://<user>.github.io/nativa-themes
+```
+
+Every page in `scripts/pages.mjs` must answer 200, be `text/html`, and still
+contain its theme's marker (`expect` — the theme's CSS token for the generated
+pages, its class prefix for the hand-written ones, whose stylesheet is a
+separate asset). It retries six times, because Pages serves a new artefact
+within seconds but not always the first one; every retry is the same
+assertion, not a weaker one.
 
 The build uses `base: './'`, so the site works under any repository name —
 rename the repo and the URLs keep resolving.
