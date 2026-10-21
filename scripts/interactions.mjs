@@ -131,6 +131,77 @@ const CHECKS = [
     ],
   },
   {
+    name: 'moonshine demo: the dashboard links to the subpages',
+    page: '/moonshine/',
+    steps: [
+      // The four demo pages are one demo: a sidebar link that still points at
+      // `#articles` is a nav item that goes nowhere.
+      `(function(){
+         var links=[].slice.call(document.querySelectorAll('.layout-sidebar__link'));
+         var byLabel=function(label){
+           return links.filter(function(l){return l.textContent.trim()===label})[0];
+         };
+         var a=byLabel('Articles'), u=byLabel('Users');
+         return !!a && a.getAttribute('href')==='articles/'
+             && !!u && u.getAttribute('href')==='users/';
+       })()`,
+      // The palette resolves the same two pages from `data-mark-root`.
+      `(function(){
+         document.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}));
+         var hrefs=[].map.call(
+           document.querySelectorAll('#m-palette-list .m-palette-item'),
+           function(i){return i.dataset.href}
+         );
+         document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'}));
+         return hrefs.indexOf('./articles/')!==-1 && hrefs.indexOf('./users/')!==-1;
+       })()`,
+    ],
+  },
+  {
+    name: 'moonshine articles: a real list, wired back to the dashboard',
+    page: '/moonshine/articles/',
+    steps: [
+      `(function(){
+         var links=[].slice.call(document.querySelectorAll('.layout-sidebar__link'));
+         var u=links.filter(function(l){return l.textContent.trim()==='Users'})[0];
+         return document.body.getAttribute('data-mark-root')==='../'
+             && !!u && u.getAttribute('href')==='../users/'
+             && !!document.querySelector('table.m-table')
+             && document.querySelectorAll('table.m-table tbody tr').length>0;
+       })()`,
+      `(function(){
+         document.dispatchEvent(new KeyboardEvent('keydown',{key:'k',ctrlKey:true,bubbles:true}));
+         var items=[].slice.call(document.querySelectorAll('#m-palette-list .m-palette-item'));
+         var hrefs=items.map(function(i){return i.dataset.href});
+         document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'}));
+         return hrefs.indexOf('../articles/')!==-1 && hrefs.indexOf('../')!==-1;
+       })()`,
+    ],
+  },
+  {
+    name: 'moonshine editor and users: real forms, real rows',
+    page: '/moonshine/article/',
+    steps: [
+      `(function(){
+         return document.body.getAttribute('data-mark-root')==='../'
+             && !!document.querySelector('form.m-form')
+             && document.querySelectorAll('form.m-form input, form.m-form textarea').length>0;
+       })()`,
+    ],
+  },
+  {
+    name: 'moonshine users: the list renders rows',
+    page: '/moonshine/users/',
+    steps: [
+      `(function(){
+         var links=[].slice.call(document.querySelectorAll('.layout-sidebar__link'));
+         var a=links.filter(function(l){return l.textContent.trim()==='Articles'})[0];
+         return !!a && a.getAttribute('href')==='../articles/'
+             && document.querySelectorAll('table.m-table tbody tr').length>0;
+       })()`,
+    ],
+  },
+  {
     name: 'magazine: mobile menu and back-to-top are wired',
     page: '/magazine/',
     steps: [

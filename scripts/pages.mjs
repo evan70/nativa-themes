@@ -31,6 +31,9 @@ export const PAGES = [
   { name: 'magazine/tags', url: '/magazine/tags/', expect: 'class="mag-' },
   { name: 'magazine/author', url: '/magazine/author/', expect: 'class="mag-' },
   { name: 'moonshine/admin', url: '/moonshine/', expect: 'class="m-stat' },
+  { name: 'moonshine/articles', url: '/moonshine/articles/', expect: 'class="m-table' },
+  { name: 'moonshine/article', url: '/moonshine/article/', expect: 'class="m-form' },
+  { name: 'moonshine/users', url: '/moonshine/users/', expect: 'class="m-table' },
   // Generated from the themes themselves; see vite.config.ts.
   { name: 'boson/home', url: '/boson/', expect: '--bo-bg' },
   { name: 'boson/blog', url: '/boson/blog/', expect: '--bo-bg' },

@@ -50,6 +50,9 @@ const input = {
   // Served under the theme's own name, like the other three. It is NOT a live
   // admin and never sits at `/mark`; the page opens with a banner saying so.
   'moonshine/admin': 'moonshine/index.html',
+  'moonshine/articles': 'moonshine/articles/index.html',
+  'moonshine/article': 'moonshine/article/index.html',
+  'moonshine/users': 'moonshine/users/index.html',
 
   // The kernel themes. These pages are GENERATED from the theme's own PHP
   // (`bin/build/render-theme-pages.php` in nativa-php-core) — do not hand-edit

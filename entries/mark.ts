@@ -124,14 +124,22 @@ const initCommandPalette = (): void => {
   const list = document.getElementById('m-palette-list');
   if (!overlay || !input || !list) return;
 
-  const commands = [
-    { label: 'Dashboard', href: '#dashboard' },
-    { label: 'Articles', href: '#articles' },
-    { label: 'Users', href: '#users' },
+  // `path` entries are real demo pages, resolved from the page's own
+  // `data-mark-root` (the subpages sit one level deeper than the dashboard);
+  // `href` entries are the inert anchors the demo has no page for.
+  type PaletteCommand = { label: string; path?: string; href?: string };
+  const root = document.body.getAttribute('data-mark-root') || './';
+  const commands: PaletteCommand[] = [
+    { label: 'Dashboard', path: '' },
+    { label: 'Articles', path: 'articles/' },
+    { label: 'Users', path: 'users/' },
     { label: 'Roles', href: '#roles' },
     { label: 'Media', href: '#media' },
     { label: 'Settings', href: '#settings' },
   ];
+
+  const resolve = (command: PaletteCommand): string =>
+    command.path === undefined ? command.href || '#' : root + command.path;
 
   let active = 0;
 
@@ -150,7 +158,7 @@ const initCommandPalette = (): void => {
                 '<div class="m-palette-item' +
                 (index === 0 ? ' active' : '') +
                 '" data-href="' +
-                command.href +
+                resolve(command) +
                 '"><span class="m-palette-item__icon">›</span>' +
                 '<span class="m-palette-item__label">' +
                 command.label +
@@ -202,9 +210,7 @@ const initCommandPalette = (): void => {
       const items = list.querySelectorAll<HTMLElement>('.m-palette-item');
       const chosen = items[active];
       if (chosen) {
-        const href = chosen.dataset.href;
-        close();
-        if (href) window.location.hash = href;
+        follow(chosen.dataset.href);
       }
     }
   });
@@ -217,10 +223,16 @@ const initCommandPalette = (): void => {
     const target = event.target as HTMLElement | null;
     if (!target || !target.classList.contains('m-palette-item')) return;
     const item = target.closest<HTMLElement>('.m-palette-item');
-    const href = item ? item.dataset.href : undefined;
-    close();
-    if (href) window.location.hash = href;
+    follow(item ? item.dataset.href : undefined);
   });
+
+  /** Anchors stay on the page; a real page path navigates. */
+  function follow(href: string | undefined): void {
+    close();
+    if (!href) return;
+    if (href.charAt(0) === '#') window.location.hash = href;
+    else window.location.href = href;
+  }
 };
 
 const onDomReady = (): void => {

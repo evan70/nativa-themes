@@ -33,11 +33,13 @@ PHP templates emit.
 | Starter | `st-*` | public, the default | [home](starter/) · [blog](starter/blog/) · [article](starter/article/) · [tags](starter/tags/) · [author](starter/author/) |
 | Erik | `er-*` | public, selectable | [home](erik/) · [blog](erik/blog/) · [article](erik/article/) · [tags](erik/tags/) · [author](erik/author/) |
 | Magazine | `mag-*` | reference code, unwired | [home](magazine/) · [blog](magazine/blog/) · [article](magazine/article/) · [tags](magazine/tags/) · [author](magazine/author/) |
-| Moonshine | `m-*` / `layout-*` | admin, behind `/mark` | [dashboard](moonshine/) |
+| Moonshine | `m-*` / `layout-*` | admin, behind `/mark` | [dashboard](moonshine/) · [articles](moonshine/articles/) · [editor](moonshine/article/) · [users](moonshine/users/) |
 
-The Moonshine page is a **static design demo**, not a live admin: no session,
-no data, no forms, every control inert. It opens with a banner saying so, and
-its design language is inspired by
+The Moonshine pages are a **static design demo**, not a live admin: no session,
+no data, no writes, every control inert. Four of them: the dashboard, the
+articles list, the article editor and the users list — the admin surfaces the
+real templates render. Each opens with a banner saying so, they navigate to
+each other (sidebar and Ctrl+K palette), and the design language is inspired by
 [MoonShine](https://getmoonshine.app/).
 
 The fifth theme in the app, `minimal`, is unwired reference code with no build
@@ -118,7 +120,10 @@ font-set/index.html      Slovak charset specimen of every served face
 starter/…/index.html     demo pages, at the URL they are served from
 erik/…/index.html
 magazine/…/index.html
-moonshine/index.html
+moonshine/index.html       the admin dashboard
+moonshine/articles/        the articles list, at the URL the admin serves it from
+moonshine/article/         the article editor
+moonshine/users/           the users list
 boson/…/index.html       GENERATED — 7 surfaces + 7 under sk/, same for jednotka, mono
 entries/                 hand-written code: gallery CSS, the admin entry
 src/<theme>/             SYNCED from the app — do not edit
