@@ -370,3 +370,117 @@ code {
 :root[data-theme='light'] .gal-toggle__moon {
   display: block;
 }
+
+/* ── Font set page ─────────────────────────────────────────────── */
+
+/*
+ * The specimen's own families are declared in the page, not here: their `src`
+ * URLs name two files one directory up, and a stylesheet that lives under
+ * `assets/` after the build would have to guess that distance. Everything in
+ * this block is layout only — no URLs, so nothing here can 404.
+ */
+.fset {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+.fset__face {
+  border: 1px solid var(--gal-border);
+  border-radius: 12px;
+  background: var(--gal-surface);
+  padding: 1.25rem 1.25rem 1.5rem;
+  overflow: hidden;
+}
+
+.fset__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.9rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--gal-border);
+  font-size: 0.8125rem;
+  color: var(--gal-muted);
+}
+
+.fset__name {
+  font-weight: 700;
+  color: var(--gal-ink);
+}
+
+.fset__glyphs {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.fset__row {
+  margin: 0;
+}
+
+.fset__chars {
+  font-family: 'Inter specimen', system-ui, sans-serif;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.fset__chars--prose {
+  font-size: 1rem;
+  max-width: 46ch;
+}
+
+.fset__chars--display {
+  font-family: 'Roboto Condensed specimen', system-ui, sans-serif;
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
+
+.fset__chars--title {
+  font-family: 'Roboto Condensed specimen', system-ui, sans-serif;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.fset__chars--bold {
+  font-weight: 600;
+}
+
+/* `normal`, not a fixed ratio: the comparison is the line box the font metrics
+   produce, and a fixed line-height would hide exactly what is being compared. */
+.fset__chars--metric {
+  line-height: normal;
+}
+
+.fset__chars--inter {
+  font-family: 'Inter specimen', system-ui, sans-serif;
+}
+
+.fset__chars--fallback {
+  font-family: 'Inter Fallback specimen', system-ui, sans-serif;
+  color: var(--gal-muted);
+}
+
+.fset__notes {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.6rem;
+  color: var(--gal-muted);
+}
+
+.fset__notes strong {
+  color: var(--gal-ink);
+}
+
+.fset__code {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--gal-border);
+  border-radius: 10px;
+  background: var(--gal-surface-raised);
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}

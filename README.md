@@ -58,19 +58,28 @@ kernel, `php bin/cms module:add <Name>`, run the suite there.
 
 ### Demo pages for the kernel themes are generated
 
-`boson/`, `jednotka/` and `mono/` (7 surfaces each: home, blog, article, tags, categories,
-author, search) are rendered by `bin/build/render-theme-pages.php` in `nativa-php-core` —
-the theme's own PHP against one fixture, wrapped by the kernel layout. Do not hand-edit
-them; re-render instead:
+`boson/`, `jednotka/` and `mono/` are rendered by `bin/build/render-theme-pages.php` in
+`nativa-php-core` — the theme's own PHP against one fixture, wrapped by the kernel layout.
+Each theme gets **7 surfaces in English and the same 7 in Slovak**: home, blog, article,
+tags, categories, author, search, at `/boson/…` and `/boson/sk/…` (42 pages). Do not
+hand-edit them; re-render instead:
 
 ```bash
 cd ../nativa-php-core
 php bin/build/render-theme-pages.php --theme=boson --out=../nativa-themes   # or --theme=all
+php bin/build/render-theme-pages.php --locale=sk --out=../nativa-themes     # Slovak only
 php bin/build/render-theme-pages.php --check --out=../nativa-themes         # exit 1 if stale
 ```
 
+The Slovak pages are the font test that matters here: Slovak is the project's default
+locale, its fixture (§ `fixtures/themes-demo-sk.php`) carries the whole alphabet in both
+cases in one paragraph, and a face that ships no `č`, `ľ` or `ô` falls back mid-sentence
+there and nowhere on the English pages. The markup stays the theme's; the theme ships no
+translations, so its chrome labels stay English on both locales.
+
 The generated documents are self-contained: critical CSS inlined, the behaviour script
-inlined, root URLs rewritten to `../../`. Two consequences worth knowing:
+inlined, root URLs rewritten to the depth of the page (`../../` for a surface, `../../../`
+for its Slovak twin). Two consequences worth knowing:
 
 - `erik` is skipped on purpose: its gallery pages are hand-written and rendering into the same
 directory would overwrite them without a diff to review. The generator refuses it by name.
@@ -80,9 +89,8 @@ of visible text and `shoot` fails it as an empty body. The generator can render 
 (`--theme=griffe`) and says why it is empty. Also, the module stylesheet is the 281-line
 critical subset, not the app's full frontend one.
 - The fonts the pages use (`inter-400-0c9c05bd`, `roboto-condensed-400-c05481f9`) and the
-  mono hero images (`public/demo/`) are copied by hand, because they are assets, not markup.
-- `shoot` now covers 38 pages (17 hand-written + 21 generated); `render --check` proves the
-generated half still matches the themes.
+  mono hero images (`public/demo/`) are copied by hand, because they are assets, not markup.- `shoot` covers 60 pages (17 hand-written + 21 generated + 21 Slovak + 1 font set);
+  `render --check` proves the generated half still matches the themes.
 
 ## Why the markup is hand-written
 
@@ -101,10 +109,12 @@ copies them out of the app, byte for byte.
 ```
 modules/Themes/<Name>/   the five kernel themes — Theme/, assets/, tests/ (the source)
 index.html               the gallery itself
+font-set/index.html      Slovak charset specimen of every served face
 starter/…/index.html     demo pages, at the URL they are served from
 erik/…/index.html
 magazine/…/index.html
 moonshine/index.html
+boson/…/index.html       GENERATED — 7 surfaces + 7 under sk/, same for jednotka, mono
 entries/                 hand-written code: gallery CSS, the admin entry
 src/<theme>/             SYNCED from the app — do not edit
 build/                   SYNCED from the app — the @layer stripping plugin
@@ -141,13 +151,20 @@ pnpm run verify        # everything below, in order
 | `pnpm run sync:check` | the copied theme sources still match the app |
 | `pnpm run typecheck` | `tsc --noEmit` over the entries, the build plugins and the synced sources |
 | `pnpm run build` | Vite builds the multi-page site |
-| `pnpm run check:dist` | `dist/` contains exactly the pages in `scripts/pages.mjs` — no page shipped unchecked, none listed that did not build |
+| `pnpm run check:dist` | `dist/` contains exactly the pages in `scripts/pages.mjs`, and every internal `href`/`src`/`action` on those pages resolves to a file the build produced |
+| `pnpm run check:fonts` | every character the font-set page renders is in the `cmap` of the `.woff2` it names — the claim on the page, read out of the bytes |
 | `pnpm run shoot` | every page loads with no 404, no console error, and its theme's token on `:root` |
 | `pnpm run interactions` | the ported behaviours actually work in a browser |
 
 `shoot` is what caught both font bugs above: a missing woff2 file shows up as
 an HTTP 404 on every erik and moonshine page, not as a silent visual
 difference.
+
+`check:fonts` answers a different question: not "did the file arrive" but "is
+the glyph in it". It parses the `cmap` out of the same `.woff2` bytes the
+browser loads (woff2 table directory + one brotli stream, no dependency) and
+fails naming the missing codepoints — which is how a re-subset that drops the
+Slovak set goes red instead of quietly producing fallback glyphs.
 
 `shoot` and `interactions` need a preview server:
 

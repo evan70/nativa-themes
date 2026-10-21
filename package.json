@@ -1,7 +1,7 @@
 {
   "name": "nativa-themes",
   "version": "1.0.0",
-  "description": "Nativa Minimal themes \u2014 a static gallery of the starter, erik, magazine and moonshine themes, published on GitHub Pages.",
+  "description": "Nativa Minimal themes — a static gallery of the starter, erik, magazine and moonshine themes, published on GitHub Pages.",
   "type": "module",
   "private": true,
   "license": "MIT",
@@ -14,9 +14,10 @@
     "sync:check": "node scripts/sync-themes.mjs --check",
     "shoot": "node scripts/shoot.mjs",
     "interactions": "node scripts/interactions.mjs",
-    "verify": "pnpm run sync:check && pnpm run typecheck && pnpm run build && pnpm run check:dist && pnpm run shoot && pnpm run interactions",
+    "verify": "pnpm run sync:check && pnpm run typecheck && pnpm run build && pnpm run check:dist && pnpm run check:fonts && pnpm run shoot && pnpm run interactions",
     "check:dist": "node scripts/check-pages.mjs --dist dist",
-    "check:pages": "node scripts/check-pages.mjs"
+    "check:pages": "node scripts/check-pages.mjs",
+    "check:fonts": "node scripts/font-coverage.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",

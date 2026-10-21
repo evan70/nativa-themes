@@ -17,8 +17,8 @@
  *
  * Exit 0 only when every page passes; failures print the URL and the reason.
  */
-import { existsSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join, normalize, resolve } from 'node:path';
 import { PAGES } from './pages.mjs';
 
 const args = process.argv.slice(2);
@@ -38,6 +38,9 @@ if (!base && null === dist) {
 }
 
 const fetchPages = '' !== base;
+
+/** Counts everything that failed, so one mode cannot overwrite another's exit. */
+let failures = 0;
 
 /** Every index.html under a directory, relative to it. */
 const pagesIn = (root, prefix = '') => {
@@ -71,9 +74,46 @@ if (null !== dist) {
   }
 
   console.log(`dist: ${built.length} built, ${listed.length} listed`);
-}
 
-let failures = 0;
+  // Every internal href/src/action, resolved against the page that declares it.
+  // A built page is not a working page: `check:dist` compared names, so a
+  // "Blog" link spelled `../blog/` on a theme's HOME (where the demo's blog is
+  // `blog/`) passed every check and 404'd for the reader.
+  let links = 0;
+  const broken = [];
+
+  for (const page of built) {
+    const file = join(dist, page);
+    const at = dirname(resolve(file));
+    // Inline scripts build markup too, and their strings are not links.
+    const html = readFileSync(file, 'utf8').replace(/<script[\s\S]*?<\/script>/g, '');
+
+    for (const match of html.matchAll(/(?:href|src|action)="([^"]+)"/g)) {
+      const url = match[1];
+
+      if ('' === url || /^(?:#|https?:|mailto:|tel:|data:)/.test(url)) continue;
+
+      const path = url.split('?')[0].split('#')[0];
+      const target = normalize(join(at, path));
+      const hit = path.endsWith('/')
+        ? existsSync(join(target, 'index.html'))
+        : existsSync(target) || existsSync(join(target, 'index.html'));
+
+      links++;
+
+      if (!hit) broken.push(`${page} → ${url}`);
+    }
+  }
+
+  if (broken.length > 0) {
+    failures += broken.length;
+    console.error(`dist: ${broken.length} broken internal link(s)`);
+    for (const entry of broken.slice(0, 20)) console.error(`        ${entry}`);
+    process.exitCode = 1;
+  }
+
+  console.log(`links: ${links} internal, ${broken.length} broken`);
+}
 
 if (!fetchPages) {
   console.log('check-pages: --dist only, nothing to fetch');

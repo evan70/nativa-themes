@@ -24,6 +24,10 @@ Those pages are rendered from the theme's PHP by
 next render, which is exactly the drift `render --check` refuses to ship.
 
 - Change the theme (in `modules/Themes/<Name>/`), then re-render.
+- Two locales, one shape: `<theme>/…` is English, `<theme>/sk/…` is Slovak. Slovak is the
+  project's default locale, so those are the pages that test the font set — the article
+  body carries every letter of the alphabet in both cases. Do not hand-write a Slovak page
+  to "fill a gap": add the surface to the generator instead, or the two drift apart.
 - `erik/`, `starter/`, `magazine/` and `moonshine/` are still hand-written — that is why the
   two rules sit next to each other rather than replacing one another. The generator refuses
   `erik` by name, because rendering into it would overwrite tracked pages.
@@ -127,6 +131,27 @@ shipping a page no check ever saw. The `expect` field is what that page's own
 stylesheet must leave in the HTML: a CSS token for generated pages, the theme's
 class prefix for hand-written ones (their stylesheet is a separate asset, so no
 token appears in the HTML at all).
+
+The same check resolves every internal `href`/`src`/`action` in the built tree,
+so a link to a page or a file the demo does not publish fails at build time.
+That is not redundant with `shoot`: the browser only fetches what it needs to
+paint, so three real bugs (a search form posting to `/en/blog`, a "Blog" link
+written `../blog/` on the home page, and Atom/RSS links to feeds this gallery
+never emits) were all invisible to it and visible to this check.
+
+## A font claim is read out of the bytes, never typed
+
+`font-set/index.html` says which characters each face covers. That claim is not
+allowed to be prose: every block carries `data-font="<file in public/fonts>"`,
+and `pnpm run check:fonts` parses the `cmap` of that exact `.woff2` and fails on
+any character the block renders that the font does not map.
+
+- Adding a face to the specimen means adding its `data-font` block — an
+  uncovered glyph then fails the check instead of showing up as a fallback
+  glyph a reader has to notice.
+- Do not "fix" a failure by deleting the character from the block. Either the
+  face is wrong for this gallery (say so in the page) or the subset is wrong
+  (fix it upstream, in `public/fonts/`).
 
 ## `theme-init.js` must stay blocking
 
