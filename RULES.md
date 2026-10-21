@@ -3,14 +3,29 @@
 Working rules for this repository. They are the constraints that are easy to
 break and hard to notice afterwards.
 
-## `src/` and `build/` are copies, not sources
+## `modules/Themes/<Name>/` is the source of the theme
+
+Five themes live here: `Boson`, `Erik`, `Griffe`, `Jednotka`, `Mono`. Each is a kernel
+module — `Theme/<Name>Theme.php`, `assets/`, `tests/` — and this repository is where it is
+edited.
+
+- A change ships in this order: edit here, sync into `nativa-php-core`, then
+  `php bin/cms module:add <Name>` there (the sync script is `bin/build/sync-themes.sh`; until
+  it lands, the kernel catalogue is a byte-identical copy that a sync would overwrite).
+- The tests travel with the module but **run in the kernel** (`phpunit` scans `modules/`
+  there). A change here is not verified until that suite runs.
+- No font files and no build output belong in a module: woff2 faces stay in the kernel's
+  `public/fonts/`, bundles in its `public/dist/<theme>/`.
+
+## `src/` and `build/` are gallery copies, not sources
 
 `scripts/sync-themes.mjs` **deletes and recopies** `src/<theme>/` and
-`build/`. An edit there does not survive the next `pnpm run sync`.
+`build/`. An edit there does not survive the next `pnpm run sync`. This is about the
+gallery only — it never touches `modules/`.
 
-- To change a theme, change it in
+- To change a gallery theme, change it in
   [nativa-minimal](https://github.com/evan70/nativa-minimal) and sync.
-- To add code for this repository, put it in `entries/` or `scripts/`.
+- To add code for this repository, put it in `entries/` or `scripts/` (or a theme module).
 
 `sync --check` compares a SHA-256 of every file's contents, so an edit two
 directories deep is still caught. Committing a hand-edit to `src/` will fail
@@ -108,11 +123,14 @@ hijacks every install and build. The `ignoreWorkspace: true` key is what pnpm
 pins. Do not delete either, and do not turn this repository into a real
 workspace without thinking about it.
 
-`packages: []` in that file is **not** redundant. pnpm 9 parses the file as a
-workspace manifest whether or not `ignoreWorkspace` is set, and refuses every
+`packages: []` in that file is **not** redundant. pnpm 9 parses the file as a workspace manifest whether or not `ignoreWorkspace` is set, and refuses every
 command — including the `pnpm store path` that `actions/setup-node` calls for
 its cache — when `packages` is missing. Dropping it failed the first deploy
 with "packages field missing or empty" before any project code ran.
+
+It also keeps `modules/` out of the workspace: a theme module is PHP + assets, not an npm
+package, and `packages: []` states that no directory here is a member. Do not add a glob
+that would pull `modules/**` in.
 
 A local pnpm ≥ 10 does **not** catch this. Verify a change to that file with
 the version CI actually pins:

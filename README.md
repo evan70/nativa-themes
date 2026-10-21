@@ -1,8 +1,28 @@
 # Nativa Themes
 
-A static gallery of the four themes in
-[Nativa Minimal](https://github.com/evan70/nativa-minimal) — a
-zero-dependency PHP 8.5 starter kit — published on GitHub Pages.
+Two things live here.
+
+1. **`modules/Themes/<Name>/` — the five themes of the Nativa kernel.** Each is a complete
+   kernel module: a `Theme/<Name>Theme.php` class, its vendored CSS/JS under `assets/`, and its
+   tests. This repository is their source; once a theme is in the kernel's catalogue,
+   `php bin/cms module:add <Name>` installs it. Its **build source** (`Frontend/packages/<theme>/`)
+   still lives in the kernel for now — see "The theme modules are the source" below.
+
+   | Module | Prefix | Surface | Files |
+   |--------|--------|---------|-------|
+   | `Boson` | `bo-` | public, selectable | 4 |
+   | `Erik` | `er-` | public, selectable | 3 |
+   | `Griffe` | `gr-` | public, selectable | 4 |
+   | `Jednotka` | `je-` | public, selectable | 3 |
+   | `Mono` | `mo-` | public, selectable | 5 |
+
+   A theme module carries **no font files** and no build output: the woff2 faces stay in the
+   kernel's `public/fonts/`, and `public/dist/<theme>/` is built there.
+
+2. **A static gallery of the four themes in
+   [Nativa Minimal](https://github.com/evan70/nativa-minimal)** — a zero-dependency PHP 8.5
+   starter kit — published on GitHub Pages. The gallery is a *consumer*: its `src/` is copied
+   from the app, not edited here.
 
 No screenshots. Every page below is the theme's **real stylesheet and real
 scripts** over **hand-written markup** that uses the same BEM class names the
@@ -23,6 +43,19 @@ its design language is inspired by
 The fifth theme in the app, `minimal`, is unwired reference code with no build
 entry, so it has no page here.
 
+## The theme modules are the source, the kernel copy is a copy
+
+`modules/Themes/<Name>/` here is the editable copy. `nativa-php-core` keeps a catalogue at
+`modules/Themes/<Name>/` and an installed slice at `src/Modules/Themes/<Name>/`; both are
+meant to be filled from this repository (the `bin/build/sync-themes.sh --check` gate is
+planned there, not written yet). **Until that script lands the two catalogues are
+byte-identical copies**, so a change typed into the kernel catalogue is a change that a
+later sync would overwrite.
+
+A theme's tests travel with it here, but they run in the kernel (`phpunit` scans `modules/`
+there and owns the harness). Packaging a change therefore means: edit here, sync into the
+kernel, `php bin/cms module:add <Name>`, run the suite there.
+
 ## Why the markup is hand-written
 
 In the app a theme is a PHP class: it renders all of its own HTML from a
@@ -38,6 +71,7 @@ copies them out of the app, byte for byte.
 ## Layout
 
 ```
+modules/Themes/<Name>/   the five kernel themes — Theme/, assets/, tests/ (the source)
 index.html               the gallery itself
 starter/…/index.html     demo pages, at the URL they are served from
 erik/…/index.html
@@ -54,7 +88,8 @@ scripts/                 sync, page check, interaction check, CDP client
 
 `scripts/sync-themes.mjs` **deletes and recopies** `src/<theme>/` on every
 run. Anything you hand-write there is erased by the next sync, so demo-only
-entries live in `entries/` instead.
+entries live in `entries/` instead. This applies to the gallery only —
+`modules/Themes/` is hand-written source and is never touched by the sync.
 
 ## Working on it
 
