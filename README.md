@@ -56,6 +56,34 @@ A theme's tests travel with it here, but they run in the kernel (`phpunit` scans
 there and owns the harness). Packaging a change therefore means: edit here, sync into the
 kernel, `php bin/cms module:add <Name>`, run the suite there.
 
+### Demo pages for the kernel themes are generated
+
+`boson/`, `jednotka/` and `mono/` (7 surfaces each: home, blog, article, tags, categories,
+author, search) are rendered by `bin/build/render-theme-pages.php` in `nativa-php-core` —
+the theme's own PHP against one fixture, wrapped by the kernel layout. Do not hand-edit
+them; re-render instead:
+
+```bash
+cd ../nativa-php-core
+php bin/build/render-theme-pages.php --theme=boson --out=../nativa-themes   # or --theme=all
+php bin/build/render-theme-pages.php --check --out=../nativa-themes         # exit 1 if stale
+```
+
+The generated documents are self-contained: critical CSS inlined, the behaviour script
+inlined, root URLs rewritten to `../../`. Two consequences worth knowing:
+
+- `erik` is skipped on purpose: its gallery pages are hand-written and rendering into the same
+directory would overwrite them without a diff to review. The generator refuses it by name.
+- `griffe` is not published: its homepage is `<hero-layout>` + `<horizontal-scroll-hero>` filled
+from attributes by the frontend package's web components, so the static render is 53 characters
+of visible text and `shoot` fails it as an empty body. The generator can render it on request
+(`--theme=griffe`) and says why it is empty. Also, the module stylesheet is the 281-line
+critical subset, not the app's full frontend one.
+- The fonts the pages use (`inter-400-0c9c05bd`, `roboto-condensed-400-c05481f9`) and the
+  mono hero images (`public/demo/`) are copied by hand, because they are assets, not markup.
+- `shoot` now covers 38 pages (17 hand-written + 21 generated); `render --check` proves the
+generated half still matches the themes.
+
 ## Why the markup is hand-written
 
 In the app a theme is a PHP class: it renders all of its own HTML from a

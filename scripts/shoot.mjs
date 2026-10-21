@@ -62,6 +62,28 @@ const PAGES = [
   { name: 'magazine/tags', url: '/magazine/tags/' },
   { name: 'magazine/author', url: '/magazine/author/' },
   { name: 'moonshine/admin', url: '/moonshine/' },
+  // Generated from the themes themselves; see vite.config.ts.
+  { name: 'boson/home', url: '/boson/' },
+  { name: 'boson/blog', url: '/boson/blog/' },
+  { name: 'boson/article', url: '/boson/article/' },
+  { name: 'boson/tags', url: '/boson/tags/' },
+  { name: 'boson/categories', url: '/boson/categories/' },
+  { name: 'boson/author', url: '/boson/author/' },
+  { name: 'boson/search', url: '/boson/search/' },
+  { name: 'jednotka/home', url: '/jednotka/' },
+  { name: 'jednotka/blog', url: '/jednotka/blog/' },
+  { name: 'jednotka/article', url: '/jednotka/article/' },
+  { name: 'jednotka/tags', url: '/jednotka/tags/' },
+  { name: 'jednotka/categories', url: '/jednotka/categories/' },
+  { name: 'jednotka/author', url: '/jednotka/author/' },
+  { name: 'jednotka/search', url: '/jednotka/search/' },
+  { name: 'mono/home', url: '/mono/' },
+  { name: 'mono/blog', url: '/mono/blog/' },
+  { name: 'mono/article', url: '/mono/article/' },
+  { name: 'mono/tags', url: '/mono/tags/' },
+  { name: 'mono/categories', url: '/mono/categories/' },
+  { name: 'mono/author', url: '/mono/author/' },
+  { name: 'mono/search', url: '/mono/search/' },
 ];
 
 const targets = PAGES.filter((page) => !only || page.name.startsWith(only));
@@ -72,7 +94,8 @@ const targets = PAGES.filter((page) => !only || page.name.startsWith(only));
  */
 const PROBE = `JSON.stringify((function () {
   var root = getComputedStyle(document.documentElement);
-  var tokens = ['--st-bg', '--er-bg', '--mag-accent', '--m-primary', '--gal-bg'];
+  var tokens = ['--st-bg', '--er-bg', '--mag-accent', '--m-primary', '--gal-bg',
+                '--bo-bg', '--brand-gold', '--comments-accent'];
   var found = [];
   for (var i = 0; i < tokens.length; i++) {
     var value = root.getPropertyValue(tokens[i]).trim();

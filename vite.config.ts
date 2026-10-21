@@ -50,6 +50,32 @@ const input = {
   // Served under the theme's own name, like the other three. It is NOT a live
   // admin and never sits at `/mark`; the page opens with a banner saying so.
   'moonshine/admin': 'moonshine/index.html',
+
+  // The kernel themes. These pages are GENERATED from the theme's own PHP
+  // (`bin/build/render-theme-pages.php` in nativa-php-core) — do not hand-edit
+  // them; re-render instead. Erik is not listed here yet: its hand-written
+  // pages predate the generator and the two must not overwrite each other.
+  'boson/home': 'boson/index.html',
+  'boson/blog': 'boson/blog/index.html',
+  'boson/article': 'boson/article/index.html',
+  'boson/tags': 'boson/tags/index.html',
+  'boson/categories': 'boson/categories/index.html',
+  'boson/author': 'boson/author/index.html',
+  'boson/search': 'boson/search/index.html',
+  'jednotka/home': 'jednotka/index.html',
+  'jednotka/blog': 'jednotka/blog/index.html',
+  'jednotka/article': 'jednotka/article/index.html',
+  'jednotka/tags': 'jednotka/tags/index.html',
+  'jednotka/categories': 'jednotka/categories/index.html',
+  'jednotka/author': 'jednotka/author/index.html',
+  'jednotka/search': 'jednotka/search/index.html',
+  'mono/home': 'mono/index.html',
+  'mono/blog': 'mono/blog/index.html',
+  'mono/article': 'mono/article/index.html',
+  'mono/tags': 'mono/tags/index.html',
+  'mono/categories': 'mono/categories/index.html',
+  'mono/author': 'mono/author/index.html',
+  'mono/search': 'mono/search/index.html',
 };
 
 export default defineConfig({

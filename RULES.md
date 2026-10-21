@@ -17,6 +17,20 @@ edited.
 - No font files and no build output belong in a module: woff2 faces stay in the kernel's
   `public/fonts/`, bundles in its `public/dist/<theme>/`.
 
+## `boson/`, `jednotka/`, `mono/` are GENERATED, not sources
+
+Those pages are rendered from the theme's PHP by
+`bin/build/render-theme-pages.php` (in `nativa-php-core`). An edit there is lost on the
+next render, which is exactly the drift `render --check` refuses to ship.
+
+- Change the theme (in `modules/Themes/<Name>/`), then re-render.
+- `erik/`, `starter/`, `magazine/` and `moonshine/` are still hand-written — that is why the
+  two rules sit next to each other rather than replacing one another. The generator refuses
+  `erik` by name, because rendering into it would overwrite tracked pages.
+- `griffe/` does not exist yet: its homepage is composed from attributes by its own web
+  components, so a static render is empty. Do not “fix” that by hand-writing pages here —
+  either render it once the composition works, or leave it out.
+
 ## `src/` and `build/` are gallery copies, not sources
 
 `scripts/sync-themes.mjs` **deletes and recopies** `src/<theme>/` and
