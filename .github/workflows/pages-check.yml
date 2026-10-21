@@ -1,0 +1,34 @@
+name: Check the published gallery
+
+# `pages.yml` checks the site once, right after it deploys. This checks it
+# later, without deploying anything: Pages can start serving a stale artefact
+# or a 404 long after the deploy that looked fine, and a push is not the only
+# moment worth knowing about it.
+#
+# Nothing is built and nothing is uploaded — the job fetches the published URLs
+# and compares them with scripts/pages.mjs.
+on:
+  schedule:
+    # Mondays, 06:00 UTC. Cheap: 38 requests.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # Same script and same assertion as the post-deploy job: every listed page
+      # answers 200, is text/html, and still contains its theme's marker. Only
+      # the retry differs — a scheduled run has no deploy to wait for, so a
+      # failure here is a real failure, not a race with a fresh artefact.
+      - name: Check the published pages
+        run: node scripts/check-pages.mjs https://evan70.github.io/nativa-themes
