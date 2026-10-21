@@ -4,6 +4,17 @@
 
 .cba-muted { color: var(--m-muted); }
 .cba-mono { font-family: var(--m-mono); font-size: 13px; }
+
+/* Visually hidden, still announced. `display:none` and `visibility:hidden`
+   both remove the text from the accessibility tree, so a badge whose number
+   is only in a `title` attribute — or in a digit nobody reads aloud — reaches
+   a screen reader as nothing at all. The classic clip recipe works on the
+   Chrome 70 baseline; `clip-path` alone is newer than the target. */
+.sr-only {
+    position: absolute; width: 1px; height: 1px;
+    margin: -1px; padding: 0; border: 0;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
 .cba-theme-toggle {
     display: inline-flex; align-items: center; justify-content: center;
     width: 30px; height: 30px; padding: 0; background: transparent;

@@ -19,6 +19,33 @@
   max-width: 100%;
 }
 
+/* Article body tables. MarkdownRenderer emits a bare <table> with no class,
+   so the article wrapper is the only way to reach it — without these rules
+   the tables in an article render completely unstyled in this theme. The
+   shape mirrors the starter/magazine contract; the colours are erik's own
+   tokens, so both colour modes are covered. `th` uses --er-surface-raised
+   because --er-surface is already the article background and the header
+   would otherwise be invisible. */
+.er-article table {
+  border-collapse: collapse;
+  margin: 0 0 1rem;
+  width: 100%;
+}
+
+.er-article th,
+.er-article td {
+  border: 1px solid var(--er-border);
+  font-size: .875em;
+  padding: .5rem .75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.er-article th {
+  background: var(--er-surface-raised);
+  font-weight: 600;
+}
+
 /* Article body code — inline code chip + fenced block. The dark block
    surface stays fixed in both themes (starter/magazine parity). The
    MarkdownRenderer emits data-lang on every fenced block; the badge
@@ -79,7 +106,7 @@
 .er-article .tok-keyword { color: #c084fc; }
 .er-article .tok-string { color: #86efac; }
 .er-article .tok-number { color: #fbbf24; }
-.er-article .tok-comment { color: #64748b; font-style: italic; }
+.er-article .tok-comment { color: #94a3b8; font-style: italic; }
 .er-article .tok-function { color: #60a5fa; }
 .er-article .tok-variable { color: #f472b6; }
 .er-article .tok-type { color: #2dd4bf; }
@@ -279,12 +306,6 @@
   justify-self: start;
   min-height: 2.75rem;
   padding: .5rem 1.25rem;
-}
-
-.er-comments {
-  border-top: 1px solid var(--er-border);
-  margin-top: 2rem;
-  padding-top: 2rem;
 }
 
 @media (max-width: 760px) {

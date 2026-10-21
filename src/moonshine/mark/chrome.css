@@ -23,6 +23,21 @@
 .layout-sidebar__link svg { flex-shrink: 0; width: 18px; height: 18px; }
 .layout-sidebar__link-label { transition: opacity 150ms ease; }
 
+/* ── Sidebar count badge ──
+   `--m-primary` + white is the pair the accent contract already grades for
+   AA, so the badge reuses it rather than inventing a colour nothing audits.
+   `margin-left:auto` pins it to the far edge, the same slot the group
+   chevron takes. */
+.layout-sidebar__badge {
+    margin-left: auto; flex-shrink: 0;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--m-primary); color: #fff;
+    border-radius: var(--m-r-full);
+    font-size: 11px; font-weight: 600; line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
 /* ── Sidebar group (expandable) ── */
 .layout-sidebar__group { }
 .layout-sidebar__link--group {

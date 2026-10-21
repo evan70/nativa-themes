@@ -29,6 +29,17 @@
   --st-error-ink: #f87171; /* error text on rgba(239,68,68,.12) bg (dark) ≥ 4.5:1 */
   --st-border: #334155;
   --st-surface: #1e293b;
+  /* ── Inline editor source surface ────────────────────────────────────────
+   * The inline editor paints the AUTHOR'S OWN Markdown, so its ground is a
+   * code surface and stays dark in BOTH colour modes. Deliberately not
+   * `code-bg` above: that token follows the theme and turns pale in light mode,
+   * and pairing the dark highlight palette below with it would leave the
+   * author's own text at roughly 1.6:1. Declared once here, with no light
+   * override, so the pairing cannot drift out of sync with the palette.
+   * `ink` is the caret, which must stay legible on this ground. */
+  --st-editor-bg: #0b1120;
+  --st-editor-ink: #e2e8f0;
+  --st-editor-border: #334155;
   --st-code-bg: #1e293b;
   --st-tag-bg: rgba(59, 130, 246, 0.16);
   --st-header-h: 60px;

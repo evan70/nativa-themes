@@ -11,7 +11,8 @@ body {
 body {
   background: var(--er-bg);
   color: var(--er-ink);
-  font-family: 'Gilroy', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Gilroy', 'Gilroy Fallback', system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   line-height: 1.6;
 }
 

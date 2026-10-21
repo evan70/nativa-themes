@@ -52,6 +52,11 @@ planned there, not written yet). **Until that script lands the two catalogues ar
 byte-identical copies**, so a change typed into the kernel catalogue is a change that a
 later sync would overwrite.
 
+Two copies live here and they are not interchangeable. `modules/Themes/<Name>/` is the
+kernel theme module (PHP + vendored `assets/` + tests). `src/<theme>/` below is the
+gallery's copy of `nativa-minimal`'s frontend sources, and `pnpm run sync:check` only
+guards that second pair — a green gallery says nothing about a theme module.
+
 A theme's tests travel with it here, but they run in the kernel (`phpunit` scans `modules/`
 there and owns the harness). Packaging a change therefore means: edit here, sync into the
 kernel, `php bin/cms module:add <Name>`, run the suite there.
@@ -148,7 +153,7 @@ pnpm run verify        # everything below, in order
 
 | Command | What it proves |
 |---------|----------------|
-| `pnpm run sync:check` | the copied theme sources still match the app |
+| `pnpm run sync:check` | the gallery's `src/` still matches the app (theme modules are **not** checked here) |
 | `pnpm run typecheck` | `tsc --noEmit` over the entries, the build plugins and the synced sources |
 | `pnpm run build` | Vite builds the multi-page site |
 | `pnpm run check:dist` | `dist/` contains exactly the pages in `scripts/pages.mjs`, and every internal `href`/`src`/`action` on those pages resolves to a file the build produced |

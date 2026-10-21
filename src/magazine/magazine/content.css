@@ -152,6 +152,9 @@
                                 color: var(--st-ink); }
 .mag-home-feature-card__subtitle { font-size: 0.875rem; color: var(--mag-accent-soft); margin: 0 0 12px; }
 .mag-home-feature-card__desc { font-size: 0.95rem; color: var(--st-muted); line-height: 1.6; margin: 0 0 12px; }
+.mag-home-feature-card__link { display: inline-block; margin-top: 4px; font-size: 0.9rem;
+                              font-weight: 600; color: var(--mag-accent-soft); }
+.mag-home-feature-card__link:hover { color: var(--mag-accent-strong); }
 
 /* ── Home CTA ── */
 .mag-home-cta { padding: 48px 0; background: var(--st-surface); text-align: center;

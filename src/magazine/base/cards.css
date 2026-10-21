@@ -135,7 +135,7 @@
   padding: 0 10px;
   border: 1px solid var(--st-border);
   border-radius: 6px;
-  color: var(--st-text);
+  color: var(--st-ink);
   text-decoration: none;
   font-weight: 500;
   transition: border-color 150ms ease, background 150ms ease;

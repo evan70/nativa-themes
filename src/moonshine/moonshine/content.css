@@ -499,3 +499,31 @@ article.ms-card:hover {
     margin: 0;
     font-size: var(--m-text-md);
 }
+
+/* ── Article body tables ──
+   MarkdownRenderer emits a bare <table> with no class, so the public article
+   tables are reachable only through the article content wrapper; without these
+   rules they render completely unstyled. Lives here rather than in
+   article.css, which already sits at the 600-line cap enforced by
+   ThemeFileSizeTest (whose baseline list is empty by policy). Colours are
+   moonshine's own tokens; `th` uses --m-surface-2 because --m-surface is the
+   article background and the header would otherwise be invisible. */
+.ms-article__content table {
+    border-collapse: collapse;
+    margin: 0 0 var(--m-sp-4);
+    width: 100%;
+}
+
+.ms-article__content th,
+.ms-article__content td {
+    border: 1px solid var(--m-border);
+    font-size: var(--m-text-md);
+    padding: var(--m-sp-2) var(--m-sp-3);
+    text-align: left;
+    vertical-align: top;
+}
+
+.ms-article__content th {
+    background: var(--m-surface-2);
+    font-weight: 600;
+}

@@ -1,3 +1,32 @@
+/*
+ * Metric-matched fallback. Gilroy and the platform sans-serif disagree on
+ * x-height (0.50 vs 0.53 em) and on the line box, so `font-display: swap`
+ * reflowed every heading when the real font landed — measured 0.336 CLS on
+ * the erik hero under Slow 4G, all of it in <section class="er-hero">.
+ *
+ * These descriptors resize an Arial-class local() fallback to Gilroy's own
+ * metrics: size-adjust 94.64% from the x-height ratio (1082/2048 against
+ * 500/1000), ascent/descent overridden to Gilroy's 920/1000 and 240/1000.
+ * Because ascent and descent are OVERRIDES rather than the local font's own
+ * metrics, the line box is forced to Gilroy's height whichever local() hits
+ * — Arial, Roboto, Noto or Segoe all land on the same box, so the swap
+ * changes glyphs without moving anything.
+ *
+ * Browsers without size-adjust (before Chrome 87) drop the whole face and
+ * continue down the stack to plain Arial — today's behaviour, no
+ * regression on the Chrome 70 baseline.
+ */
+@font-face {
+  font-family: 'Gilroy Fallback';
+  src: local('Arial'), local('Arimo'), local('Liberation Sans'),
+    local('Roboto'), local('Noto Sans'), local('Segoe UI'),
+    local('Helvetica Neue'), local('DejaVu Sans');
+  size-adjust: 94.64%;
+  ascent-override: 97.21%;
+  descent-override: 25.36%;
+  line-gap-override: 0%;
+}
+
 @font-face {
   font-family: 'Gilroy';
   font-style: normal;
@@ -18,6 +47,22 @@
   --er-bg: #0b1220;
   --er-surface: #111c2e;
   --er-surface-raised: #17243a;
+  /* Code surface for the author editor's preview, recessed from --er-bg.
+     Contrast against the ink that renders inside it: 18.3:1 dark,
+     13.6:1 light — the editor shows the author's own text, and a
+     preview they cannot read is not a preview. */
+  --er-code-bg: #070d18;
+  /* ── Inline editor source surface ────────────────────────────────────────
+   * The inline editor paints the AUTHOR'S OWN Markdown, so its ground is a
+   * code surface and stays dark in BOTH colour modes. Deliberately not
+   * `code-bg` above: that token follows the theme and turns pale in light mode,
+   * and pairing the dark highlight palette below with it would leave the
+   * author's own text at roughly 1.6:1. Declared once here, with no light
+   * override, so the pairing cannot drift out of sync with the palette.
+   * `ink` is the caret, which must stay legible on this ground. */
+  --er-editor-bg: #0b1120;
+  --er-editor-ink: #e2e8f0;
+  --er-editor-border: #334155;
   --er-ink: #f3f7ff;
   --er-muted: #aebbd0;
   --er-border: #33445f;
@@ -25,6 +70,8 @@
   --er-accent-hover: #bef264;
   --er-accent-soft: #d9f99d;
   --er-accent-ink: #08111f;
+  --er-error-bg: rgba(239, 68, 68, .18);
+  --er-error-ink: #fef2f2;
   --er-focus: #fbbf24;
   --er-container: 72rem;
   --er-radius: .5rem;
@@ -35,6 +82,7 @@
   --er-bg: #f4f7fb;
   --er-surface: #ffffff;
   --er-surface-raised: #e8eef7;
+  --er-code-bg: #e3ebf6;
   --er-ink: #142033;
   --er-muted: #53647b;
   --er-border: #b6c4d8;
@@ -42,5 +90,7 @@
   --er-accent-hover: #365314;
   --er-accent-soft: #365314;
   --er-accent-ink: #ffffff;
+  --er-error-bg: rgba(239, 68, 68, .12);
+  --er-error-ink: #b91c1c;
   --er-focus: #92400e;
 }

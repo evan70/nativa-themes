@@ -120,7 +120,7 @@
 .m-filter-row__filters { flex: 0 1 auto; }
 .m-filter-spacer { flex: 1 1 auto; width: 12px; min-width: 12px; }
 .m-filter-bar--search .m-input--search { flex: 1; padding: 8px 12px; border: 1px solid var(--m-border); border-radius: var(--m-r-md); background: var(--m-surface); color: var(--m-ink); font-size: 14px; }
-.m-input--search:focus { outline: none; border-color: var(--m-accent); box-shadow: 0 0 0 2px var(--m-accent-soft-alpha); }
+.m-input--search:focus { outline: none; border-color: var(--m-primary); box-shadow: 0 0 0 2px var(--m-primary-soft); }
 .m-filter-bar + .m-filter-bar { margin-top: 0; }
 .m-pill { display: inline-flex; align-items: center; padding: 8px 14px; border: 1px solid var(--m-border); border-radius: var(--m-r-sm); font-size: 13px; font-weight: 500; color: var(--m-muted); text-decoration: none; cursor: pointer; transition: all 150ms ease; background: transparent; }
 .m-pill:hover { color: var(--m-ink); border-color: var(--m-muted); }
@@ -187,6 +187,20 @@
 .m-media-card__info { font-size: 11px; color: var(--m-muted); margin-top: 6px; }
 .m-media-card__footer { padding: 8px 12px; border-top: 1px solid var(--m-border); display: flex; gap: 6px; }
 .m-media-filters__sep { color: var(--m-muted); font-size: 13px; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   FOLDER OVERVIEW
+   ═══════════════════════════════════════════════════════════════════ */
+
+.m-folders { margin-bottom: var(--m-sp-4); }
+.m-folders__head { display: flex; align-items: center; gap: var(--m-sp-2); margin-bottom: var(--m-sp-2); }
+.m-folders__title { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--m-muted); }
+.m-folder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--m-sp-2); }
+.m-folder-card { display: flex; align-items: center; gap: var(--m-sp-2); padding: 10px 12px; border: 1px solid var(--m-border); border-radius: var(--m-r-md); background: var(--m-surface); color: var(--m-ink); text-decoration: none; transition: border-color 150ms ease; }
+.m-folder-card:hover { border-color: var(--m-primary); }
+.m-folder-card--active { border-color: var(--m-primary); background: var(--m-surface-2); }
+.m-folder-card__icon { display: inline-flex; flex: none; color: var(--m-muted); }
+.m-folder-card__name { flex: 1; min-width: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ═══════════════════════════════════════════════════════════════════
    EDIT FORM

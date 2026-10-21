@@ -51,3 +51,14 @@
 @import './content.css';
 @import './article.css';
 @import './toc.css';
+
+/* Code blocks — LAST: same specificity as the `pre` rule in article.css, so
+   it has to load after it to win. See the file header for why it is separate. */
+@import './code.css';
+
+/* Embedded form block (Forms module) — `ms-` prefix, GENERATED from starter. */
+@import './comments.css';
+@import './form.css';
+
+/* Reader questions block (Questions module) — `ms-`, GENERATED from starter. */
+@import './questions.css';

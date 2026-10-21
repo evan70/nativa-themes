@@ -24,3 +24,10 @@
 @import './content.css';
 @import './article.css';
 @import './utilities.css';
+
+/* Embedded form block (Forms module) — `mag-` prefix, GENERATED from starter. */
+@import './comments.css';
+@import './form.css';
+
+/* Reader questions block (Questions module) — `mag-`, GENERATED from starter. */
+@import './questions.css';

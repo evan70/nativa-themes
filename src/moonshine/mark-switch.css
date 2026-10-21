@@ -152,4 +152,4 @@ button.m-pubswitch__track {
 
 /* @supports fallback note: this component uses no gap/flex-gap construct
    that Chrome 70 lacks — flexbox + absolute thumb only, so no fallback
-   block is required (bin/verify-build.php contract). */
+   block is required (bin/build/verify-build.php contract). */

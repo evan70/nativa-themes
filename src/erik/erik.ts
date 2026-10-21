@@ -12,6 +12,8 @@ import './erik/index.css';
 import { containerQueryManager } from './container-query';
 import { initTocScrollspy } from './toc-scrollspy';
 import { initCodeHighlight } from './code-highlight';
+// The author's Markdown editor: toolbar + live preview over the canonical textarea.
+import { initInlineEditor } from './inline-editor';
 
 // The erik bundle carries the same three runtime helpers as the starter
 // bundle, byte-identical copies (FrontendPackageParityTest). Only
@@ -24,6 +26,7 @@ const onDomReady = (): void => {
   containerQueryManager.init()
   initTocScrollspy()
   initCodeHighlight()
+  initInlineEditor()
 }
 
 if (document.readyState === 'loading') {

@@ -20,6 +20,8 @@
 import './moonshine/index.css';
 import { initTocScrollspy } from './toc-scrollspy';
 import { initCodeHighlight } from './code-highlight';
+// The author's Markdown editor: toolbar + live preview over the canonical textarea.
+import { initInlineEditor } from './inline-editor';
 
 // The same runtime helpers as the starter and erik bundles, byte-identical
 // copies (FrontendPackageParityTest). Both have markup to act on today:
@@ -28,6 +30,7 @@ import { initCodeHighlight } from './code-highlight';
 const onDomReady = (): void => {
   initTocScrollspy()
   initCodeHighlight()
+  initInlineEditor()
 }
 
 if (document.readyState === 'loading') {

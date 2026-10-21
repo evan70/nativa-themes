@@ -18,6 +18,8 @@
 import './magazine/index.css';
 import { initTocScrollspy } from './toc-scrollspy';
 import { initCodeHighlight } from './code-highlight';
+// The author's Markdown editor: toolbar + live preview over the canonical textarea.
+import { initInlineEditor } from './inline-editor';
 
 /**
  * Mobile menu — toggles the `.is-open` class on the header menu panel.
@@ -108,6 +110,7 @@ const onDomReady = (): void => {
   initBackToTop();
   initTocScrollspy();
   initCodeHighlight();
+  initInlineEditor();
 };
 
 if (document.readyState === 'loading') {

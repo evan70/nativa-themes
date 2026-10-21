@@ -1,7 +1,7 @@
 {
   "name": "nativa-themes",
   "version": "1.0.0",
-  "description": "Nativa Minimal themes — a static gallery of the starter, erik, magazine and moonshine themes, published on GitHub Pages.",
+  "description": "The Nativa kernel themes as modules under modules/Themes, plus a static gallery of the starter, erik, magazine and moonshine themes, published on GitHub Pages.",
   "type": "module",
   "private": true,
   "license": "MIT",

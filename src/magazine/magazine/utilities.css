@@ -1,3 +1,15 @@
+/*
+ * ROOT NOTE: these overrides are scoped to `.mag-article-page`, the wrapper
+ * `Sections/ArticleView` actually renders. They were written against
+ * `.mag-page`, a class no magazine page has ever emitted, so all of them were
+ * dead: the shared starter components fell back to the starter look. Same
+ * failure as the comment block above — a selector that cannot match.
+ *
+ * NOT yet guarded: `ThemeDomParityTest` compares the markup one theme emits
+ * against another. It does not compare a selector against the markup, so a
+ * renamed wrapper slips past it exactly as `.mag-page` did. That third axis
+ * is designed but unwired — see the class docblock for what it needs.
+ */
 /* ── Tags cloud + categories grid ── */
 .mag-tags-cloud { display: flex; flex-wrap: wrap; gap: 12px; padding: 32px 0; align-items: center;
                   justify-content: center; }
@@ -63,14 +75,22 @@
                                background: var(--mag-accent); }
 
 /* ── Shared starter components, magazine-styled (comments etc.) ── */
-.mag-page .st-comments { max-width: none; }
-.mag-page .st-comments__input, .mag-page .st-comments__textarea { background: var(--st-bg); }
-.mag-page .st-comments__button { background: var(--mag-accent-strong); }
-.mag-page .st-comments__button:hover { background: var(--mag-accent-hover); }
-.mag-page .st-article__tag { background: var(--mag-tag-bg); color: var(--mag-accent-soft);
+
+/*
+ * The comment block used to be overridden here, under `.mag-article-page
+ * .st-comments` — but `CommentSection` builds its classes from the ACTIVE
+ * THEME'S PREFIX, so a magazine page renders `mag-comments` and never
+ * `st-comments`. Those four rules could not match anything; they were an
+ * attempted fix that never fired, which is exactly why magazine comments
+ * looked unstyled. The block is styled now, and per theme, by
+ * `src/magazine/comments.css` — generated from the canonical starter copy by
+ * `bin/generate/generate-comments-css.mjs`, with magazine's palette (including the
+ * full-width intent this override was reaching for) in that file.
+ */
+.mag-article-page .st-article__tag { background: var(--mag-tag-bg); color: var(--mag-accent-soft);
                              border: 1px solid rgba(245, 158, 11, 0.35); }
 
 /* Magazine pagination */
-.mag-page .st-blog-pagination__link { border-color: var(--st-border); color: var(--st-text); }
-.mag-page .st-blog-pagination__link:hover { border-color: var(--mag-accent); background: var(--st-surface); }
-.mag-page .st-blog-pagination__current { background: var(--mag-accent-strong); border-color: var(--mag-accent-strong); color: #fff; }
+.mag-article-page .st-blog-pagination__link { border-color: var(--st-border); color: var(--st-ink); }
+.mag-article-page .st-blog-pagination__link:hover { border-color: var(--mag-accent); background: var(--st-surface); }
+.mag-article-page .st-blog-pagination__current { background: var(--mag-accent-strong); border-color: var(--mag-accent-strong); color: #fff; }

@@ -11,6 +11,12 @@
 :root {
     /* ── Surface ── */
     --m-bg:             #0f172a;
+    --m-code-bg:        #0b1120;
+    /* Inline editor source surface — dark in BOTH modes, unlike --m-code-bg
+     * above, which turns pale in light mode. `ink` is the caret. */
+    --m-editor-bg:      #0b1120;
+    --m-editor-ink:     #e2e8f0;
+    --m-editor-border:  #334155;
     --m-surface:        #1e293b;
     --m-surface-2:      #1a2332;
     --m-ink:            #e2e8f0;
@@ -79,6 +85,7 @@
 
 :root[data-theme="light"] {
     --m-bg:             #f8fafc;
+    --m-code-bg:        #f1f5f9;
     --m-surface:        #ffffff;
     --m-surface-2:      #f1f5f9;
     --m-ink:            #0f172a;

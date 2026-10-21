@@ -49,6 +49,23 @@ gallery only — it never touches `modules/`.
 directories deep is still caught. Committing a hand-edit to `src/` will fail
 `pnpm run verify` on the next run.
 
+### What `sync:check` does and does not guard
+
+It is a **gallery freshness gate against `nativa-minimal`**, nothing more. The
+two copies in this repository are not interchangeable:
+
+| copy | source | guarded by |
+|---|---|---|
+| `src/<theme>/`, `build/` | `nativa-minimal`'s `Frontend/packages/…` | `pnpm run sync:check` |
+| `modules/Themes/<Name>/` | this repository | `bin/build/sync-themes.sh --check` in `nativa-php-core` (planned there, not written yet) |
+
+So a green `pnpm run verify` says the gallery still paints the app's current
+stylesheets. It says **nothing** about the five kernel theme modules, and it
+cannot: `starter`, `magazine` and `moonshine` are not kernel themes, and
+`erik`'s gallery CSS is the app's full stylesheet, not the module's 355-line
+critical fallback. Until the kernel gate lands, a change to a theme module is
+verified only by the kernel suite.
+
 ## A demo page is evidence, so it must be faithful
 
 The pages exist to show what the themes actually look like. A page that
