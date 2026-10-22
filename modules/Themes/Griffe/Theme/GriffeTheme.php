@@ -6,10 +6,12 @@ namespace Modules\Themes\Griffe\Theme;
 
 use Modules\Core\Domain\AdminRoutePolicy;
 use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\Core\Interfaces\HTTP\ContentServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Themes\ThemeModule;
+use Themes\ThemeSettings;
 
 /**
  * GriffeTheme — the webgriffe.com agency idiom as a kernel theme module.
@@ -25,7 +27,7 @@ use Themes\ThemeModule;
  * `get_object_vars` rather than `use`ing the entity, the established kernel
  * pattern for a theme that must not name the module owning the article.
  */
-final class GriffeTheme implements ThemeModule
+final class GriffeTheme implements ThemeModule, ThemeSettings
 {
     public function name(): string
     {
@@ -86,6 +88,32 @@ final class GriffeTheme implements ThemeModule
     }
 
     /**
+     * Griffe's one admin choice: which glyph the phone menu toggle draws.
+     *
+     * `auto` keeps the meatball this header was ported with, so an install
+     * that never opens the settings screen renders what it always did. Both
+     * closed-state glyphs ship in the DOM and CSS shows one — opening the menu
+     * still costs no JS and no second request.
+     *
+     * @return list<ThemeSetting>
+     */
+    public function settingsSchema(): array
+    {
+        return [
+            ThemeSetting::select(
+                'nav_toggle_icon',
+                'Menu icon',
+                [
+                    'auto'     => 'Auto (theme default: meatball)',
+                    'burger'   => 'Burger (three lines)',
+                    'meatball' => 'Meatball (three dots)',
+                ],
+                'auto',
+            ),
+        ];
+    }
+
+    /**
      * Sticky text-nav header in the reference's shape: brand left, text links
      * (Work, Services, Blog, About, Contact come from the menu), theme toggle
      * + locale + hamburger right. The hide-on-scroll half is CSS + gr-header.js
@@ -106,6 +134,9 @@ final class GriffeTheme implements ThemeModule
         }
 
         $hasMenu = [] !== $context->headerNav;
+        // `auto` is this theme's own glyph (the meatball the header was ported
+        // with); only an explicit `burger` switches the closed icon.
+        $icon = 'burger' === ($context->themeSettings['nav_toggle_icon'] ?? 'auto') ? 'burger' : 'meatball';
 
         return '<header class="gr-header">' . "\n"
             . self::menuToggleInput($hasMenu)
@@ -115,7 +146,7 @@ final class GriffeTheme implements ThemeModule
             . '<div class="gr-header__actions">' . "\n"
             . self::themeToggle()
             . $this->localeLinks($context)
-            . self::menuToggleLabel($hasMenu)
+            . self::menuToggleLabel($hasMenu, $icon)
             . '</div>' . "\n"
             . '</div>' . "\n"
             . '</header>' . "\n";
@@ -834,21 +865,34 @@ final class GriffeTheme implements ThemeModule
     }
 
     /**
-     * The hamburger label: meatball and close icons both ship, CSS shows one
-     * at a time. Rendered only beside a menu.
+     * The menu label: both closed-state glyphs and the close glyph ship, CSS
+     * shows one at a time.
+     *
+     * The choice is a modifier on the LABEL (`--burger`), not a second markup
+     * path: the checkbox, the `~` selectors that open the menu and the close
+     * glyph are the contract, and only the closed glyph changes.
      */
-    private static function menuToggleLabel(bool $hasMenu): string
+    private static function menuToggleLabel(bool $hasMenu, string $icon = 'meatball'): string
     {
         if (!$hasMenu) {
             return '';
         }
 
-        return '<label class="gr-nav__toggle gr-icon-btn" for="gr-nav-toggle" title="Menu">'
+        $variant = 'burger' === $icon ? ' gr-nav__toggle--burger' : '';
+
+        return '<label class="gr-nav__toggle gr-icon-btn' . $variant . '" for="gr-nav-toggle" title="Menu">'
             . '<span class="gr-nav__toggle-icon--meatball" aria-hidden="true">'
             . '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">'
             . '<circle cx="12" cy="5" r="2"></circle>'
             . '<circle cx="12" cy="12" r="2"></circle>'
             . '<circle cx="12" cy="19" r="2"></circle>'
+            . '</svg></span>'
+            . '<span class="gr-nav__toggle-icon--burger" aria-hidden="true">'
+            . '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+            . ' stroke-width="2" stroke-linecap="round">'
+            . '<line x1="4" y1="7" x2="20" y2="7"></line>'
+            . '<line x1="4" y1="12" x2="20" y2="12"></line>'
+            . '<line x1="4" y1="17" x2="20" y2="17"></line>'
             . '</svg></span>'
             . '<span class="gr-nav__toggle-icon--close" aria-hidden="true">'
             . '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"'

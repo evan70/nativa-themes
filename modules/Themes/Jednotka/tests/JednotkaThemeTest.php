@@ -510,6 +510,70 @@ final class JednotkaThemeTest extends TestCase
     }
 
     /**
+     * The glyph choice is optional: without a stored value the theme keeps the
+     * burger the header was ported with.
+     */
+    #[Test]
+    public function theToggleKeepsTheBurgerByDefault(): void
+    {
+        foreach (['', 'auto'] as $stored) {
+            $header = (new JednotkaTheme())->header(self::shellWithIcon($stored));
+
+            $this->assertStringContainsString('<line x1="3" y1="6" x2="21" y2="6">', $header, 'stored=' . $stored);
+            $this->assertStringNotContainsString('je-nav__toggle-icon--meatball', $header, 'stored=' . $stored);
+        }
+    }
+
+    /**
+     * The meatball is filled dots, not the stroke geometry the shell CSS
+     * applies to every toggle SVG — the inline style is what keeps them from
+     * rendering as three hollow rings.
+     */
+    #[Test]
+    public function aStoredMeatballRendersThreeDotsOnTheSameLabel(): void
+    {
+        $header = (new JednotkaTheme())->header(self::shellWithIcon('meatball'));
+
+        $this->assertStringContainsString('je-nav__toggle-icon--meatball', $header);
+        $this->assertStringContainsString('<circle cx="12" cy="5" r="2">', $header);
+        $this->assertStringContainsString('<circle cx="12" cy="12" r="2">', $header);
+        $this->assertStringContainsString('<circle cx="12" cy="19" r="2">', $header);
+        $this->assertStringContainsString('style="fill:currentColor;stroke:none"', $header);
+        $this->assertStringContainsString('je-nav__toggle-icon--close', $header, 'The open state stays the shared X.');
+        $this->assertStringContainsString('id="je-nav-toggle"', $header);
+        $this->assertStringContainsString('for="je-nav-toggle"', $header);
+    }
+
+    #[Test]
+    public function theSchemaDeclaresTheNavIconChoice(): void
+    {
+        $schema = (new JednotkaTheme())->settingsSchema();
+
+        $this->assertCount(1, $schema);
+        $this->assertSame('nav_toggle_icon', $schema[0]->key);
+        $this->assertSame('auto', $schema[0]->default, 'Unset keeps the theme\'s own burger.');
+        $this->assertSame(['auto', 'burger', 'meatball'], array_keys($schema[0]->options));
+    }
+
+    /**
+     * @param string $icon stored `nav_toggle_icon`; '' means "nothing stored"
+     */
+    private static function shellWithIcon(string $icon = ''): ShellContext
+    {
+        return ShellContext::from(
+            'Site',
+            [new ShellNavItem('Section', '/section', true)],
+            [new ShellNavItem('Section', '/section')],
+            '/section',
+            null,
+            'en_US',
+            ['en_US'],
+            false,
+            '' === $icon ? [] : ['nav_toggle_icon' => $icon],
+        );
+    }
+
+    /**
      * Every surface, rendered from the same shapes the kernel hands them.
      *
      * @return array<string, string>

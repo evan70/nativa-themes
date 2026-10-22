@@ -135,6 +135,62 @@ final class GriffeThemeTest extends TestCase
         $this->assertStringContainsString('gr-nav__toggle-icon--close', $header, 'Both icons ship; CSS shows one at a time.');
     }
 
+    /**
+     * The glyph choice is optional: without a stored value the theme keeps the
+     * meatball the header was ported with.
+     */
+    #[Test]
+    public function theToggleKeepsTheMeatballByDefault(): void
+    {
+        foreach (['', 'auto'] as $stored) {
+            $header = (new GriffeTheme())->header(self::shellWithItems(icon: $stored));
+
+            $this->assertStringNotContainsString('gr-nav__toggle--burger', $header, 'stored=' . $stored);
+        }
+    }
+
+    #[Test]
+    public function aStoredBurgerSwapsOnlyTheClosedGlyph(): void
+    {
+        $header = (new GriffeTheme())->header(self::shellWithItems(icon: 'burger'));
+
+        $this->assertStringContainsString('class="gr-nav__toggle gr-icon-btn gr-nav__toggle--burger"', $header);
+        $this->assertStringContainsString('gr-nav__toggle-icon--burger', $header);
+        $this->assertStringContainsString('gr-nav__toggle-icon--meatball', $header, 'Both glyphs ship; the modifier decides which one shows.');
+        $this->assertStringContainsString('gr-nav__toggle-icon--close', $header, 'The open state stays the shared X.');
+        $this->assertStringContainsString('id="gr-nav-toggle"', $header, 'The checkbox and its label pairing do not move.');
+    }
+
+    /**
+     * The stylesheet, not just the class name: a modifier with no rule behind
+     * it renders the meatball and looks saved.
+     */
+    #[Test]
+    public function theStylesheetSwapsTheClosedGlyphOnTheModifier(): void
+    {
+        $css = InlineCss::file('Modules/Griffe/assets/critical/griffe.css');
+
+        $this->assertStringContainsString('.gr-nav__toggle-icon--burger { display: none; }', $css);
+        $this->assertStringContainsString('.gr-nav__toggle--burger .gr-nav__toggle-icon--meatball { display: none; }', $css);
+        $this->assertStringContainsString('.gr-nav__toggle--burger .gr-nav__toggle-icon--burger { display: inline-flex; }', $css);
+        $this->assertStringContainsString(
+            '.gr-nav__toggle-input:checked ~ .gr-header__inner .gr-nav__toggle-icon--burger',
+            $css,
+            'An open menu must hide whichever closed glyph is showing.',
+        );
+    }
+
+    #[Test]
+    public function theSchemaDeclaresTheNavIconChoice(): void
+    {
+        $schema = (new GriffeTheme())->settingsSchema();
+
+        $this->assertCount(1, $schema);
+        $this->assertSame('nav_toggle_icon', $schema[0]->key);
+        $this->assertSame('auto', $schema[0]->default, 'Unset keeps the theme\'s own meatball.');
+        $this->assertSame(['auto', 'burger', 'meatball'], array_keys($schema[0]->options));
+    }
+
     #[Test]
     public function aHeaderWithoutItemsRendersNoToggleAtAll(): void
     {
@@ -492,7 +548,7 @@ final class GriffeThemeTest extends TestCase
         return (new GriffeTheme())->header(self::shellWithItems());
     }
 
-    private static function shellWithItems(string $currentPath = '/blog'): ShellContext
+    private static function shellWithItems(string $currentPath = '/blog', string $icon = ''): ShellContext
     {
         return ShellContext::from(
             'Griffe',
@@ -503,6 +559,7 @@ final class GriffeThemeTest extends TestCase
             'en',
             ['en', 'it'],
             false,
+            '' === $icon ? [] : ['nav_toggle_icon' => $icon],
         );
     }
 

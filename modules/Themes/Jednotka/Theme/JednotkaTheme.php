@@ -7,11 +7,13 @@ namespace Modules\Themes\Jednotka\Theme;
 use Modules\Core\Application\Services\MarkdownRenderer;
 use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\Core\Interfaces\HTTP\ContentServices;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Themes\ThemeModule;
+use Themes\ThemeSettings;
 
 /**
  * JednotkaTheme — the `jednotka` design, carried as a kernel theme module.
@@ -79,7 +81,7 @@ use Themes\ThemeModule;
  * consumers (`ThemeBundleDiscoveryTest` resolves the bundle, the layout inlines
  * the entry's stylesheet).
  */
-final class JednotkaTheme implements ThemeModule
+final class JednotkaTheme implements ThemeModule, ThemeSettings
 {
     /** The Blog façade — a string, so no `use` enters the install closure. */
     private const string BLOG_FACADE = 'Modules\\Blog\\Application\\BlogServices';
@@ -218,6 +220,32 @@ final class JednotkaTheme implements ThemeModule
         return 'je';
     }
 
+    /**
+     * Jednotka's one admin choice: which glyph the phone menu toggle draws.
+     *
+     * `auto` keeps the burger this header was ported with, so an untouched
+     * install renders what it always did. The meatball ships as a second SVG
+     * (filled, not stroked) and only the closed glyph changes — the close
+     * icon and the checkbox stay exactly where the open-state CSS expects.
+     *
+     * @return list<ThemeSetting>
+     */
+    public function settingsSchema(): array
+    {
+        return [
+            ThemeSetting::select(
+                'nav_toggle_icon',
+                'Menu icon',
+                [
+                    'auto'     => 'Auto (theme default: burger)',
+                    'burger'   => 'Burger (three lines)',
+                    'meatball' => 'Meatball (three dots)',
+                ],
+                'auto',
+            ),
+        ];
+    }
+
     public function header(ShellContext $context): string
     {
         $brand = self::e($context->siteName);
@@ -228,6 +256,12 @@ final class JednotkaTheme implements ThemeModule
         // (`class="je-header"` is what the stylesheet and the DOM-parity tests
         // key on); the surface marker is a separate attribute.
         $surface = self::isHomePath($context->currentPath) ? ' data-surface="home"' : '';
+
+        // `auto` is this theme's own glyph: the burger the header was ported
+        // with. Only an explicit `meatball` swaps the closed icon.
+        $meatball = 'meatball' === ($context->themeSettings['nav_toggle_icon'] ?? 'auto');
+        $openIcon = $meatball ? $this->meatball() : $this->burger();
+        $openModifier = $meatball ? ' je-nav__toggle-icon--meatball' : '';
 
         return <<<HTML
 <header class="je-header"{$surface}>
@@ -242,8 +276,8 @@ final class JednotkaTheme implements ThemeModule
             {$this->chrome($context)}
         </div>
         <label for="je-nav-toggle" class="je-nav__toggle" title="Toggle menu">
-            <span class="je-nav__toggle-icon je-nav__toggle-icon--open" aria-hidden="true">
-                {$this->burger()}
+            <span class="je-nav__toggle-icon je-nav__toggle-icon--open{$openModifier}" aria-hidden="true">
+                {$openIcon}
             </span>
             <span class="je-nav__toggle-icon je-nav__toggle-icon--close" aria-hidden="true">
                 {$this->close()}
@@ -1341,6 +1375,21 @@ HTML;
     private static function burger(): string
     {
         return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+    }
+
+    /**
+     * The opt-in meatball: three filled dots on the same 24-unit grid the
+     * burger uses (r=2 at cy 5/12/19, the geometry Mono and Griffe draw).
+     *
+     * `style` rather than attributes: the theme's shell CSS sets
+     * `fill: none; stroke: …` on every toggle SVG, and a presentation
+     * attribute loses to a stylesheet — the dots would come out as three
+     * invisible outlines. Inline style is the one thing that wins without a
+     * second rule in the shared stylesheet.
+     */
+    private static function meatball(): string
+    {
+        return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><circle cx="12" cy="5" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="12" cy="19" r="2"></circle></svg>';
     }
 
     private static function close(): string

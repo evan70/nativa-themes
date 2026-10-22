@@ -627,6 +627,62 @@ final class MonoThemeTest extends TestCase
      * this asserts WHICH one that is — a track that fills the first option
      * regardless of the active locale would pass a count-only assertion.
      */
+    /**
+     * The glyph choice is optional: without a stored value Mono keeps its own
+     * meatball — the glyph the other themes borrowed the idiom from.
+     */
+    #[Test]
+    public function theToggleKeepsTheMeatballByDefault(): void
+    {
+        foreach (['', 'auto'] as $stored) {
+            $header = self::headerWithIcon($stored);
+
+            $this->assertStringNotContainsString('mo-navbar__toggle--burger', $header, 'stored=' . $stored);
+        }
+    }
+
+    #[Test]
+    public function aStoredBurgerSwapsOnlyTheClosedGlyph(): void
+    {
+        $header = self::headerWithIcon('burger');
+
+        $this->assertStringContainsString('class="mo-navbar__toggle mo-icon-btn mo-navbar__toggle--burger"', $header);
+        $this->assertStringContainsString('mo-navbar__toggle-icon--burger', $header);
+        $this->assertStringContainsString('mo-navbar__toggle-icon--meatball', $header, 'Both glyphs ship; the modifier decides which one shows.');
+        $this->assertStringContainsString('mo-navbar__toggle-icon--close', $header, 'The open state stays the shared X.');
+        $this->assertStringContainsString('id="mo-nav-toggle"', $header, 'The checkbox and its label pairing do not move.');
+    }
+
+    /**
+     * The stylesheet, not just the class name: an open menu must hide the
+     * burger exactly like it hides the meatball, or two glyphs stack.
+     */
+    #[Test]
+    public function theStylesheetSwapsAndHidesTheClosedGlyph(): void
+    {
+        $css = InlineCss::file('Modules/Mono/assets/critical/mono.css');
+
+        $this->assertStringContainsString('.mo-navbar__toggle-icon--burger{display:none}', $css);
+        $this->assertStringContainsString('.mo-navbar__toggle--burger .mo-navbar__toggle-icon--meatball{display:none}', $css);
+        $this->assertStringContainsString('.mo-navbar__toggle--burger .mo-navbar__toggle-icon--burger{display:block}', $css);
+        $this->assertStringContainsString(
+            '.mo-navbar__toggle-input:checked~.mo-navbar__actions .mo-navbar__toggle-icon--burger{display:none}',
+            $css,
+            'The open state must hide the opt-in burger too.',
+        );
+    }
+
+    #[Test]
+    public function theSchemaDeclaresTheNavIconChoice(): void
+    {
+        $schema = (new MonoTheme())->settingsSchema();
+
+        $this->assertCount(1, $schema);
+        $this->assertSame('nav_toggle_icon', $schema[0]->key);
+        $this->assertSame('auto', $schema[0]->default, 'Unset keeps the theme\'s own meatball.');
+        $this->assertSame(['auto', 'burger', 'meatball'], array_keys($schema[0]->options));
+    }
+
     #[Test]
     public function theLocaleSwitcherIsASwitchWithTheActiveSegmentMarked(): void
     {
@@ -715,8 +771,16 @@ final class MonoThemeTest extends TestCase
 
     private static function headerWithItems(): string
     {
+        return self::headerWithIcon('');
+    }
+
+    /**
+     * @param string $icon stored `nav_toggle_icon`; '' means "nothing stored"
+     */
+    private static function headerWithIcon(string $icon): string
+    {
         $context = ShellContext::from(
-            'Mono',
+            'Site',
             [new ShellNavItem('Home', '/', active: true), new ShellNavItem('Articles', '/blog')],
             [new ShellNavItem('Docs', '/docs')],
             '/',
@@ -724,6 +788,7 @@ final class MonoThemeTest extends TestCase
             'sk',
             [],
             false,
+            '' === $icon ? [] : ['nav_toggle_icon' => $icon],
         );
 
         return (new MonoTheme())->header($context);

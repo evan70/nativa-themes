@@ -147,7 +147,15 @@
 
 .gr-nav__toggle { display: none; }
 .gr-nav__toggle-icon--close { display: none; }
-.gr-nav__toggle-input:checked ~ .gr-header__inner .gr-nav__toggle-icon--meatball { display: none; }
+
+/* Second closed-state glyph, off by default: the meatball is this theme's own
+   and `auto` must keep it. `--burger` on the label swaps which one shows; the
+   open state hides EITHER closed glyph and shows the shared close icon. */
+.gr-nav__toggle-icon--burger { display: none; }
+.gr-nav__toggle--burger .gr-nav__toggle-icon--meatball { display: none; }
+.gr-nav__toggle--burger .gr-nav__toggle-icon--burger { display: inline-flex; }
+.gr-nav__toggle-input:checked ~ .gr-header__inner .gr-nav__toggle-icon--meatball,
+.gr-nav__toggle-input:checked ~ .gr-header__inner .gr-nav__toggle-icon--burger { display: none; }
 .gr-nav__toggle-input:checked ~ .gr-header__inner .gr-nav__toggle-icon--close { display: block; }
 
 @media (max-width: 768px) {

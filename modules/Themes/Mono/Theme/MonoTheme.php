@@ -5,10 +5,12 @@ declare(strict_types = 1);
 namespace Modules\Themes\Mono\Theme;
 
 use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\Core\Interfaces\HTTP\ContentServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Themes\ThemeModule;
+use Themes\ThemeSettings;
 
 /**
  * MonoTheme — the evan70.github.io/mono vocabulary as a kernel theme module.
@@ -23,7 +25,7 @@ use Themes\ThemeModule;
  * `get_object_vars` rather than `use`ing the entity, the established kernel
  * pattern for a theme that must not name the module owning the article.
  */
-final class MonoTheme implements ThemeModule
+final class MonoTheme implements ThemeModule, ThemeSettings
 {
     public function name(): string
     {
@@ -111,9 +113,36 @@ final class MonoTheme implements ThemeModule
         return 'mo';
     }
 
+    /**
+     * Mono's one admin choice: which glyph the phone menu toggle draws.
+     *
+     * `auto` keeps the meatball (this theme's own, and the name of the idiom
+     * the other themes borrowed), so an untouched install renders what it
+     * always did. Both closed-state glyphs ship and CSS shows one — the open
+     * state still costs no JS.
+     *
+     * @return list<ThemeSetting>
+     */
+    public function settingsSchema(): array
+    {
+        return [
+            ThemeSetting::select(
+                'nav_toggle_icon',
+                'Menu icon',
+                [
+                    'auto'     => 'Auto (theme default: meatball)',
+                    'burger'   => 'Burger (three lines)',
+                    'meatball' => 'Meatball (three dots)',
+                ],
+                'auto',
+            ),
+        ];
+    }
+
     public function header(ShellContext $context): string
     {
         $hasMenu = [] !== $context->headerNav;
+        $icon = 'burger' === ($context->themeSettings['nav_toggle_icon'] ?? 'auto') ? 'burger' : 'meatball';
 
         return '<nav class="mo-navbar">'
             . '<div class="mo-navbar__container mo-container">'
@@ -127,7 +156,7 @@ final class MonoTheme implements ThemeModule
             . $this->localeLinks($context)
             // The menu toggle is the last control on a phone, where it is the
             // actionable one; the switcher sits before it rather than after.
-            . $this->menuToggleLabel($hasMenu)
+            . $this->menuToggleLabel($hasMenu, $icon)
             . '</div>'
             . '</div>'
             . '</nav>' . "\n";
@@ -720,18 +749,33 @@ final class MonoTheme implements ThemeModule
      * rules already hide `--close` in the closed state), so opening the menu
      * costs no JS and no second request.
      */
-    private function menuToggleLabel(bool $hasMenu): string
+    private function menuToggleLabel(bool $hasMenu, string $icon = 'meatball'): string
     {
         if (!$hasMenu) {
             return '';
         }
 
-        return '<label class="mo-navbar__toggle mo-icon-btn" for="mo-nav-toggle" title="Menu">'
+        $variant = 'burger' === $icon ? ' mo-navbar__toggle--burger' : '';
+
+        return '<label class="mo-navbar__toggle mo-icon-btn' . $variant . '" for="mo-nav-toggle" title="Menu">'
             . '<span class="mo-navbar__toggle-icon mo-navbar__toggle-icon--meatball" aria-hidden="true">'
             . self::meatballIcon() . '</span>'
+            . '<span class="mo-navbar__toggle-icon mo-navbar__toggle-icon--burger" aria-hidden="true">'
+            . self::burgerIcon() . '</span>'
             . '<span class="mo-navbar__toggle-icon mo-navbar__toggle-icon--close" aria-hidden="true">'
             . self::closeIcon() . '</span>'
             . '</label>';
+    }
+
+    /** The opt-in burger: same 22 px box and stroke weight as the meatball. */
+    private static function burgerIcon(): string
+    {
+        return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+            . ' stroke-width="2" stroke-linecap="round">'
+            . '<line x1="4" y1="7" x2="20" y2="7"></line>'
+            . '<line x1="4" y1="12" x2="20" y2="12"></line>'
+            . '<line x1="4" y1="17" x2="20" y2="17"></line>'
+            . '</svg>';
     }
 
     private static function meatballIcon(): string
