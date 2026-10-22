@@ -8,12 +8,14 @@ use Modules\Core\Application\Services\AssetManager;
 use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\AdminRoutePolicy;
 use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\Core\Interfaces\HTTP\ContentServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Themes\AuthPageTheme;
 use Themes\DocsPageTheme;
 use Themes\ThemeModule;
+use Themes\ThemeSettings;
 
 /**
  * BosonTheme — the boson-php marketing site's design as a kernel theme module.
@@ -85,7 +87,7 @@ use Themes\ThemeModule;
  * `AssetManager` before inlining, so a built tree cannot run the same IIFE
  * twice.
  */
-final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme
+final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, ThemeSettings
 {
     /** The reference's image-less, framework-free copy. */
     private const array DEFAULT_COPY = [
@@ -171,6 +173,49 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme
     }
 
     /**
+     * The one choice Boson offers its admin: which glyph the mobile menu
+     * toggle draws.
+     *
+     * `auto` is the default and means THIS theme's own icon (the three lines
+     * the design was ported with), so an install that never opens the settings
+     * screen renders exactly what it rendered before the choice existed. The
+     * variant is a class on the same label, not a second markup path: the
+     * checkbox, the `~` selectors that open the panel and the scroll lock are
+     * all keyed off the DOM the label lives in, and a second label would be a
+     * second place for that contract to drift.
+     *
+     * @return list<ThemeSetting>
+     */
+    public function settingsSchema(): array
+    {
+        return [
+            ThemeSetting::select(
+                'nav_toggle_icon',
+                'Menu icon',
+                [
+                    'auto'     => 'Auto (theme default: burger)',
+                    'burger'   => 'Burger (three lines)',
+                    'meatball' => 'Meatball (three dots)',
+                ],
+                'auto',
+            ),
+        ];
+    }
+
+    /**
+     * The icon the header actually draws, resolved from the stored choice.
+     *
+     * `auto` and anything the schema would have rejected land on the burger —
+     * the theme's own default. Unknown values cannot really arrive (the kernel
+     * vets them against the schema first), but a theme that trusts its input
+     * completely is one rename away from a header with no icon at all.
+     */
+    private static function navIcon(ShellContext $context): string
+    {
+        return 'meatball' === ($context->themeSettings['nav_toggle_icon'] ?? 'auto') ? 'meatball' : 'burger';
+    }
+
+    /**
      * The reference's fixed header: dotted rails at both ends, the wordmark,
      * the nav, the search field and the action cluster, shrinking from 100 to
      * 70 px once the page scrolls.
@@ -205,7 +250,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme
             . $this->localeLinks($context)
             . '<a class="bo-btn bo-btn--ghost bo-actions__admin" href="'
             . self::e(AdminRoutePolicy::prefix()) . '">Admin</a>' . "\n"
-            . self::burgerLabel($hasNav)
+            . self::burgerLabel($hasNav, self::navIcon($context))
             . '</div>' . "\n"
             . '<span class="bo-header__dots" aria-hidden="true"></span>' . "\n"
             . '</div>' . "\n"
@@ -1358,13 +1403,23 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme
             . ' aria-label="Open navigation" aria-controls="bo-mobile-menu">' . "\n";
     }
 
-    private static function burgerLabel(bool $hasNav): string
+    /**
+     * The toggle label. `$icon` is `burger` or `meatball` — already resolved by
+     * `navIcon()`, never the raw stored value.
+     *
+     * The close glyph is shared: an open menu is an X in both variants, so the
+     * choice only changes the closed-state glyph. That is why the modifier sits
+     * on the label and the CSS targets `__open` inside it.
+     */
+    private static function burgerLabel(bool $hasNav, string $icon): string
     {
         if (!$hasNav) {
             return '';
         }
 
-        return '<label class="bo-burger" for="bo-nav-toggle" title="Menu">'
+        $variant = 'meatball' === $icon ? ' bo-burger--meatball' : '';
+
+        return '<label class="bo-burger' . $variant . '" for="bo-nav-toggle" title="Menu">'
             . '<span class="bo-burger__open" aria-hidden="true"></span>'
             . '<span class="bo-burger__close" aria-hidden="true"></span>'
             . '</label>' . "\n";

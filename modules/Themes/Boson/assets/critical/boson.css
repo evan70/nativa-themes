@@ -597,6 +597,18 @@ table th {
 .bo-burger__open::before { top: -7px; }
 .bo-burger__open::after { top: 7px; }
 
+/* Meatball variant (`nav_toggle_icon: meatball`) — the same label and the same
+   checkbox, three dots instead of three lines. Only the closed glyph changes:
+   the open state is still the shared X, and the panel opening stays keyed off
+   `.bo-burger-input:checked ~ …`, so the variant cannot affect the menu. */
+.bo-burger--meatball .bo-burger__open,
+.bo-burger--meatball .bo-burger__open::before,
+.bo-burger--meatball .bo-burger__open::after {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
 .bo-burger__close {
   display: none;
   position: relative;

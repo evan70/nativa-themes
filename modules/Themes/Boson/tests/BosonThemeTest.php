@@ -132,6 +132,79 @@ final class BosonThemeTest extends TestCase
         $this->assertStringContainsString('.bo-burger-input:checked ~ .bo-header__bar', $css);
     }
 
+    /**
+     * The menu-glyph choice is OPTIONAL: an install that never opened the
+     * settings screen keeps the three lines the design was ported with.
+     */
+    #[Test]
+    public function theHeaderKeepsTheThemesOwnBurgerWithoutAChoice(): void
+    {
+        $header = (new BosonTheme())->header(self::shell());
+
+        $this->assertStringContainsString('class="bo-burger"', $header);
+        $this->assertStringNotContainsString('bo-burger--meatball', $header);
+    }
+
+    #[Test]
+    public function autoResolvesToTheThemesOwnIcon(): void
+    {
+        $header = (new BosonTheme())->header(self::shell('auto'));
+
+        $this->assertStringContainsString('class="bo-burger"', $header);
+        $this->assertStringNotContainsString('bo-burger--meatball', $header);
+    }
+
+    /**
+     * The variant is a class on the SAME label, not a second markup path: the
+     * checkbox, its position in the header and the shared close glyph are the
+     * contract the panel's `~` selectors depend on.
+     */
+    #[Test]
+    public function aStoredMeatballRendersTheMeatballVariantOnTheSameLabel(): void
+    {
+        $header = (new BosonTheme())->header(self::shell('meatball'));
+
+        $this->assertStringContainsString('class="bo-burger bo-burger--meatball"', $header);
+        $this->assertStringContainsString('id="bo-nav-toggle"', $header, 'The checkbox stays; only the glyph changes.');
+        $this->assertStringContainsString('for="bo-nav-toggle"', $header);
+        $this->assertStringContainsString('class="bo-burger__open"', $header);
+        $this->assertStringContainsString('class="bo-burger__close"', $header, 'An open menu is the shared X in both variants.');
+    }
+
+    /**
+     * The stylesheet, not just the class name: a modifier with no rule behind
+     * it renders the burger and looks saved — the exact "setting saved, page
+     * unchanged" failure this feature exists to avoid.
+     */
+    #[Test]
+    public function theMeatballVariantIsStyledAsThreeDots(): void
+    {
+        $css = InlineCss::file('Modules/Boson/assets/critical/boson.css');
+
+        $this->assertStringContainsString('.bo-burger--meatball .bo-burger__open', $css);
+        $this->assertMatchesRegularExpression(
+            '/\.bo-burger--meatball[^{]*\{[^}]*border-radius:\s*50%/s',
+            $css,
+            'The dots are round; without the radius the variant draws three short lines.',
+        );
+        $this->assertStringContainsString(
+            '.bo-burger-input:checked ~ .bo-mobile',
+            $css,
+            'The panel still opens off the checkbox, never off the variant class.',
+        );
+    }
+
+    #[Test]
+    public function theSchemaDeclaresTheNavIconChoice(): void
+    {
+        $schema = (new BosonTheme())->settingsSchema();
+
+        $this->assertCount(1, $schema, 'One field: the theme offers one choice, and the admin renders what it declares.');
+        $this->assertSame('nav_toggle_icon', $schema[0]->key);
+        $this->assertSame('auto', $schema[0]->default, 'Unset means the theme\'s own icon, not the admin\'s worst guess.');
+        $this->assertSame(['auto', 'burger', 'meatball'], array_keys($schema[0]->options));
+    }
+
     #[Test]
     public function theHeaderRendersTheShellNavAndTheAdminPrefix(): void
     {
@@ -972,7 +1045,10 @@ final class BosonThemeTest extends TestCase
         );
     }
 
-    private static function shell(): ShellContext
+    /**
+     * @param string $icon stored `nav_toggle_icon`; '' means "nothing stored"
+     */
+    private static function shell(string $icon = ''): ShellContext
     {
         return ShellContext::from(
             'Boson Test',
@@ -988,6 +1064,7 @@ final class BosonThemeTest extends TestCase
             'sk',
             ['sk', 'en'],
             false,
+            '' === $icon ? [] : ['nav_toggle_icon' => $icon],
         );
     }
 
