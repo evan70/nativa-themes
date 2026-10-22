@@ -2603,7 +2603,14 @@ pre.bo-has-badge > code {
   .bo-burger {
     display: flex;
   }
+}
 
+/* The reading rail keeps its column down to 1024px — the breakpoint the
+   kernel's reader layout uses — so on a 1024px window it still floats beside
+   the prose instead of moving above the article at 1100px. The chrome above
+   (search, burger) keeps switching at 1100px: that is header space, not the
+   rail's. */
+@media (max-width: 1023px) {
   .bo-article-layout {
     grid-template-columns: minmax(0, 1fr);
   }
