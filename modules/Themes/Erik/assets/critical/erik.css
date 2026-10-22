@@ -353,3 +353,111 @@
 .er-section__empty {
     color: #64748b;
 }
+
+/* Article reading surface — the shape the built bundle gets from
+   src/erik/erik/article.css: prose beside a sticky "On this page" rail, body
+   copy bounded at 68ch, code and tables opting out so a wide sample is not
+   squashed. Without these rules a tree with no Vite manifest renders the rail
+   as a plain list under the article — markup without its rule, the failure the
+   Mono audit was written for. */
+.er-article-layout {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    margin: 0 auto;
+    max-width: var(--er-container);
+    padding: 3rem 1.25rem;
+}
+.er-article {
+    background: var(--er-surface);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius);
+    padding: clamp(1.25rem, 4vw, 3rem);
+}
+.er-article img {
+    height: auto;
+    max-width: 100%;
+}
+.er-article__body p, .er-article__body li, .er-article__body blockquote {
+    max-width: 68ch;
+}
+.er-article__body table {
+    border-collapse: collapse;
+    margin: 0 0 1rem;
+    width: 100%;
+}
+.er-article__body th, .er-article__body td {
+    border: 1px solid var(--er-border);
+    font-size: .875em;
+    padding: .5rem .75rem;
+    text-align: left;
+    vertical-align: top;
+}
+.er-article__body th {
+    background: var(--er-surface-raised);
+    font-weight: 600;
+}
+.er-article__body code {
+    background: var(--er-surface-raised);
+    border-radius: .25rem;
+    font-size: .9em;
+    padding: .1em .35em;
+}
+.er-article__body pre {
+    background: #0d1526;
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius);
+    color: #dbe4f3;
+    font-size: .875em;
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+}
+.er-article__body pre code {
+    background: none;
+    color: inherit;
+    display: block;
+    font-size: inherit;
+    padding: 0;
+    white-space: pre;
+}
+.er-toc {
+    border-left: 2px solid var(--er-accent-strong);
+    height: max-content;
+    padding: 0 0 0 1rem;
+    position: sticky;
+    top: 1.5rem;
+}
+.er-toc__title {
+    color: var(--er-accent-soft);
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    margin: 0 0 .75rem;
+    text-transform: uppercase;
+}
+.er-toc__nav {
+    display: grid;
+    gap: .5rem;
+}
+.er-toc__link {
+    color: var(--er-muted);
+    font-size: .85rem;
+    text-decoration: none;
+}
+.er-toc__link:hover, .er-toc__link--active {
+    color: var(--er-accent-soft);
+}
+.er-toc__link--active {
+    font-weight: 600;
+}
+@media (max-width: 760px) {
+    .er-article-layout {
+        display: block;
+    }
+    .er-toc {
+        margin-top: 1.5rem;
+        position: static;
+    }
+}

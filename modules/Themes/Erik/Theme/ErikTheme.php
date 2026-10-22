@@ -421,14 +421,79 @@ final class ErikTheme implements ThemeModule
         );
     }
 
+    /**
+     * The article surface, read the way Boson reads one: the prose column
+     * beside a sticky "On this page" rail, both inside the theme's own
+     * `er-article-layout` grid.
+     *
+     * The rail is built from `PageContext::$headings` — the anchors
+     * `MarkdownRenderer` itself generated — so a link can never point at an id
+     * the body does not carry. The links carry `data-toc-link`/`data-heading`,
+     * which is the opt-in `toc-scrollspy.ts` in this bundle already looks for;
+     * before this, erik shipped the rail's stylesheet and none of its markup,
+     * and the scrollspy's own header comment recorded it as the one theme that
+     * matched nothing.
+     *
+     * The kernel wraps article output in `FrontendLayout::readerLayout()`, which
+     * is a no-op when the document already answers `aria-label="On this page"`
+     * — that marker is how one rail is guaranteed rather than two.
+     */
     public function blogArticle(PageContext $context): string
     {
-        return $this->pageWrap(
-            '<article class="er-article">'
+        $article = '<article class="er-article">'
             . '<h1 class="er-section__title">' . self::e($context->title) . '</h1>'
             . '<div class="er-article__body">' . $context->bodyHtml . '</div>'
-            . '</article>',
+            . '</article>';
+
+        $toc = self::toc($context->headings);
+
+        // No rail, no grid: one entry is furniture, and a 15rem column holding
+        // a single link would narrow the article to show it.
+        if ('' === $toc) {
+            return $this->pageWrap($article);
+        }
+
+        return $this->pageWrap(
+            '<div class="er-article-layout">' . $article . $toc . '</div>',
         );
+    }
+
+    /**
+     * The floating contents rail, or '' when there is nothing worth listing.
+     *
+     * @param list<array{level?: int, text?: string, anchor?: string}> $headings
+     */
+    private static function toc(array $headings): string
+    {
+        $links = '';
+        $listed = 0;
+
+        foreach ($headings as $heading) {
+            if (!is_array($heading)) {
+                continue;
+            }
+
+            $anchor = $heading['anchor'] ?? '';
+            $text = $heading['text'] ?? '';
+
+            if (!is_string($anchor) || '' === $anchor || !is_string($text) || '' === trim($text)) {
+                continue;
+            }
+
+            $listed++;
+            $links .= '<a class="er-toc__link" href="#' . self::e($anchor) . '"'
+                . ' data-toc-link data-heading="' . self::e($anchor) . '">'
+                . self::e(trim($text)) . '</a>';
+        }
+
+        if ($listed < 2) {
+            return '';
+        }
+
+        return '<aside class="er-toc" aria-label="On this page">'
+            . '<p class="er-toc__title">On this page</p>'
+            . '<nav class="er-toc__nav">' . $links . '</nav>'
+            . '</aside>';
     }
 
     public function articleTail(string $html): string

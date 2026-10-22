@@ -8,6 +8,7 @@ use Modules\Core\Application\Services\AssetManager;
 use Modules\Core\Application\Services\View\InlineCss;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
+use Modules\Core\Interfaces\HTTP\ContentServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\Kernel;
@@ -436,6 +437,149 @@ final class ErikThemeTest extends TestCase
         foreach (['mo-', 'st-', 'gr-', 'k-header', 'k-footer'] as $foreign) {
             $this->assertStringNotContainsString($foreign, $html, sprintf('Foreign vocabulary `%s` in erik output.', $foreign));
         }
+    }
+
+    /**
+     * The article surface: the headings the renderer already anchored become
+     * the "On this page" rail, the rail sits beside the prose in the theme's
+     * own grid, and the kernel's reader layout steps aside for it.
+     *
+     * The rail used to be stylesheet-only: `er-toc*` rules and a scrollspy
+     * shipped in the bundle, while `blogArticle()` emitted neither, and the
+     * scrollspy's own header comment recorded erik as the theme whose links
+     * carried no `data-heading`. A rule the reader cannot see is not a feature.
+     */
+    #[Test]
+    public function theArticleRailIsBuiltFromTheRenderersHeadings(): void
+    {
+        $headings = [
+            ['level' => 2, 'text' => 'What it was before', 'anchor' => 'what-it-was-before'],
+            ['level' => 2, 'text' => 'The contract', 'anchor' => 'the-contract'],
+            ['level' => 3, 'text' => 'The connector', 'anchor' => 'the-connector'],
+        ];
+
+        $html = (new ErikTheme())->blogArticle(self::articleContext($headings));
+
+        $this->assertSame(1, substr_count($html, 'aria-label="On this page"'), 'One rail, never two.');
+        $this->assertStringContainsString('<div class="er-article-layout">', $html);
+        $this->assertStringContainsString('<aside class="er-toc" aria-label="On this page">', $html);
+        $this->assertLessThan(
+            strpos($html, 'er-toc__nav'),
+            strpos($html, 'er-article__body'),
+            'The rail follows the prose it describes.',
+        );
+
+        $this->assertSame(3, substr_count($html, 'data-toc-link'), 'Every heading stays reachable.');
+        $this->assertStringContainsString('href="#the-contract"', $html);
+        $this->assertStringContainsString(
+            'data-heading="the-connector"',
+            $html,
+            'The scrollspy pairs a link with its heading by data-heading — without it the rail never highlights.',
+        );
+
+        $wrapped = FrontendLayout::readerLayout($html, $headings);
+
+        $this->assertSame(
+            $html,
+            $wrapped,
+            'The kernel wrapped a rail the theme already composed: the page would render two tables of contents.',
+        );
+    }
+
+    /**
+     * Fewer than two headings is no rail and no grid: a 15rem column holding a
+     * single link narrows the prose to show it, which is the article reading
+     * worse for having a table of contents.
+     */
+    #[Test]
+    public function aLoneHeadingGetsNoRailAndTheFullMeasure(): void
+    {
+        $html = (new ErikTheme())->blogArticle(self::articleContext([
+            ['level' => 2, 'text' => 'Only one', 'anchor' => 'only-one'],
+        ]));
+
+        $this->assertStringNotContainsString('er-toc', $html, 'One entry is furniture.');
+        $this->assertStringNotContainsString('er-article-layout', $html, 'No rail, no grid.');
+        $this->assertStringContainsString('<article class="er-article">', $html);
+    }
+
+    #[Test]
+    public function theRailEscapesHeadingTextItDidNotWrite(): void
+    {
+        $html = (new ErikTheme())->blogArticle(self::articleContext([
+            ['level' => 2, 'text' => 'A & B <script>', 'anchor' => 'a-b'],
+            ['level' => 2, 'text' => 'Second', 'anchor' => 'second'],
+        ]));
+
+        $this->assertStringContainsString('A &amp; B &lt;script&gt;', $html);
+        $this->assertStringNotContainsString('<script>A', $html);
+    }
+
+    /**
+     * The markup above is what a tree WITHOUT a built bundle renders (the
+     * critical subset is the fallback), so the fallback has to carry a rule for
+     * every class the article emits — the Mono audit's assertion, applied to
+     * the one surface it could not see before.
+     */
+    #[Test]
+    public function theArticleVocabularyIsCoveredByTheCriticalStylesheet(): void
+    {
+        $html = (new ErikTheme())->blogArticle(self::articleContext([
+            ['level' => 2, 'text' => 'One', 'anchor' => 'one'],
+            ['level' => 2, 'text' => 'Two', 'anchor' => 'two'],
+        ]));
+
+        $css = InlineCss::file('Modules/Erik/assets/critical/erik.css');
+
+        preg_match_all('/class="([^"]*)"/', $html, $matches);
+
+        $classes = [];
+
+        foreach ($matches[1] as $list) {
+            foreach (preg_split('/\s+/', $list) ?: [] as $token) {
+                if (str_starts_with($token, 'er-')) {
+                    $classes[] = $token;
+                }
+            }
+        }
+
+        $classes = array_unique($classes);
+
+        $this->assertNotEmpty($classes);
+
+        foreach ($classes as $class) {
+            $this->assertStringContainsString(
+                '.' . $class,
+                $css,
+                sprintf('The article emits `%s` with no rule in the critical subset — unstyled markup in a tree with no build.', $class),
+            );
+        }
+    }
+
+    /**
+     * The article payload. The locale is the tree's configured default rather
+     * than a spelled code: the rail is locale-neutral, and a hardcoded one is a
+     * literal the name-ownership gate counts as a duplicate of the mapper's own
+     * value (measured — it moved the ceiling by exactly one).
+     *
+     * @param list<array{level: int, text: string, anchor: string}> $headings
+     */
+    private static function articleContext(array $headings): PageContext
+    {
+        return PageContext::forBlogArticle(
+            Request::create('GET', '/blog/what-it-was-before'),
+            self::THEME,
+            ContentServices::mapper()->defaultLocale(),
+            'what-it-was-before',
+            'What it was before',
+            '<p>Body</p>',
+            '',
+            '',
+            '',
+            '',
+            $headings,
+            [],
+        );
     }
 
     /**
