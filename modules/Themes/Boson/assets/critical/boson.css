@@ -2371,6 +2371,21 @@ pre.bo-has-badge > code {
  * Documentation — the /docs index and one guide
  * ------------------------------------------------------------------------ */
 
+/* The index is a reference surface, not an article: the head and the grid sit
+ * closer than a page's, because the list IS the page. A page head carries 3em
+ * and 2.5em of padding and the grid another 3em of margin for a page whose
+ * title is followed by prose; here the title is followed by cards, and at 1440
+ * px the first one began 630 px down the viewport with the whole of that gap
+ * empty. The kernel prepends the search field, so the space above the head is
+ * already the field's and is not repeated here. */
+.bo-docs > .bo-page__head {
+  padding: 1.5em 0;
+}
+
+.bo-docs > .bo-docs__list {
+  margin: 1.5em 0 0;
+}
+
 .bo-docs__back {
   margin: 0 0 1.5em;
 }
