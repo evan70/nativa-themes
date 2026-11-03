@@ -509,7 +509,7 @@ final class GriffeThemeTest extends TestCase
         $html = (new GriffeTheme())->blogSearch(PageContext::forBlogSearch(
             Request::create('GET', '/blog?q=%3Cb%3E'),
             'griffe',
-            'en',
+            'sk_SK',
             '<b>',
             [self::article('alpha', 'Alpha Client')],
         ));

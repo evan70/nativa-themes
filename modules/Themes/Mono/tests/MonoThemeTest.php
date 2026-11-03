@@ -283,7 +283,7 @@ final class MonoThemeTest extends TestCase
     {
         $facade = 'Modules\\Blog\\Application\\BlogServices';
 
-        $context = PageContext::forHomepage(Request::create('GET', '/'), 'mono', 'en', copy: ['title' => 'Hero']);
+        $context = PageContext::forHomepage(Request::create('GET', '/'), 'mono', 'en_US', copy: ['title' => 'Hero']);
 
         $html = (new MonoTheme())->homepage($context);
 
@@ -368,7 +368,7 @@ final class MonoThemeTest extends TestCase
         $this->assertStringContainsString('>Read More →</a>', $html, 'The case slide keeps its own label with no home.read_article row.');
 
         $bare = (new MonoTheme())->homepage(
-            PageContext::forHomepage(Request::create('GET', '/'), 'mono', 'en'),
+            PageContext::forHomepage(Request::create('GET', '/'), 'mono', 'en_US'),
         );
 
         // The title's wrapper differs between the two copies of this theme, so
@@ -612,7 +612,7 @@ final class MonoThemeTest extends TestCase
         $html = (new MonoTheme())->blogSearch(PageContext::forBlogSearch(
             Request::create('GET', '/blog?q=%3Cb%3E'),
             'mono',
-            'en',
+            'sk_SK',
             '<b>',
             [self::article('alpha', 'Alpha Client')],
         ));
@@ -659,7 +659,7 @@ final class MonoThemeTest extends TestCase
         return PageContext::forHomepage(
             Request::create('GET', '/'),
             'mono',
-            'en',
+            'en_US',
             copy: ['title' => 'Mono upstream', 'lede' => 'Business first.', 'cta' => 'Discover more'],
             blogHref: '/blog',
             heroSrc: 'https://example.test/hero.webp',
