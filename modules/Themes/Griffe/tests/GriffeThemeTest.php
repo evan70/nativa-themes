@@ -491,7 +491,12 @@ final class GriffeThemeTest extends TestCase
     #[Test]
     public function theBlogIndexCarriesASearchField(): void
     {
-        $html = (new GriffeTheme())->blogIndex(self::indexContext([self::article('alpha', 'Alpha Client')]));
+        $html = (new GriffeTheme())->blogIndex(PageContext::forBlogIndex(
+            Request::create('GET', '/blog'),
+            'griffe',
+            'sk_SK',
+            [self::article('alpha', 'Alpha Client')],
+        ));
 
         $this->assertStringContainsString('role="search"', $html);
         $this->assertStringContainsString('action="/blog"', $html);
@@ -511,6 +516,26 @@ final class GriffeThemeTest extends TestCase
 
         $this->assertStringContainsString('value="&lt;b&gt;"', $html);
         $this->assertStringNotContainsString('value="<b>"', $html);
+    }
+
+    /**
+     * The field posts to the locale's blog base, never to the path it was
+     * rendered on: LocaleMiddleware strips `/en` before routing, so an English
+     * reader's `getPathInfo()` is `/blog` and posting there would search the
+     * default corpus instead of the one they are reading.
+     */
+    #[Test]
+    public function theSearchFieldPostsToTheLocalesBlogBase(): void
+    {
+        $english = (new GriffeTheme())->blogIndex(PageContext::forBlogIndex(
+            Request::create('GET', '/blog'),
+            'griffe',
+            'en_US',
+            [self::article('alpha', 'Alpha Client')],
+        ));
+
+        $this->assertStringContainsString('action="/en/blog"', $english);
+        $this->assertStringNotContainsString('action="/blog"', $english);
     }
 
     private static function bodyOf(string $html): string

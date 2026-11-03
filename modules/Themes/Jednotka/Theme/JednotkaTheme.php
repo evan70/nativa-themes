@@ -691,7 +691,7 @@ HTML;
      */
     private static function searchBox(PageContext $context, string $query): string
     {
-        $action = 'en_US' === $context->locale ? '/en/blog' : '/blog';
+        $action = ContentServices::mapper()->urlPrefix($context->locale) . '/blog';
 
         return '<form class="je-blog-search" method="get" action="' . $action . '" role="search">'
             . '<label class="je-sr-only" for="je-search-input">Search</label>'

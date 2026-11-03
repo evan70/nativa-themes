@@ -316,6 +316,25 @@ final class JednotkaThemeTest extends TestCase
     }
 
     /**
+     * The search field posts to the locale's blog base, not to a literal and
+     * not to `getPathInfo()`: LocaleMiddleware strips `/en` before routing, so
+     * the rendered path is `/blog` even for an English reader.
+     */
+    #[Test]
+    public function theBlogSearchPostsToTheLocalesBlogBase(): void
+    {
+        $english = (new JednotkaTheme())->blogIndex(
+            PageContext::forBlogIndex(Request::create('GET', '/blog'), self::THEME, 'en_US', [self::article('a', 'A')]),
+        );
+        $slovak = (new JednotkaTheme())->blogIndex(
+            PageContext::forBlogIndex(Request::create('GET', '/blog'), self::THEME, 'sk_SK', [self::article('a', 'A')]),
+        );
+
+        $this->assertStringContainsString('action="/en/blog"', $english);
+        $this->assertStringContainsString('action="/blog"', $slovak);
+    }
+
+    /**
      * The pager is computed from `PageContext` — the showcase's `SearchResult`
      * is a Blog DTO a theme may not name — and it keeps the index's one
      * canonical first-page URL.

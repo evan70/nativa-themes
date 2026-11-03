@@ -597,7 +597,7 @@ final class MonoThemeTest extends TestCase
         $html = (new MonoTheme())->blogIndex(PageContext::forBlogIndex(
             Request::create('GET', '/blog'),
             'mono',
-            'en',
+            'sk_SK',
             [self::article('alpha', 'Alpha Client')],
         ));
 
@@ -619,6 +619,26 @@ final class MonoThemeTest extends TestCase
 
         $this->assertStringContainsString('value="&lt;b&gt;"', $html);
         $this->assertStringNotContainsString('value="<b>"', $html);
+    }
+
+    /**
+     * The field posts to the locale's blog base, never to the path it was
+     * rendered on: LocaleMiddleware strips `/en` before routing, so an English
+     * reader's `getPathInfo()` is `/blog` and posting there would search the
+     * default corpus instead of the one they are reading.
+     */
+    #[Test]
+    public function theSearchFieldPostsToTheLocalesBlogBase(): void
+    {
+        $english = (new MonoTheme())->blogIndex(PageContext::forBlogIndex(
+            Request::create('GET', '/blog'),
+            'mono',
+            'en_US',
+            [self::article('alpha', 'Alpha Client')],
+        ));
+
+        $this->assertStringContainsString('action="/en/blog"', $english);
+        $this->assertStringNotContainsString('action="/blog"', $english);
     }
 
     private static function article(string $slug, string $title, ?string $image = null): object

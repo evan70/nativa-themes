@@ -430,15 +430,17 @@ final class ErikTheme implements ThemeModule
      * The blog's search control, under the title and above the list.
      *
      * This theme's shell carries no field, so without this the blog would be
-     * searchable only by typing `?q=` by hand. The action is the CURRENT path,
-     * not a literal, so the English prefix (`/en/blog`) is answered by the
-     * request rather than re-spelled here. The button reuses `er-button`, the
+     * searchable only by typing `?q=` by hand. The action is the locale's blog
+     * base, never `getPathInfo()`: LocaleMiddleware strips the `/en` prefix
+     * before routing, so the path here is `/blog` even for an English reader,
+     * and posting to it would search the default corpus. Boson's shell builds
+     * the same address from the same mapper. The button reuses `er-button`, the
      * theme's own control vocabulary.
      */
     private function searchForm(PageContext $context, string $query): string
     {
         return '<form role="search" method="get" action="'
-            . self::e($context->request->getPathInfo()) . '">'
+            . self::e(ContentServices::mapper()->urlPrefix($context->locale) . '/blog') . '">'
             . '<label for="er-blog-search">Search articles</label>'
             . '<input id="er-blog-search" name="q" type="search"'
             . ' placeholder="Search articles" value="' . self::e($query) . '" autocomplete="off">'
