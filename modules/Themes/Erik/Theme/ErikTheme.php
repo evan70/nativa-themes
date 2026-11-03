@@ -411,14 +411,39 @@ final class ErikTheme implements ThemeModule
 
     public function blogIndex(PageContext $context): string
     {
-        return $this->pageWrap($this->section('Blog', $this->links($context->articles)));
+        return $this->pageWrap(
+            $this->section('Blog', $this->searchForm($context, '') . $this->links($context->articles)),
+        );
     }
 
     public function blogSearch(PageContext $context): string
     {
         return $this->pageWrap(
-            $this->section('Search: ' . $context->query, $this->links($context->results)),
+            $this->section(
+                'Search: ' . $context->query,
+                $this->searchForm($context, $context->query) . $this->links($context->results),
+            ),
         );
+    }
+
+    /**
+     * The blog's search control, under the title and above the list.
+     *
+     * This theme's shell carries no field, so without this the blog would be
+     * searchable only by typing `?q=` by hand. The action is the CURRENT path,
+     * not a literal, so the English prefix (`/en/blog`) is answered by the
+     * request rather than re-spelled here. The button reuses `er-button`, the
+     * theme's own control vocabulary.
+     */
+    private function searchForm(PageContext $context, string $query): string
+    {
+        return '<form role="search" method="get" action="'
+            . self::e($context->request->getPathInfo()) . '">'
+            . '<label for="er-blog-search">Search articles</label>'
+            . '<input id="er-blog-search" name="q" type="search"'
+            . ' placeholder="Search articles" value="' . self::e($query) . '" autocomplete="off">'
+            . '<button class="er-button" type="submit">Search</button>'
+            . '</form>';
     }
 
     /**

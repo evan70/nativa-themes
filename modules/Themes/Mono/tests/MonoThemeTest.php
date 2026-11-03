@@ -587,6 +587,40 @@ final class MonoThemeTest extends TestCase
         $this->assertLessThan($meatball, $toggle, 'Upstream order: theme switcher first, meatball last — the meatball stays the final control.');
     }
 
+    /**
+     * The blog's search control lives in the page, because this shell carries
+     * none: without it `/blog` is searchable only by typing `?q=` by hand.
+     */
+    #[Test]
+    public function theBlogIndexCarriesASearchField(): void
+    {
+        $html = (new MonoTheme())->blogIndex(PageContext::forBlogIndex(
+            Request::create('GET', '/blog'),
+            'mono',
+            'en',
+            [self::article('alpha', 'Alpha Client')],
+        ));
+
+        $this->assertStringContainsString('role="search"', $html);
+        $this->assertStringContainsString('action="/blog"', $html);
+        $this->assertStringContainsString('name="q"', $html);
+    }
+
+    #[Test]
+    public function theBlogSearchCarriesTheQueryEscaped(): void
+    {
+        $html = (new MonoTheme())->blogSearch(PageContext::forBlogSearch(
+            Request::create('GET', '/blog?q=%3Cb%3E'),
+            'mono',
+            'en',
+            '<b>',
+            [self::article('alpha', 'Alpha Client')],
+        ));
+
+        $this->assertStringContainsString('value="&lt;b&gt;"', $html);
+        $this->assertStringNotContainsString('value="<b>"', $html);
+    }
+
     private static function article(string $slug, string $title, ?string $image = null): object
     {
         $article = new \stdClass();

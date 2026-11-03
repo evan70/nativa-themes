@@ -451,12 +451,17 @@ final class MonoTheme implements ThemeModule, ThemeSettings
 
     public function blogIndex(PageContext $context): string
     {
-        return $this->cardSection('Blog', '', $context->articles);
+        return $this->cardSection('Blog', '', $context->articles, $this->searchForm($context, ''));
     }
 
     public function blogSearch(PageContext $context): string
     {
-        return $this->cardSection('Search: ' . $context->query, '', $context->results);
+        return $this->cardSection(
+            'Search: ' . $context->query,
+            '',
+            $context->results,
+            $this->searchForm($context, $context->query),
+        );
     }
 
     public function blogArticle(PageContext $context): string
@@ -559,7 +564,7 @@ final class MonoTheme implements ThemeModule, ThemeSettings
     /**
      * @param array<array-key, mixed> $articles article DTOs (slug + title read via get_object_vars, like cards())
      */
-    private function cardSection(string $title, string $subtitle, array $articles): string
+    private function cardSection(string $title, string $subtitle, array $articles, string $lead = ''): string
     {
         $html = '<section class="mo-features-section"><div class="mo-container">'
             . '<header class="mo-features-section__header">'
@@ -569,7 +574,26 @@ final class MonoTheme implements ThemeModule, ThemeSettings
             $html .= '<p class="mo-features-section__subtitle">' . self::e($subtitle) . '</p>';
         }
 
-        return $html . '</header>' . $this->cards($articles) . '</div></section>';
+        return $html . '</header>' . $lead . $this->cards($articles) . '</div></section>';
+    }
+
+    /**
+     * The blog's search control, under the title and above the cards.
+     *
+     * This theme's shell carries no field, so without this the blog would be
+     * searchable only by typing `?q=` by hand. The action is the CURRENT path,
+     * not a literal, so a locale prefix is answered by the request rather than
+     * re-spelled here. The button reuses `mo-btn`, the theme's own control.
+     */
+    private function searchForm(PageContext $context, string $query): string
+    {
+        return '<form role="search" method="get" action="'
+            . self::e($context->request->getPathInfo()) . '">'
+            . '<label for="mo-blog-search">Search articles</label>'
+            . '<input id="mo-blog-search" name="q" type="search"'
+            . ' placeholder="Search articles" value="' . self::e($query) . '" autocomplete="off">'
+            . '<button class="mo-btn" type="submit">Search</button>'
+            . '</form>';
     }
 
     /**

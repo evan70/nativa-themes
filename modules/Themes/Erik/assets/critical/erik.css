@@ -353,6 +353,44 @@
 .er-section__empty {
     color: #64748b;
 }
+/* The blog's search control. Scoped to the content column rather than a class
+   of its own: two frozen theme bundles refuse a fallback class the build does
+   not style, and one shape for all three themes is the point of the rule. */
+main form[role="search"] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin: 0 0 1.5rem;
+    max-width: 32rem;
+}
+main form[role="search"] label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+}
+main form[role="search"] input[name="q"] {
+    flex: 1 1 12rem;
+    min-width: 0;
+    padding: .6rem .75rem;
+    font: inherit;
+    color: var(--er-ink);
+    background: var(--er-surface);
+    border: 1px solid var(--er-border);
+    border-radius: var(--er-radius);
+}
+main form[role="search"] input[name="q"]::placeholder {
+    color: var(--er-muted);
+}
+main form[role="search"] input[name="q"]:focus {
+    outline: none;
+    border-color: var(--er-accent-strong);
+}
+main form[role="search"] button {
+    flex: 0 0 auto;
+    font: inherit;
+}
 
 /* Article reading surface — the shape the built bundle gets from
    src/erik/erik/article.css: prose beside a sticky "On this page" rail, body

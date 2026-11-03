@@ -173,6 +173,16 @@ main pre .mo-code-badge{position:absolute;top:8px;left:8px;font-family:var(--fon
 .mo-lang-switch__option:focus-visible{outline:none;box-shadow:var(--focus-ring)}
 .mo-lang-switch__option--active{background-color:var(--brand-gold);color:var(--color-text-inverse)}
 .mo-lang-switch__option--active:hover{background-color:var(--brand-gold-dark);color:var(--color-text-inverse)}
+/* Blog search: the shell carries no field, so the index and its results do.
+   Scoped to the content column rather than a class of its own: the frozen
+   bundle refuses a fallback class it does not style. */
+main form[role="search"]{display:flex;flex-wrap:wrap;gap:var(--space-3);max-width:32rem;margin:0 0 var(--space-8)}
+main form[role="search"] label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+main form[role="search"] input[name="q"]{flex:1 1 12rem;min-width:0;padding:var(--space-2) var(--space-4);font:inherit;color:var(--color-text);background-color:var(--color-bg-alt);border:1px solid var(--color-border);border-radius:var(--radius-md)}
+main form[role="search"] input[name="q"]::placeholder{color:var(--color-text-muted)}
+main form[role="search"] input[name="q"]:focus{outline:none;box-shadow:var(--focus-ring-inset)}
+main form[role="search"] button{flex:0 0 auto}
+
 /* Phone: the two dev variant buttons are desktop toys; without hiding them the
    switch does not fit beside the brand, the theme toggle and the meatball.
    The meatball goes last so the menu still closes at the edge, and a long site

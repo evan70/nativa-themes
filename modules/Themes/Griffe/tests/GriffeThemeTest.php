@@ -484,6 +484,35 @@ final class GriffeThemeTest extends TestCase
         $this->assertStringNotContainsString('<script>A', $html);
     }
 
+    /**
+     * The blog's search control lives in the page, because this shell has none:
+     * without it `/blog` is searchable only by typing `?q=` by hand.
+     */
+    #[Test]
+    public function theBlogIndexCarriesASearchField(): void
+    {
+        $html = (new GriffeTheme())->blogIndex(self::indexContext([self::article('alpha', 'Alpha Client')]));
+
+        $this->assertStringContainsString('role="search"', $html);
+        $this->assertStringContainsString('action="/blog"', $html);
+        $this->assertStringContainsString('name="q"', $html);
+    }
+
+    #[Test]
+    public function theBlogSearchCarriesTheQueryEscaped(): void
+    {
+        $html = (new GriffeTheme())->blogSearch(PageContext::forBlogSearch(
+            Request::create('GET', '/blog?q=%3Cb%3E'),
+            'griffe',
+            'en',
+            '<b>',
+            [self::article('alpha', 'Alpha Client')],
+        ));
+
+        $this->assertStringContainsString('value="&lt;b&gt;"', $html);
+        $this->assertStringNotContainsString('value="<b>"', $html);
+    }
+
     private static function bodyOf(string $html): string
     {
         $cut = strpos($html, '<script');
