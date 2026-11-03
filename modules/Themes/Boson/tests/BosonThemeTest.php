@@ -451,6 +451,28 @@ final class BosonThemeTest extends TestCase
         $this->assertStringContainsString('href="/en/blog/a"', $html);
     }
 
+    /**
+     * The index is the list, and the search field is the shell's.
+     *
+     * The header's input posts to `/blog` and the menu carries a second copy for
+     * a narrow viewport, so a form here asked `q` of the same URL a third time
+     * and pushed the cards down the page. The guides' index makes the same
+     * choice in the kernel.
+     */
+    #[Test]
+    public function theBlogIndexLeavesTheSearchToTheShell(): void
+    {
+        $html = (new BosonTheme())->blogIndex(PageContext::forBlogIndex(
+            Request::create('GET', '/blog'),
+            self::THEME,
+            'sk',
+            [self::article('a', 'Alpha')],
+        ));
+
+        $this->assertStringNotContainsString('<form', $html, 'The blog index composed a form of its own.');
+        $this->assertStringNotContainsString('name="q"', $html, 'The shell\'s field is the index\'s search.');
+    }
+
     #[Test]
     public function theBlogSearchRendersAndEscapesTheQuery(): void
     {
@@ -464,7 +486,11 @@ final class BosonThemeTest extends TestCase
 
         $this->assertStringContainsString('Search: &lt;b&gt;', $html);
         $this->assertStringNotContainsString('Search: <b>', $html);
-        $this->assertStringContainsString('value="&lt;b&gt;"', $html);
+        $this->assertStringNotContainsString(
+            'name="q"',
+            $html,
+            'The results page renders its own field instead of narrowing from the shell\'s.',
+        );
         $this->assertStringContainsString('1 result', $html);
     }
 

@@ -373,14 +373,20 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             'Index',
             'Blog',
             'Plain Markdown, one module, no build required.',
-            self::searchForm($context, '')
-            . self::cards($slice, $context->locale)
+            self::cards($slice, $context->locale)
             . self::pager($context, $totalPages, $page),
         );
     }
 
     /**
      * Search results share the index's grid; the heading carries the query.
+     *
+     * No search form: the shell already carries one. The header's field posts to
+     * `/blog` (and to `/docs` from inside the guides) and the menu holds a
+     * second copy for a narrow viewport, so a form here would put the same
+     * input named `q` on the page a third time, all three pointing at one URL.
+     * The query stays visible in the heading, so a miss is narrowed from the
+     * field above it rather than from a box of its own.
      */
     public function blogSearch(PageContext $context): string
     {
@@ -388,8 +394,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             'Search',
             'Search: ' . $context->query,
             count($context->results) . ' ' . (1 === count($context->results) ? 'result' : 'results'),
-            self::searchForm($context, $context->query)
-            . self::cards($context->results, $context->locale)
+            self::cards($context->results, $context->locale)
             . self::pager($context),
         );
     }
@@ -1284,16 +1289,6 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         }
 
         return '<ul class="bo-toc__sublist">' . $items . '</ul>';
-    }
-
-    private static function searchForm(PageContext $context, string $query): string
-    {
-        return '<form class="bo-search-form" method="get" action="' . self::e(self::blogBaseFor($context->locale)) . '" role="search">'
-            . '<label class="bo-sr-only" for="bo-blog-search">Search articles</label>'
-            . '<input class="bo-search-form__input" id="bo-blog-search" type="search" name="q"'
-            . ' placeholder="Search articles" value="' . self::e($query) . '" autocomplete="off">'
-            . '<button class="bo-search-form__submit" type="submit">Search</button>'
-            . '</form>';
     }
 
     /**
