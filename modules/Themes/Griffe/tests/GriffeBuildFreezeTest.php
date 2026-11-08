@@ -76,8 +76,10 @@ final class GriffeBuildFreezeTest extends TestCase
      * griffe did until then.
      *
      * Measured after the rebuild: CSS 25 426 B, against 20 954 B with the
-     * questions rules alone and 18 243 B before either; the metric-matched
-     * fallback faces account for the last 305 B. The ceiling moves to
+     * questions rules alone and 18 243 B before either. The metric-matched
+     * fallback pair is 204 B and 215 B, 419 B together, while the rebuild that
+     * carried it moved the file by 305 B; those two numbers count different
+     * things and the delta is not the size of the block. The ceiling moves to
      * 27 000, and deliberately not to the ~30% the paragraph above describes:
      * that headroom was sized for a build that had just been pruned, while this
      * growth is two fixed blocks of rules the theme owes its readers. ~1.9 KB is
