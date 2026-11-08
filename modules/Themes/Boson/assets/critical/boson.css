@@ -25,7 +25,12 @@
  * word gap inside a heading was rendered by whatever family came next in the
  * stack (16.00 px at 64 px where the face's own advance is 14.69). Both
  * faces below point at it, and the fallback percentages stay the ones
- * measured for this file. */
+ * measured for this file.
+ *
+ * `roboto-condensed-400-c05481f9.woff2` therefore has no reference left and
+ * stays on disk on purpose: a year of immutable caching means some reader
+ * still holds HTML that asks for it, and deleting it turns that reader's
+ * heading into a 404 font. It is not dead weight to prune. */
 @font-face {
   font-family: Inter;
   font-style: normal;
