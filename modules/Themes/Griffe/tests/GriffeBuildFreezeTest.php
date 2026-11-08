@@ -68,7 +68,23 @@ final class GriffeBuildFreezeTest extends TestCase
         return (new GriffeTheme())->name();
     }
 
-    private const int CSS_BUDGET = 23000;
+    /**
+     * The questions and embedded-form blocks joined the bundle in one change
+     * (`questions.css` from `generate-questions-css.mjs`, `form.css` from
+     * `generate-form-css.mjs`): a theme that styles neither leaves both blocks
+     * at browser defaults inside an otherwise designed page, which is what
+     * griffe did until then.
+     *
+     * Measured after the rebuild: CSS 25 426 B, against 20 954 B with the
+     * questions rules alone and 18 243 B before either; the metric-matched
+     * fallback faces account for the last 305 B. The ceiling moves to
+     * 27 000, and deliberately not to the ~30% the paragraph above describes:
+     * that headroom was sized for a build that had just been pruned, while this
+     * growth is two fixed blocks of rules the theme owes its readers. ~1.9 KB is
+     * enough for rule growth and still far below what a library creeping back
+     * would need.
+     */
+    private const int CSS_BUDGET = 27000;
 
     protected function setUp(): void
     {
