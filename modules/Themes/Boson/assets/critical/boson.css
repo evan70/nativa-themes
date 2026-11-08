@@ -18,7 +18,14 @@
  * /fonts/*.woff2 as immutable for a year: a repaired subset has to ship as a
  * new URL, not as new bytes behind the old one, or a client that already
  * cached the old file keeps it and falls back to a system face for every
- * glyph the old subset lacked (the Slovak č/š/ž/ľ/ť/ň/ô). */
+ * glyph the old subset lacked (the Slovak č/š/ž/ľ/ť/ň/ô).
+ *
+ * `roboto-condensed-400-99aca383.woff2` is that repair with the `space` glyph
+ * put back: `-c05481f9` carried the Slovak letters but no U+0020, so every
+ * word gap inside a heading was rendered by whatever family came next in the
+ * stack (16.00 px at 64 px where the face's own advance is 14.69). Both
+ * faces below point at it, and the fallback percentages stay the ones
+ * measured for this file. */
 @font-face {
   font-family: Inter;
   font-style: normal;
@@ -32,7 +39,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/roboto-condensed-400-c05481f9.woff2") format("woff2");
+  src: url("/fonts/roboto-condensed-400-99aca383.woff2") format("woff2");
 }
 
 /* Both weights are the SAME variable file: it carries a `wght` axis
@@ -47,7 +54,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("/fonts/roboto-condensed-400-c05481f9.woff2") format("woff2");
+  src: url("/fonts/roboto-condensed-400-99aca383.woff2") format("woff2");
 }
 
 /* Two families, both self-hosted: Inter for body copy, Roboto Condensed for
