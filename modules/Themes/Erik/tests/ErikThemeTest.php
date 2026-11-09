@@ -9,7 +9,7 @@ use View\InlineCss;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Modules\Core\Interfaces\HTTP\PageContext;
+use Shell\PageContext;
 use Themes\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\Kernel;
 use Modules\Core\Interfaces\HTTP\Router;

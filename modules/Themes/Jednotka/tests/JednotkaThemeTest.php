@@ -6,12 +6,12 @@ namespace Modules\Themes\Jednotka\Tests;
 
 use Themes\AssetManager;
 use View\InlineJs;
-use Modules\Core\Domain\ShellNavItem;
+use Shell\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
 use Themes\FrontendLayout;
-use Modules\Core\Interfaces\HTTP\PageContext;
-use Modules\Core\Interfaces\HTTP\ShellContext;
+use Shell\PageContext;
+use Shell\ShellContext;
 use Themes\ThemeRegistry;
 use Modules\Themes\Jednotka\Theme\JednotkaTheme;
 use PHPUnit\Framework\Attributes\Test;

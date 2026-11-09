@@ -5,12 +5,12 @@ declare(strict_types = 1);
 namespace Modules\Themes\Griffe\Tests;
 
 use View\InlineCss;
-use Modules\Core\Domain\ShellNavItem;
+use Shell\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Themes\FrontendLayout;
-use Modules\Core\Interfaces\HTTP\PageContext;
-use Modules\Core\Interfaces\HTTP\ShellContext;
+use Shell\PageContext;
+use Shell\ShellContext;
 use Themes\ThemeRegistry;
 use Modules\Themes\Griffe\Theme\GriffeTheme;
 use PHPUnit\Framework\Attributes\Test;
