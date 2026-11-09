@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Boson\Tests;
 
-use Modules\Core\Application\Services\AssetManager;
-use Modules\Core\Application\Services\View\InlineCss;
-use Modules\Core\Application\Services\View\InlineJs;
+use Themes\AssetManager;
+use View\InlineCss;
+use View\InlineJs;
 use Modules\Core\Domain\AdminRoutePolicy;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;

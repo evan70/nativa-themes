@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Modules\Themes\Jednotka\Theme;
 
 use Modules\Markdown\Application\Services\MarkdownRenderer;
-use Modules\Core\Application\Services\View\InlineJs;
+use View\InlineJs;
 use Modules\Core\Domain\ShellNavItem;
 use Themes\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;

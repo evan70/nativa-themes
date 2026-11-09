@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Jednotka\Tests;
 
-use Modules\Core\Application\Services\AssetManager;
-use Modules\Core\Application\Services\View\InlineJs;
+use Themes\AssetManager;
+use View\InlineJs;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;

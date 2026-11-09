@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Mono\Tests;
 
-use Modules\Core\Application\Services\View\InlineCss;
+use View\InlineCss;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;

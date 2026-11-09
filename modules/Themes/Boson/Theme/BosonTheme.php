@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Boson\Theme;
 
-use Modules\Core\Application\Services\AssetManager;
-use Modules\Core\Application\Services\View\InlineJs;
+use Themes\AssetManager;
+use View\InlineJs;
 use Modules\Core\Domain\AdminRoutePolicy;
 use Modules\Core\Domain\ShellNavItem;
 use Themes\ThemeSetting;

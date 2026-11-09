@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Erik\Tests;
 
-use Modules\Core\Application\Services\AssetManager;
-use Modules\Core\Application\Services\View\InlineCss;
+use Themes\AssetManager;
+use View\InlineCss;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
