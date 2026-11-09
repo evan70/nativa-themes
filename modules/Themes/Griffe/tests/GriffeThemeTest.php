@@ -7,7 +7,7 @@ namespace Modules\Themes\Griffe\Tests;
 use Modules\Core\Application\Services\View\InlineCss;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
-use Modules\Core\Interfaces\HTTP\ContentServices;
+use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
@@ -253,7 +253,7 @@ final class GriffeThemeTest extends TestCase
     {
         $facade = 'Modules\\Blog\\Application\\BlogServices';
 
-        $locale = ContentServices::mapper()->defaultLocale();
+        $locale = ContentLocaleServices::mapper()->defaultLocale();
         $context = PageContext::forHomepage(Request::create('GET', '/'), 'griffe', $locale);
 
         $slides = self::slidesOf((new GriffeTheme())->homepage($context));

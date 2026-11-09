@@ -8,7 +8,7 @@ use Modules\Markdown\Application\Services\MarkdownRenderer;
 use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Domain\ThemeSetting;
-use Modules\Core\Interfaces\HTTP\ContentServices;
+use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
@@ -691,7 +691,7 @@ HTML;
      */
     private static function searchBox(PageContext $context, string $query): string
     {
-        $action = ContentServices::mapper()->urlPrefix($context->locale) . '/blog';
+        $action = ContentLocaleServices::mapper()->urlPrefix($context->locale) . '/blog';
 
         return '<form class="je-blog-search" method="get" action="' . $action . '" role="search">'
             . '<label class="je-sr-only" for="je-search-input">Search</label>'
@@ -1307,7 +1307,7 @@ HTML;
 
             $href = null !== $context->localeLinks
                 ? ($context->localeLinks[$code] ?? null)
-                : ContentServices::mapper()->urlPrefix($code) . ('/' === $context->currentPath ? '/' : $context->currentPath);
+                : ContentLocaleServices::mapper()->urlPrefix($code) . ('/' === $context->currentPath ? '/' : $context->currentPath);
 
             if (!is_string($href) || '' === $href) {
                 continue;

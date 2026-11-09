@@ -9,7 +9,7 @@ use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\AdminRoutePolicy;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Domain\ThemeSetting;
-use Modules\Core\Interfaces\HTTP\ContentServices;
+use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Themes\AuthPageTheme;
@@ -1430,7 +1430,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
 
         foreach ($context->availableLocales as $language) {
             $href = $context->localeLinks[$language]
-                ?? ContentServices::mapper()->urlPrefix($language) . $context->currentPath;
+                ?? ContentLocaleServices::mapper()->urlPrefix($language) . $context->currentPath;
 
             $links .= '<a class="' . $class . ($language === $context->activeLocale ? ' bo-locale__link--active' : '') . '"'
                 . ' href="' . self::e($href) . '"'
@@ -1449,12 +1449,12 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
 
     private static function blogBaseFor(string $locale): string
     {
-        return ContentServices::mapper()->urlPrefix($locale) . '/blog';
+        return ContentLocaleServices::mapper()->urlPrefix($locale) . '/blog';
     }
 
     private static function urlPrefix(string $locale): string
     {
-        return ContentServices::mapper()->urlPrefix($locale);
+        return ContentLocaleServices::mapper()->urlPrefix($locale);
     }
 
     private static function t(PageContext $context, string $key): string

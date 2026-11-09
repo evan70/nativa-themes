@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Modules\Themes\Erik\Theme;
 
 use Modules\Core\Domain\ShellNavItem;
-use Modules\Core\Interfaces\HTTP\ContentServices;
+use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Themes\ThemeModule;
@@ -440,7 +440,7 @@ final class ErikTheme implements ThemeModule
     private function searchForm(PageContext $context, string $query): string
     {
         return '<form role="search" method="get" action="'
-            . self::e(ContentServices::mapper()->urlPrefix($context->locale) . '/blog') . '">'
+            . self::e(ContentLocaleServices::mapper()->urlPrefix($context->locale) . '/blog') . '">'
             . '<label for="er-blog-search">Search articles</label>'
             . '<input id="er-blog-search" name="q" type="search"'
             . ' placeholder="Search articles" value="' . self::e($query) . '" autocomplete="off">'
@@ -664,7 +664,7 @@ final class ErikTheme implements ThemeModule
         $links = '';
 
         foreach ($context->availableLocales as $language) {
-            $href = $context->localeLinks[$language] ?? ContentServices::mapper()->urlPrefix($language) . $context->currentPath;
+            $href = $context->localeLinks[$language] ?? ContentLocaleServices::mapper()->urlPrefix($language) . $context->currentPath;
 
             $links .= '<a class="er-locale__link" href="' . self::e($href) . '"'
                 . ($language === $context->activeLocale ? ' aria-current="true"' : '')

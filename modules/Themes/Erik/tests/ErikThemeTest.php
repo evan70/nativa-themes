@@ -8,7 +8,7 @@ use Modules\Core\Application\Services\AssetManager;
 use Modules\Core\Application\Services\View\InlineCss;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
-use Modules\Core\Interfaces\HTTP\ContentServices;
+use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\Kernel;
@@ -569,7 +569,7 @@ final class ErikThemeTest extends TestCase
         return PageContext::forBlogArticle(
             Request::create('GET', '/blog/what-it-was-before'),
             self::THEME,
-            ContentServices::mapper()->defaultLocale(),
+            ContentLocaleServices::mapper()->defaultLocale(),
             'what-it-was-before',
             'What it was before',
             '<p>Body</p>',
