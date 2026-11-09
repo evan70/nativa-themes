@@ -12,7 +12,7 @@ use Modules\Core\Infrastructure\Paths\AppPaths;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
-use Modules\Core\Interfaces\HTTP\ThemeRegistry;
+use Themes\ThemeRegistry;
 use Modules\Themes\Jednotka\Theme\JednotkaTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

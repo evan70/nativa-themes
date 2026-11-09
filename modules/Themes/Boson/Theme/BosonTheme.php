@@ -8,7 +8,7 @@ use Modules\Core\Application\Services\AssetManager;
 use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\AdminRoutePolicy;
 use Modules\Core\Domain\ShellNavItem;
-use Modules\Core\Domain\ThemeSetting;
+use Themes\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;

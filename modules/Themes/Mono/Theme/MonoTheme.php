@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace Modules\Themes\Mono\Theme;
 
 use Modules\Core\Domain\ShellNavItem;
-use Modules\Core\Domain\ThemeSetting;
+use Themes\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;

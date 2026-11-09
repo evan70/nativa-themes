@@ -13,7 +13,7 @@ use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Interfaces\HTTP\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
-use Modules\Core\Interfaces\HTTP\ThemeRegistry;
+use Themes\ThemeRegistry;
 use Modules\Themes\Boson\Theme\BosonTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
