@@ -5,7 +5,7 @@ break and hard to notice afterwards.
 
 ## `modules/Themes/<Name>/` is the source of the theme
 
-Five themes live here: `Boson`, `Erik`, `Griffe`, `Jednotka`, `Mono`. Each is a kernel
+Six themes live here: `Boson`, `Erik`, `Griffe`, `Jednotka`, `Mono`, `Nativa`. Each is a kernel
 module — `Theme/<Name>Theme.php`, `assets/`, `tests/` — and this repository is where it is
 edited.
 
@@ -60,7 +60,7 @@ two copies in this repository are not interchangeable:
 | `modules/Themes/<Name>/` | this repository | `bin/build/sync-themes.sh --check` in `nativa-php-core` (planned there, not written yet) |
 
 So a green `pnpm run verify` says the gallery still paints the app's current
-stylesheets. It says **nothing** about the five kernel theme modules, and it
+stylesheets. It says **nothing** about the six kernel theme modules, and it
 cannot: `starter`, `magazine` and `moonshine` are not kernel themes, and
 `erik`'s gallery CSS is the app's full stylesheet, not the module's 355-line
 critical fallback. Until the kernel gate lands, a change to a theme module is

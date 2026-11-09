@@ -2,7 +2,7 @@
 
 Two things live here.
 
-1. **`modules/Themes/<Name>/` — the five themes of the Nativa kernel.** Each is a complete
+1. **`modules/Themes/<Name>/` — the six themes of the Nativa kernel.** Each is a complete
    kernel module: a `Theme/<Name>Theme.php` class, its vendored CSS/JS under `assets/`, and its
    tests. This repository is their source; once a theme is in the kernel's catalogue,
    `php bin/cms module:add <Name>` installs it. Its **build source** (`Frontend/packages/<theme>/`)
@@ -15,6 +15,7 @@ Two things live here.
    | `Griffe` | `gr-` | public, selectable | 4 |
    | `Jednotka` | `je-` | public, selectable | 3 |
    | `Mono` | `mo-` | public, selectable | 5 |
+   | `Nativa` | `na-` | public, selectable | 4 |
 
    A theme module carries **no font files** and no build output: the woff2 faces stay in the
    kernel's `public/fonts/`, and `public/dist/<theme>/` is built there.
@@ -114,7 +115,7 @@ copies them out of the app, byte for byte.
 ## Layout
 
 ```
-modules/Themes/<Name>/   the five kernel themes — Theme/, assets/, tests/ (the source)
+modules/Themes/<Name>/   the six kernel themes — Theme/, assets/, tests/ (the source)
 index.html               the gallery itself
 font-set/index.html      Slovak charset specimen of every served face
 starter/…/index.html     demo pages, at the URL they are served from
