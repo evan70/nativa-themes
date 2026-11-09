@@ -7,7 +7,7 @@ namespace Modules\Themes\Mono\Tests;
 use View\InlineCss;
 use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
-use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Themes\FrontendLayout;
 use Modules\Core\Interfaces\HTTP\PageContext;
 use Modules\Core\Interfaces\HTTP\ShellContext;
 use Modules\Themes\Mono\Theme\MonoTheme;
