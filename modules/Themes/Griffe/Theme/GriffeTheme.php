@@ -235,7 +235,7 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
         $navigation = [
             ['label' => 'Home', 'href' => '/'],
             ['label' => 'Blog', 'href' => '/blog'],
-            ['label' => 'Admin', 'href' => MarkRoutePolicy::prefix()],
+            ['label' => 'Mark', 'href' => MarkRoutePolicy::prefix()],
         ];
 
         return '<hero-layout'
@@ -340,7 +340,7 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
         return $html
             . '<div class="gr-slide__actions">'
             . '<a class="gr-btn" href="' . self::e($href) . '">' . self::e($cta) . '</a>'
-            . '<a class="gr-btn gr-btn--link" href="/mark">Open admin</a>'
+            . '<a class="gr-btn gr-btn--link" href="/mark">Open Mark</a>'
             . '</div>'
             . '</div>'
             . '</li>';

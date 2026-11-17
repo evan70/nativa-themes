@@ -96,7 +96,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         'home.hero_title_2' => 'Drop the framework.',
         'home.hero_subtitle' => 'A modular monolith you can read end to end: per-module SQLite, attribute routing, and no runtime dependencies to audit around your code.',
         'home.cta_blog' => 'Read the blog',
-        'home.cta_admin' => 'Open admin',
+        'home.cta_admin' => 'Open Mark',
         'home.discovery' => 'Discover how it works',
         'home.premise_title' => 'Familiar PHP. Now as modules.',
         'home.premise_text' => 'The kernel answers only what every site needs — routing, middleware, a render layout, per-module storage — and a module answers the rest. Remove a module and its routes, tables and theme leave with it.',
@@ -105,7 +105,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         'home.works_title' => 'Under the hood of Nativa',
         'home.works_text' => 'A request enters the kernel, passes one middleware pipeline, and lands in a module action. Nothing between those three points is generated, cached or reflected at runtime.',
         'home.api_title' => 'One core, many surfaces',
-        'home.api_text' => 'The same ports serve the public site, the admin panel and the CLI. A theme renders what the kernel hands it; the admin is a module; the command line reads the same catalogue.',
+        'home.api_text' => 'The same ports serve the public site, the Mark panel and the CLI. A theme renders what the kernel hands it; the panel is a module; the command line reads the same catalogue.',
         'home.principles_title' => 'Built on a few promises',
         'home.cta_title' => 'If you write PHP, you can already ship a modular application.',
         'home.cta_accent' => 'Get started right now!',
@@ -249,7 +249,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-actions">' . "\n"
             . $this->localeLinks($context)
             . '<a class="bo-btn bo-btn--ghost bo-actions__admin" href="'
-            . self::e(MarkRoutePolicy::prefix()) . '">Admin</a>' . "\n"
+            . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>' . "\n"
             . self::burgerLabel($hasNav, self::navIcon($context))
             . '</div>' . "\n"
             . '<span class="bo-header__dots" aria-hidden="true"></span>' . "\n"
@@ -279,7 +279,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-footer__top">' . "\n"
             . '<span class="bo-footer__holder" aria-hidden="true"></span>' . "\n"
             . '<a class="bo-footer__social" href="/blog">Blog</a>' . "\n"
-            . '<a class="bo-footer__social" href="' . self::e($admin) . '">Admin</a>' . "\n"
+            . '<a class="bo-footer__social" href="' . self::e($admin) . '">Mark</a>' . "\n"
             . '<span class="bo-footer__dots" aria-hidden="true"></span>' . "\n"
             . '<a class="bo-footer__aside" href="/">Home</a>' . "\n"
             . $this->localeLinks($context, 'bo-footer__aside')
@@ -342,7 +342,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
                 '<p>' . self::e(self::t($context, 'home.solves_text')) . '</p>'
                 . self::bullets([
                     'Launch a public site and a blog from the same kernel.',
-                    'Add an admin panel as a module, not as a second application.',
+                    'Add a Mark panel as a module, not as a second application.',
                     'Replace a module — or a theme — without editing the kernel.',
                 ]),
             )
@@ -745,7 +745,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         $cells = [
             ['WEB', 'Web'],
             ['BLOG', 'Blog'],
-            ['ADMIN', 'Admin'],
+            ['MARK', 'Mark'],
             ['CLI', 'CLI'],
         ];
         $html = '';
@@ -773,7 +773,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         $panels = [
             ['01', 'Bare core', 'The kernel alone: routing, middleware, layout, per-module storage. Every other surface is a module you add.'],
             ['02', 'Blog', 'Markdown files, tags, categories, authors and a reading surface — installed as a module, removable the same way.'],
-            ['03', 'Admin', 'A panel module with its own theme and route policy, mounted under the configured admin prefix.'],
+            ['03', 'Mark', 'A panel module with its own theme and route policy, mounted under the configured Mark prefix.'],
         ];
         $html = '';
 
@@ -912,7 +912,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             ['Routes as attributes', 'A controller declares its path, method and name next to the method. The router reads the attribute; nothing is generated.'],
             ['Ports as contracts', 'Themes, shell providers and auth providers answer through kernel-owned interfaces, so a feature module never becomes a theme dependency.'],
             ['Themes as modules', 'A theme arrives with its module and leaves with it. Discovery scans the installed tree; the whitelist is not edited by hand.'],
-            ['Admin as a module', 'The panel, its routes and its own theme install as one module under one policy prefix.'],
+            ['Mark as a module', 'The panel, its routes and its own theme install as one module under one policy prefix.'],
         ];
         $html = '';
 
@@ -1381,7 +1381,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . ' placeholder="Search" autocomplete="off">'
             . '<button class="bo-search-form__submit" type="submit">Search</button>'
             . '</form>'
-            . '<a class="bo-mobile__admin" href="' . self::e(MarkRoutePolicy::prefix()) . '">Admin</a>'
+            . '<a class="bo-mobile__admin" href="' . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>'
             . '<div class="bo-mobile__locale">'
             . $this->localeLinks($context, 'bo-mobile__link bo-mobile__link--locale')
             . '</div>'

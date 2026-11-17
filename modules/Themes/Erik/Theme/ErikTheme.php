@@ -138,7 +138,7 @@ final class ErikTheme implements ThemeModule
         $actions = '<a class="er-button er-button--primary" href="' . self::e($href) . '">'
             . self::e($copy['home.cta_blog'] ?? 'Read the blog') . '</a>'
             . '<a class="er-button er-button--outline" href="/mark">'
-            . self::e($copy['home.cta_admin'] ?? 'Open admin') . '</a>';
+            . self::e($copy['home.cta_admin'] ?? 'Open Mark') . '</a>';
 
         return '<section class="er-hero"><div class="er-container">'
             . '<p class="er-hero__eyebrow">' . self::e($eyebrow) . '</p>'
@@ -175,14 +175,14 @@ final class ErikTheme implements ThemeModule
     private const array FEATURES = [
         ['number' => '01', 'title' => 'Fewer layers', 'text' => 'A transparent PHP runtime with explicit seams and no hidden framework magic.'],
         ['number' => '02', 'title' => 'Fast by default', 'text' => 'SQLite, native PHP and a small production surface keep the path to first paint short.'],
-        ['number' => '03', 'title' => 'Ready to shape', 'text' => 'Modules, themes and admin screens stay small enough to understand and change.'],
+        ['number' => '03', 'title' => 'Ready to shape', 'text' => 'Modules, themes and Mark screens stay small enough to understand and change.'],
     ];
 
     /**
      * @var list<array{number: string, title: string, text: string}>
      */
     private const array STEPS = [
-        ['number' => '1', 'title' => 'Choose a surface', 'text' => 'Start with a public page, a blog article or the Mark admin panel.'],
+        ['number' => '1', 'title' => 'Choose a surface', 'text' => 'Start with a public page, a blog article or the Mark panel.'],
         ['number' => '2', 'title' => 'Compose a module', 'text' => 'Keep routes, services, persistence and UI close to the capability they serve.'],
         ['number' => '3', 'title' => 'Ship the small path', 'text' => 'Run the gates, build the dist and deploy without a production dependency pile.'],
     ];

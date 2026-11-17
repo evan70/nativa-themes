@@ -142,7 +142,7 @@ final class JednotkaTheme implements ThemeModule, ThemeSettings
         'home.ratio_label' => '~126:1 — the entire production runtime is smaller than one phone photo.',
         'home.read_article' => 'Read article',
         'home.cta_blog' => 'Read the blog',
-        'home.cta_admin' => 'Open admin',
+        'home.cta_admin' => 'Open Mark',
     ];
 
     /**
@@ -1336,7 +1336,7 @@ HTML;
     private function userLink(ShellContext $context): string
     {
         $href = $context->signedIn ? '/mark' : '/login';
-        $label = $context->signedIn ? 'Admin' : 'Sign in';
+        $label = $context->signedIn ? 'Mark' : 'Sign in';
         $icon = $context->signedIn
             ? '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
             : '<path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>';

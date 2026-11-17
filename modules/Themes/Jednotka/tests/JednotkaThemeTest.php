@@ -244,7 +244,7 @@ final class JednotkaThemeTest extends TestCase
         $this->assertStringContainsString('A tiny, auditable foundation', $html);
         $this->assertStringContainsString('Unit 01 — Premise', $html);
         $this->assertStringContainsString('href="/blog">Read the blog</a>', $html);
-        $this->assertStringContainsString('href="/mark">Open admin</a>', $html);
+        $this->assertStringContainsString('href="/mark">Open Mark</a>', $html);
 
         // Both feature layers, three cards each, in the showcase's own words.
         $this->assertStringContainsString('<h2 class="je-section__title">Fewer Layers</h2>', $html);

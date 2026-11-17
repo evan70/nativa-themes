@@ -214,7 +214,7 @@ final class ErikThemeTest extends TestCase
         $this->assertStringContainsString('er-hero__visual', $html, 'The line-art visual is inline SVG, no external asset.');
         $this->assertStringNotContainsString('.webp', $html, 'The showcase WebP underlay stays out of the kernel port.');
         $this->assertStringContainsString('href="/blog">Read the blog</a>', $html);
-        $this->assertStringContainsString('href="/mark">Open admin</a>', $html);
+        $this->assertStringContainsString('href="/mark">Open Mark</a>', $html);
 
         foreach (['er-section--features', 'er-section--steps', 'er-section--news', 'er-section--comparison'] as $modifier) {
             $this->assertStringContainsString($modifier, $html);
