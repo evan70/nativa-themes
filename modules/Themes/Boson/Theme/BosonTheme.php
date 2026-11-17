@@ -6,7 +6,7 @@ namespace Modules\Themes\Boson\Theme;
 
 use Themes\AssetManager;
 use View\InlineJs;
-use Modules\Core\Domain\AdminRoutePolicy;
+use Modules\Core\Domain\MarkRoutePolicy;
 use Shell\ShellNavItem;
 use Themes\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
@@ -249,7 +249,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-actions">' . "\n"
             . $this->localeLinks($context)
             . '<a class="bo-btn bo-btn--ghost bo-actions__admin" href="'
-            . self::e(AdminRoutePolicy::prefix()) . '">Admin</a>' . "\n"
+            . self::e(MarkRoutePolicy::prefix()) . '">Admin</a>' . "\n"
             . self::burgerLabel($hasNav, self::navIcon($context))
             . '</div>' . "\n"
             . '<span class="bo-header__dots" aria-hidden="true"></span>' . "\n"
@@ -265,7 +265,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
      */
     public function footer(ShellContext $context): string
     {
-        $admin = AdminRoutePolicy::prefix();
+        $admin = MarkRoutePolicy::prefix();
         $secondary = '';
 
         foreach ($context->footerNav as $item) {
@@ -697,7 +697,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-hero__actions">'
             . '<a class="bo-btn bo-btn--primary" href="' . self::e($blog) . '">'
             . self::e(self::t($context, 'home.cta_blog')) . '</a>'
-            . '<a class="bo-btn bo-btn--ghost" href="' . self::e(AdminRoutePolicy::prefix()) . '">'
+            . '<a class="bo-btn bo-btn--ghost" href="' . self::e(MarkRoutePolicy::prefix()) . '">'
             . self::e(self::t($context, 'home.cta_admin')) . '</a>'
             . '</div>'
             . '</div>'
@@ -983,7 +983,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-cta__actions">'
             . '<a class="bo-btn bo-btn--primary" href="' . self::e($blog) . '">'
             . self::e(self::t($context, 'home.cta_blog')) . '</a>'
-            . '<a class="bo-btn bo-btn--ghost" href="' . self::e(AdminRoutePolicy::prefix()) . '">'
+            . '<a class="bo-btn bo-btn--ghost" href="' . self::e(MarkRoutePolicy::prefix()) . '">'
             . self::e(self::t($context, 'home.cta_admin')) . '</a>'
             . '</div>'
             . '</div>'
@@ -1381,7 +1381,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . ' placeholder="Search" autocomplete="off">'
             . '<button class="bo-search-form__submit" type="submit">Search</button>'
             . '</form>'
-            . '<a class="bo-mobile__admin" href="' . self::e(AdminRoutePolicy::prefix()) . '">Admin</a>'
+            . '<a class="bo-mobile__admin" href="' . self::e(MarkRoutePolicy::prefix()) . '">Admin</a>'
             . '<div class="bo-mobile__locale">'
             . $this->localeLinks($context, 'bo-mobile__link bo-mobile__link--locale')
             . '</div>'

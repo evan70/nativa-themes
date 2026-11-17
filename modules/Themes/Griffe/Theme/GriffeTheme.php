@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Griffe\Theme;
 
-use Modules\Core\Domain\AdminRoutePolicy;
+use Modules\Core\Domain\MarkRoutePolicy;
 use Shell\ShellNavItem;
 use Themes\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
@@ -231,11 +231,11 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
         }
 
         // The admin prefix is a policy answer, never a literal: `/mark` is
-        // `AdminRoutePolicy`'s to spell (`ADMIN_PATH` can move it).
+        // `MarkRoutePolicy`'s to spell (`MARK_PATH` can move it).
         $navigation = [
             ['label' => 'Home', 'href' => '/'],
             ['label' => 'Blog', 'href' => '/blog'],
-            ['label' => 'Admin', 'href' => AdminRoutePolicy::prefix()],
+            ['label' => 'Admin', 'href' => MarkRoutePolicy::prefix()],
         ];
 
         return '<hero-layout'

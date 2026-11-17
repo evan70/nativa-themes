@@ -7,7 +7,7 @@ namespace Modules\Themes\Boson\Tests;
 use Themes\AssetManager;
 use View\InlineCss;
 use View\InlineJs;
-use Modules\Core\Domain\AdminRoutePolicy;
+use Modules\Core\Domain\MarkRoutePolicy;
 use Shell\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Themes\FrontendLayout;
@@ -215,7 +215,7 @@ final class BosonThemeTest extends TestCase
         $this->assertStringContainsString('href="/blog"', $header);
         $this->assertStringContainsString('aria-current="page"', $header, 'The active nav item is announced.');
         $this->assertStringContainsString('bo-nav__sub', $header, 'Children render as a ruled submenu.');
-        $this->assertStringContainsString('href="' . AdminRoutePolicy::prefix() . '"', $header, 'The admin link comes from the policy, never a literal.');
+        $this->assertStringContainsString('href="' . MarkRoutePolicy::prefix() . '"', $header, 'The admin link comes from the policy, never a literal.');
         $this->assertStringContainsString('bo-locale__link--active', $header);
         $this->assertStringContainsString('bo-search__input', $header);
         $this->assertStringContainsString('bo-mobile__link', $header);
