@@ -248,7 +248,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . $search
             . '<div class="bo-actions">' . "\n"
             . $this->localeLinks($context)
-            . '<a class="bo-btn bo-btn--ghost bo-actions__admin" href="'
+            . '<a class="bo-btn bo-btn--ghost bo-actions__mark" href="'
             . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>' . "\n"
             . self::burgerLabel($hasNav, self::navIcon($context))
             . '</div>' . "\n"
@@ -1381,7 +1381,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . ' placeholder="Search" autocomplete="off">'
             . '<button class="bo-search-form__submit" type="submit">Search</button>'
             . '</form>'
-            . '<a class="bo-mobile__admin" href="' . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>'
+            . '<a class="bo-mobile__mark" href="' . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>'
             . '<div class="bo-mobile__locale">'
             . $this->localeLinks($context, 'bo-mobile__link bo-mobile__link--locale')
             . '</div>'
