@@ -30,7 +30,21 @@
  * `roboto-condensed-400-c05481f9.woff2` therefore has no reference left and
  * stays on disk on purpose: a year of immutable caching means some reader
  * still holds HTML that asks for it, and deleting it turns that reader's
- * heading into a 404 font. It is not dead weight to prune. */
+ * heading into a 404 font. It is not dead weight to prune.
+ *
+ * `-99aca383` (49 772 B) is kept for the same reason and is now the previous
+ * generation. It was also structurally invalid: its `gvar` declared 356
+ * glyphs while `maxp` said 357, so `fontTools`, `pyftsubset` and `instancer`
+ * all refused to open it — a browser renders it anyway, which is why nobody
+ * noticed. `-081b9834` (21 644 B) is rebuilt from upstream Roboto Condensed
+ * (Apache 2.0, `wght` 100–900) with the same coverage, the `wght` axis cut to
+ * 400–600 (the two weights this theme asks for: 400, 500 and 600) and no
+ * hinting. Metrics and every shared advance are byte-identical to `-99aca383`,
+ * so the fallback percentages below still hold and no line breaks move.
+ *
+ * The cut is 28 KB off the critical path — and it is the largest single byte
+ * on this page's LCP: the hero headline is the LCP element and it waits for
+ * this file. */
 @font-face {
   font-family: Inter;
   font-style: normal;
@@ -44,7 +58,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/fonts/roboto-condensed-400-99aca383.woff2") format("woff2");
+  src: url("/fonts/roboto-condensed-400-081b9834.woff2") format("woff2");
 }
 
 /* Both weights are the SAME variable file: it carries a `wght` axis
@@ -59,7 +73,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("/fonts/roboto-condensed-400-99aca383.woff2") format("woff2");
+  src: url("/fonts/roboto-condensed-400-081b9834.woff2") format("woff2");
 }
 
 /* Two families, both self-hosted: Inter for body copy, Roboto Condensed for

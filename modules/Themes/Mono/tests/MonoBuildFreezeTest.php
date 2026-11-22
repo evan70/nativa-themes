@@ -38,9 +38,9 @@ final class MonoBuildFreezeTest extends TestCase
      * when the switch landed with 259 B spare, then CSS 42 000 at 41 725 —
      * each raise is a deliberate feature landing, never slack for edits.
      */
-    private const int JS_BUDGET = 18000;
+    private const int JS_BUDGET = 18_000;
 
-    private const int CSS_BUDGET = 42500;
+    private const int CSS_BUDGET = 42_500;
 
     protected function setUp(): void
     {

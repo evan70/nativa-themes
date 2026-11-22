@@ -262,10 +262,17 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
      * The reference's ruled footer: two rows between dotted rails, with the
      * social/aside cells reduced to the links this tree actually has (blog,
      * admin, home) — no GitHub or Discord icon pointing at another project.
+     *
+     * The blog cell goes through the same locale prefix as the header's search
+     * action: hardcoded `/blog` sent an English reader to the Slovak blog, so
+     * the footer was the one place on an `/en` page that switched language
+     * under the visitor. `self::urlPrefix()` is '' for the default locale, so
+     * Slovak markup is unchanged.
      */
     public function footer(ShellContext $context): string
     {
         $admin = MarkRoutePolicy::prefix();
+        $blog = self::urlPrefix($context->activeLocale) . '/blog';
         $secondary = '';
 
         foreach ($context->footerNav as $item) {
@@ -278,7 +285,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-footer__content">' . "\n"
             . '<div class="bo-footer__top">' . "\n"
             . '<span class="bo-footer__holder" aria-hidden="true"></span>' . "\n"
-            . '<a class="bo-footer__social" href="/blog">Blog</a>' . "\n"
+            . '<a class="bo-footer__social" href="' . self::e($blog) . '">Blog</a>' . "\n"
             . '<a class="bo-footer__social" href="' . self::e($admin) . '">Mark</a>' . "\n"
             . '<span class="bo-footer__dots" aria-hidden="true"></span>' . "\n"
             . '<a class="bo-footer__aside" href="/">Home</a>' . "\n"

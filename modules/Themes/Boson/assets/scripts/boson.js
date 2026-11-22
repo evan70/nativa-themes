@@ -7,6 +7,8 @@
  * ES2015-safe for the Chrome 70 baseline, and nothing to download.
  *
  *   - header   — adds `bo-header--scrolled` once the page scrolls;
+ *   - orb      — the reference's ring of squares, pushed away from the
+ *                cursor with smoothing (the landing's hero only);
  *   - menu     — syncs the checkbox menu's scroll lock, Escape and outside
  *                click (the open state itself is CSS, so it works with this
  *                file missing);
@@ -26,6 +28,227 @@
         } else {
             fn();
         }
+    }
+
+    /* ------------------------------------------------------------------- orb */
+
+    /**
+     * The reference's signature mark: concentric rings of small squares — the
+     * outer ones quiet, the inner ones in the accent — that are pushed away
+     * from the pointer and settle back with the same lag the Lit element used
+     * (`smoothing`, `animationStrength`, `mouseRadius`).
+     *
+     * Ported as behaviour only: the squares are built here, transformed with
+     * `translate` (no layout work per frame), the loop stops when the hero
+     * leaves the viewport, and a reader who asked for reduced motion gets the
+     * static rings. The markup ships a dot field drawn by the stylesheet, so
+     * the orb is never a hole while this deferred script is on its way; this
+     * function only takes that field over (`site-orb--live`) once the rings it
+     * can move exist.
+     */
+    function initOrb() {
+        var orb = document.querySelector('[data-orb]');
+
+        if (!orb) {
+            return;
+        }
+
+        // Sparser than the reference on purpose. Its logo filled a 550 px
+        // stage with ~1400 squares; a hero decoration does not need a thousand
+        // nodes, and every one of them is a style write while the pointer
+        // moves. This lands at ~220 on a desktop orb.
+        var CONFIG = {
+            base: 520,
+            outerRadius: 250,
+            outerLayers: 7,
+            innerRadius: 72,
+            innerLayers: 3,
+            gapBetweenCircles: 12,
+            spacing: 26,
+            // Small on purpose: at 5 px the field read as squares, not as the
+            // reference's fine grain. 3 px scaled by the orb lands near 2 px on
+            // a phone and stays a dot rather than a block.
+            size: 3,
+            mouseRadius: 160,
+            strength: 22,
+            smoothing: 0.5
+        };
+
+        var dots = [];
+        var pointer = { x: -9999, y: -9999 };
+        var target = { x: -9999, y: -9999 };
+        var frame = null;
+        var inView = true;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function place(element, x, y, size, opacity) {
+            element.style.opacity = opacity;
+            element.style.left = x + 'px';
+            element.style.top = y + 'px';
+            element.style.width = size + 'px';
+            element.style.height = size + 'px';
+            element.style.transform = 'translate(-50%, -50%)';
+            orb.appendChild(element);
+            dots.push({ node: element, x: x, y: y });
+        }
+
+        function ring(radius, count, className, size, opacity) {
+            var width = orb.clientWidth;
+            var height = orb.clientHeight;
+
+            for (var i = 0; i < count; i++) {
+                var angle = (i / count) * Math.PI * 2;
+                var dot = document.createElement('span');
+                dot.className = className;
+                place(dot, width / 2 + Math.cos(angle) * radius, height / 2 + Math.sin(angle) * radius, size, opacity);
+            }
+        }
+
+        function build() {
+            var width = orb.clientWidth;
+            var height = orb.clientHeight;
+
+            if (!width || !height) {
+                return;
+            }
+
+            // Only the dots are ours: the box also carries the site mark, and
+            // an `innerHTML = ''` here deleted the logo on the first resize.
+            var built = orb.querySelectorAll('.site-orb__dot');
+
+            for (var existing = 0; existing < built.length; existing++) {
+                built[existing].parentNode.removeChild(built[existing]);
+            }
+
+            dots = [];
+            orb.classList.add('site-orb--live');
+
+            var scale = Math.min(width, height) / CONFIG.base;
+            var spacing = CONFIG.spacing * scale;
+            var size = Math.max(1.5, CONFIG.size * scale);
+            var outerRadius = Math.min(CONFIG.outerRadius * scale, Math.min(width, height) / 2 - 2 * spacing);
+            var outerLayers = width < 320 ? 5 : CONFIG.outerLayers;
+
+            for (var layer = 0; layer < outerLayers; layer++) {
+                var radius = outerRadius - layer * spacing;
+
+                if (radius <= 0) {
+                    break;
+                }
+
+                // The field fades inward so the ring of the mark reads as the
+                // centre of gravity instead of competing with a flat texture.
+                var fade = 0.9 - (layer / outerLayers) * 0.45;
+
+                ring(radius, Math.max(6, Math.floor((2 * Math.PI * radius) / spacing)), 'site-orb__dot', size, fade);
+            }
+
+            // The accent band sits BETWEEN the mark and the grey field, not at
+            // the centre: the middle of this orb is the site's logo, and a ring
+            // drawn into it reads as a mistake (measured 2026-11-19 — the first
+            // build put accent dots on top of the mark).
+            // 0.45 keeps the accent band clear of the dark disc the stylesheet
+            // draws under the mark; a band drawn into the disc reads as a bug.
+            var innerRadius = outerRadius * 0.45;
+            var innerLayers = width < 320 ? 2 : CONFIG.innerLayers;
+
+            for (var i = 0; i < innerLayers; i++) {
+                var inner = innerRadius + i * spacing;
+
+                if (inner >= outerRadius - spacing) {
+                    break;
+                }
+
+                ring(inner, Math.max(6, Math.floor((2 * Math.PI * inner) / spacing)), 'site-orb__dot site-orb__dot--inner', size, 0.85);
+            }
+        }
+
+        function settle() {
+            for (var i = 0; i < dots.length; i++) {
+                dots[i].node.style.transform = 'translate(-50%, -50%)';
+            }
+        }
+
+        function step() {
+            frame = null;
+
+            if (!inView) {
+                return;
+            }
+
+            pointer.x += (target.x - pointer.x) * CONFIG.smoothing;
+            pointer.y += (target.y - pointer.y) * CONFIG.smoothing;
+
+            var radius = CONFIG.mouseRadius;
+            var radiusSq = radius * radius;
+
+            for (var i = 0; i < dots.length; i++) {
+                var dot = dots[i];
+                var dx = dot.x - pointer.x;
+                var dy = dot.y - pointer.y;
+                var distanceSq = dx * dx + dy * dy;
+
+                if (distanceSq >= radiusSq || 0 === distanceSq) {
+                    dot.node.style.transform = 'translate(-50%, -50%)';
+
+                    continue;
+                }
+
+                var distance = Math.sqrt(distanceSq);
+                var push = ((radius - distance) / radius) * CONFIG.strength;
+                var inverse = 0.7 / distance;
+
+                dot.node.style.transform = 'translate(calc(-50% + ' + dx * inverse * push + 'px), calc(-50% + ' + dy * inverse * push + 'px))';
+            }
+
+            schedule();
+        }
+
+        function schedule() {
+            if (null === frame && !reduce) {
+                frame = window.requestAnimationFrame(step);
+            }
+        }
+
+        orb.addEventListener('pointermove', function (event) {
+            var rect = orb.getBoundingClientRect();
+            target.x = event.clientX - rect.left;
+            target.y = event.clientY - rect.top;
+            schedule();
+        });
+
+        orb.addEventListener('pointerleave', function () {
+            target.x = -9999;
+            target.y = -9999;
+
+            if (reduce) {
+                settle();
+            } else {
+                schedule();
+            }
+        });
+
+        if (window.IntersectionObserver) {
+            new window.IntersectionObserver(function (entries) {
+                inView = entries[0].isIntersecting;
+
+                if (inView) {
+                    schedule();
+                }
+            }).observe(orb);
+        }
+
+        var rebuild = null;
+
+        window.addEventListener('resize', function () {
+            window.clearTimeout(rebuild);
+            rebuild = window.setTimeout(function () {
+                build();
+                settle();
+            }, 150);
+        });
+
+        build();
     }
 
     /* ---------------------------------------------------------------- header */
@@ -489,6 +712,7 @@
 
     ready(function () {
         initHeader();
+        initOrb();
         initMenu();
         initAccordion();
         initToc();

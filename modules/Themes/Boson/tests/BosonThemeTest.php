@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Boson\Tests;
 
+use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
 use Themes\AssetManager;
 use View\InlineCss;
 use View\InlineJs;
@@ -415,6 +416,39 @@ final class BosonThemeTest extends TestCase
     }
 
     /**
+     * The footer's Blog cell was the one link in the shell with a hardcoded
+     * `/blog`, so an English reader who used the footer left the English tree
+     * — on an `/en` page every other href (search action, locale switcher,
+     * article links) carried the prefix.
+     */
+    #[Test]
+    public function theFooterBlogLinkFollowsTheActiveLocale(): void
+    {
+        $theme = new BosonTheme();
+        // Prefix and languages come from the mapper the theme itself reads, so
+        // this test cannot disagree with the tree about where English lives.
+        $mapper = ContentLocaleServices::mapper();
+        $languages = [$mapper->languageCode('sk_SK'), $mapper->languageCode('en_US')];
+        $english = ShellContext::from(
+            'Boson Test',
+            [],
+            [],
+            $mapper->urlPrefix('en_US') . '/references',
+            null,
+            $mapper->languageCode('en_US'),
+            $languages,
+            false,
+        );
+        $slovak = ShellContext::from('Boson Test', [], [], '/referencie', null, $mapper->languageCode('sk_SK'), $languages, false);
+
+        $this->assertStringContainsString(
+            'bo-footer__social" href="' . $mapper->urlPrefix('en_US') . '/blog"',
+            $theme->footer($english),
+        );
+        $this->assertStringContainsString('bo-footer__social" href="/blog"', $theme->footer($slovak));
+    }
+
+    /**
      * The index slices by page/perPage — the action hands the theme the full
      * list and the theme owns the window.
      */
@@ -800,6 +834,24 @@ final class BosonThemeTest extends TestCase
      * The reference's CSS and artwork are not fetched at runtime, and the
      * inline block cannot carry an at-rule InlineCss strips.
      */
+    /**
+     * The reference's signature mark is a ring of squares that reacts to the
+     * pointer. This port keeps the behaviour in the vendored script — no
+     * runtime, no second request — and it must stay opt-in three ways: the
+     * markup gate, the reduced-motion check, and the viewport gate that stops
+     * the loop when the hero scrolls away.
+     */
+    #[Test]
+    public function theVendoredScriptCarriesTheOrbAndItsGates(): void
+    {
+        $script = (string) file_get_contents(__DIR__ . '/../assets/scripts/boson.js');
+
+        self::assertStringContainsString("'[data-orb]'", $script, 'The orb init must gate on its own markup.');
+        self::assertStringContainsString('prefers-reduced-motion', $script, 'A reader who asked for less motion gets static rings.');
+        self::assertStringContainsString('IntersectionObserver', $script, 'The loop must stop when the hero leaves the viewport.');
+        self::assertStringContainsString('requestAnimationFrame', $script);
+    }
+
     #[Test]
     public function theStylesheetIsSelfContained(): void
     {
@@ -1023,7 +1075,7 @@ final class BosonThemeTest extends TestCase
 
         foreach ([1, 3, 5] as $offset) {
             $value = hexdec(substr($hex, $offset, 2)) / 255;
-            $channels[] = $value <= 0.03928 ? $value / 12.92 : (($value + 0.055) / 1.055) ** 2.4;
+            $channels[] = $value <= 0.039_28 ? $value / 12.92 : (($value + 0.055) / 1.055) ** 2.4;
         }
 
         return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];

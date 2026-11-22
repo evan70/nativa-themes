@@ -45,7 +45,7 @@ final class GriffeBuildFreezeTest extends TestCase
      * `theFrozenScriptIsASingleFileWithNoModuleSyntax` still proves one file,
      * and the deferred `<script>` keeps it off the critical path.
      */
-    private const int JS_BUDGET = 38000;
+    private const int JS_BUDGET = 38_000;
 
     /**
      * The bundle name, read from its owner.
@@ -86,7 +86,7 @@ final class GriffeBuildFreezeTest extends TestCase
      * enough for rule growth and still far below what a library creeping back
      * would need.
      */
-    private const int CSS_BUDGET = 27000;
+    private const int CSS_BUDGET = 27_000;
 
     protected function setUp(): void
     {
