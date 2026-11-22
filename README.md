@@ -66,10 +66,10 @@ kernel, `php bin/cms module:add <Name>`, run the suite there.
 
 ### Demo pages for the kernel themes are generated
 
-`boson/`, `jednotka/` and `mono/` are rendered by `bin/build/render-theme-pages.php` in
+`boson/`, `jednotka/`, `mono/` and `nativa/` are rendered by `bin/build/render-theme-pages.php` in
 `nativa-php-core` — the theme's own PHP against one fixture, wrapped by the kernel layout.
 Each theme gets **7 surfaces in English and the same 7 in Slovak**: home, blog, article,
-tags, categories, author, search, at `/boson/…` and `/boson/sk/…` (42 pages). Do not
+tags, categories, author, search, at `/boson/…` and `/boson/sk/…` (56 pages). Do not
 hand-edit them; re-render instead:
 
 ```bash
@@ -125,7 +125,7 @@ moonshine/index.html       the admin dashboard
 moonshine/articles/        the articles list, at the URL the admin serves it from
 moonshine/article/         the article editor
 moonshine/users/           the users list
-boson/…/index.html       GENERATED — 7 surfaces + 7 under sk/, same for jednotka, mono
+boson/…/index.html       GENERATED — 7 surfaces + 7 under sk/, same for jednotka, mono, nativa
 entries/                 hand-written code: gallery CSS, the admin entry
 src/<theme>/             SYNCED from the app — do not edit
 build/                   SYNCED from the app — the @layer stripping plugin
