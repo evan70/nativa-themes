@@ -42,14 +42,14 @@
  * hinting. Metrics and every shared advance are byte-identical to `-99aca383`,
  * so the fallback percentages below still hold and no line breaks move.
  *
- * The cut is 28 KB off the critical path — and it is the largest single byte
- * on this page's LCP: the hero headline is the LCP element and it waits for
- * this file. */
+ * The cut is 28 KB off the critical path: the hero headline is the page's
+ * largest text, and with `font-display: optional` below it no longer waits
+ * for this file to paint. */
 @font-face {
   font-family: Inter;
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: optional;
   src: url("/fonts/inter-400-0c9c05bd.woff2") format("woff2");
 }
 
@@ -57,7 +57,7 @@
   font-family: "Roboto Condensed";
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: optional;
   src: url("/fonts/roboto-condensed-400-081b9834.woff2") format("woff2");
 }
 
@@ -72,7 +72,7 @@
   font-family: "Roboto Condensed";
   font-style: normal;
   font-weight: 600;
-  font-display: swap;
+  font-display: optional;
   src: url("/fonts/roboto-condensed-400-081b9834.woff2") format("woff2");
 }
 
@@ -83,11 +83,13 @@
  * The page's identity comes from the two proportional faces; a code sample
  * nobody has to wait for reads the same.
  *
- * Metric-matched fallbacks (CLS). `font-display: swap` paints text at once
- * in the local fallback and swaps the webfont in later — a reflow unless the
- * fallback occupies the same box. Each face is a local font scaled and
- * re-metriced onto the webfont it stands in for, so the swap changes glyph
- * shapes but neither a line break nor a line box. Values come from the
+ * Metric-matched fallbacks (CLS and Speed Index). The faces ship with
+ * `font-display: optional`: a woff2 that misses the block window is not
+ * swapped in for this pageview, so the text paints once, in the fallback,
+ * and never repaints when the file lands. Each fallback is a local font
+ * scaled and re-metriced onto the webfont it stands in for, so the two keep
+ * the same line breaks and line boxes; the cached woff2 is what the next
+ * pageview paints with. Values come from the
  * shipped woff2 metrics (ascent/descent/lineGap of hhea, average advance of
  * `The quick brown fox… 0123456789`) against the local fallback it names —
  * Arial/Liberation Sans (2.048 em) for both proportional families:

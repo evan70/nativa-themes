@@ -837,8 +837,9 @@ final class BosonThemeTest extends TestCase
     /**
      * The reference's signature mark is a ring of squares that reacts to the
      * pointer. This port keeps the behaviour in the vendored script — no
-     * runtime, no second request — and it must stay opt-in three ways: the
-     * markup gate, the reduced-motion check, and the viewport gate that stops
+     * runtime, no second request — and it must stay opt-in four ways: the
+     * markup gate, the pointer gate (a touch screen has nothing to push the
+     * rings with), the reduced-motion check, and the viewport gate that stops
      * the loop when the hero scrolls away.
      */
     #[Test]
@@ -847,6 +848,7 @@ final class BosonThemeTest extends TestCase
         $script = (string) file_get_contents(__DIR__ . '/../assets/scripts/boson.js');
 
         self::assertStringContainsString("'[data-orb]'", $script, 'The orb init must gate on its own markup.');
+        self::assertStringContainsString("(hover: hover) and (pointer: fine)", $script, 'A touch screen gets the stylesheet field, not ~220 built nodes.');
         self::assertStringContainsString('prefers-reduced-motion', $script, 'A reader who asked for less motion gets static rings.');
         self::assertStringContainsString('IntersectionObserver', $script, 'The loop must stop when the hero leaves the viewport.');
         self::assertStringContainsString('requestAnimationFrame', $script);
@@ -887,6 +889,60 @@ final class BosonThemeTest extends TestCase
         $this->assertStringNotContainsString('fonts.googleapis.com', $css);
         $this->assertStringNotContainsString('http://', $css);
         $this->assertStringNotContainsString('https://', $css);
+    }
+
+    /**
+     * A webfont that lands after the first paint must not repaint the text it
+     * already painted. `optional` with the metric-matched fallbacks gives one
+     * paint per pageview: the fallback keeps the box, the woff2 serves the
+     * next pageview from cache. Measured 2026-11-23 with the fonts delayed
+     * 800 ms: the title pixels changed once at 849 ms before this, and once
+     * only if the block window catches the file after it.
+     */
+    #[Test]
+    public function theFontsNeverSwapAfterTheFirstPaint(): void
+    {
+        $css = (string) file_get_contents(__DIR__ . '/../assets/critical/boson.css');
+
+        self::assertSame(3, substr_count($css, 'font-display: optional;'));
+        self::assertStringNotContainsString('font-display: swap', $css, 'A swap repaints text that is already on screen.');
+        self::assertStringContainsString('font-family: "Inter Fallback"', $css);
+        self::assertStringContainsString('font-family: "Roboto Condensed Fallback"', $css);
+        self::assertStringContainsString('size-adjust: 107.6%', $css);
+        self::assertStringContainsString('size-adjust: 88.61%', $css);
+    }
+
+    /**
+     * The header's scrolled state is observed, not polled. The scroll listener
+     * it replaces wrote the class on every frame, and the layout read that
+     * followed was charged to this file as a forced reflow (34-46 ms) in the
+     * Lighthouse trace. The probe keeps the file off the scroll path; the
+     * listener survives only as the fallback for a browser without
+     * IntersectionObserver.
+     */
+    #[Test]
+    public function theHeaderObservesTheScrollInsteadOfPollingIt(): void
+    {
+        $js = (string) file_get_contents(__DIR__ . '/../assets/scripts/boson.js');
+
+        self::assertStringContainsString('if (window.IntersectionObserver) {', $js);
+        self::assertStringContainsString('document.body.insertBefore(probe, document.body.firstChild);', $js);
+        self::assertStringContainsString("mark(!entries[0].isIntersecting);", $js);
+        self::assertSame(1, substr_count($js, "header.classList.toggle('bo-header--scrolled'"));
+        self::assertStringNotContainsString(
+            "header.classList.toggle('bo-header--scrolled', top > 0)",
+            $js,
+            'The observer path writes the class; the polling write would run in both.',
+        );
+
+        $header = substr($js, (int) strpos($js, 'function initHeader()'));
+        $header = substr($header, 0, (int) strpos($header, 'function initMenu()'));
+
+        self::assertMatchesRegularExpression(
+            "/\.observe\(probe\);\n\n\s+return;/u",
+            $header,
+            'The observer branch returns before the fallback listener is attached.',
+        );
     }
 
     #[Test]

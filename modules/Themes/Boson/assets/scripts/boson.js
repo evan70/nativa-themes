@@ -53,6 +53,19 @@
             return;
         }
 
+        // A field that reacts to a pointer is decoration on a device that has
+        // none. The stylesheet already draws the dot field, so the orb is whole
+        // without this script; building ~220 nodes only to replace a field
+        // that is already painted is a visual change after the first paint
+        // (Speed Index) for behaviour nobody on a touch screen can trigger.
+        // Phones keep the CSS field and get no nodes at all.
+        var finePointer = window.matchMedia
+            && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+        if (!finePointer) {
+            return;
+        }
+
         // Sparser than the reference on purpose. Its logo filled a 550 px
         // stage with ~1400 squares; a hero decoration does not need a thousand
         // nodes, and every one of them is a style write while the pointer
@@ -262,11 +275,41 @@
             return;
         }
 
+        var scrolled = false;
+
+        function mark(value) {
+            if (value === scrolled) {
+                return;
+            }
+
+            scrolled = value;
+            header.classList.toggle('bo-header--scrolled', value);
+        }
+
+        // The scroll position is observed, not read. A 1px probe at the top of
+        // the document leaves the viewport exactly when the page moves, so the
+        // observer reports the state without this file touching layout. The
+        // scroll listener it replaces wrote the class on every frame, and the
+        // layout read that followed was charged here as a forced reflow.
+        if (window.IntersectionObserver) {
+            var probe = document.createElement('div');
+
+            probe.setAttribute('aria-hidden', 'true');
+            probe.style.cssText = 'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none;';
+            document.body.insertBefore(probe, document.body.firstChild);
+
+            new window.IntersectionObserver(function (entries) {
+                mark(!entries[0].isIntersecting);
+            }).observe(probe);
+
+            return;
+        }
+
         var tick = false;
 
         function sync() {
             var top = window.pageYOffset || document.documentElement.scrollTop || 0;
-            header.classList.toggle('bo-header--scrolled', top > 0);
+            mark(top > 0);
             tick = false;
         }
 
