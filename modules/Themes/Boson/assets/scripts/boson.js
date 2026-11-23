@@ -92,10 +92,12 @@
             dots.push({ node: element, x: x, y: y });
         }
 
-        function ring(radius, count, className, size, opacity) {
-            var width = orb.clientWidth;
-            var height = orb.clientHeight;
-
+        // The box is measured once by build() and passed in. Reading it here
+        // meant one layout flush per ring: the previous ring's appends had
+        // already dirtied the tree, so the next clientWidth read forced a
+        // synchronous layout. Lighthouse named this as the page's forced
+        // reflow: 50 ms, measured 2026-11-23.
+        function ring(width, height, radius, count, className, size, opacity) {
             for (var i = 0; i < count; i++) {
                 var angle = (i / count) * Math.PI * 2;
                 var dot = document.createElement('span');
@@ -140,7 +142,7 @@
                 // centre of gravity instead of competing with a flat texture.
                 var fade = 0.9 - (layer / outerLayers) * 0.45;
 
-                ring(radius, Math.max(6, Math.floor((2 * Math.PI * radius) / spacing)), 'site-orb__dot', size, fade);
+                ring(width, height, radius, Math.max(6, Math.floor((2 * Math.PI * radius) / spacing)), 'site-orb__dot', size, fade);
             }
 
             // The accent band sits BETWEEN the mark and the grey field, not at
@@ -159,7 +161,7 @@
                     break;
                 }
 
-                ring(inner, Math.max(6, Math.floor((2 * Math.PI * inner) / spacing)), 'site-orb__dot site-orb__dot--inner', size, 0.85);
+                ring(width, height, inner, Math.max(6, Math.floor((2 * Math.PI * inner) / spacing)), 'site-orb__dot site-orb__dot--inner', size, 0.85);
             }
         }
 
@@ -712,11 +714,24 @@
 
     ready(function () {
         initHeader();
-        initOrb();
         initMenu();
         initAccordion();
         initToc();
         highlight();
         initCode();
+
+        // The orb is decoration, so it is built after the page has painted:
+        // its ~220 nodes and the box measure that sizes them have no business
+        // in the first render, and the stylesheet already draws the dot field
+        // the visitor sees until then. The double rAF is the same gate the
+        // magazine theme's back-to-top uses: the read runs in the frame after
+        // the renderer has laid out and painted, so it forces no reflow.
+        if (window.requestAnimationFrame) {
+            window.requestAnimationFrame(function () {
+                window.requestAnimationFrame(initOrb);
+            });
+        } else {
+            initOrb();
+        }
     });
 })();

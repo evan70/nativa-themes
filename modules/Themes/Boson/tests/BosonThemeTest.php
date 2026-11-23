@@ -852,6 +852,27 @@ final class BosonThemeTest extends TestCase
         self::assertStringContainsString('requestAnimationFrame', $script);
     }
 
+    /**
+     * Lighthouse: "Forced reflow". The ring builder read `orb.clientWidth`
+     * and `orb.clientHeight` once per ring, so every ring laid out what the
+     * previous one had appended. The box is measured once per build now, and
+     * the build runs after the first paint (the double rAF): a decoration is
+     * not allowed to force layout on the load's critical path.
+     */
+    #[Test]
+    public function theOrbMeasuresItsBoxOnceAndBuildsAfterTheFirstPaint(): void
+    {
+        $script = (string) file_get_contents(__DIR__ . '/../assets/scripts/boson.js');
+
+        self::assertSame(1, substr_count($script, 'orb.clientWidth'), 'The orb box is measured once per build, not once per ring.');
+        self::assertSame(1, substr_count($script, 'orb.clientHeight'), 'The orb box is measured once per build, not once per ring.');
+        self::assertMatchesRegularExpression(
+            '/requestAnimationFrame\(function \(\) \{\s*window\.requestAnimationFrame\(initOrb\)/',
+            $script,
+            'The orb must be built after the first paint, not inside the ready callback.',
+        );
+    }
+
     #[Test]
     public function theStylesheetIsSelfContained(): void
     {
