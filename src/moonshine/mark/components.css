@@ -107,6 +107,12 @@
 .m-fieldset { border: 1px solid var(--m-border); border-radius: var(--m-r-sm); padding: 12px; margin: 0 0 12px; }
 .m-fieldset legend { font-size: 13px; font-weight: 600; color: var(--m-muted); padding: 0 6px; }
 .m-radio-label { display: flex; align-items: center; gap: 6px; margin: 4px 0; font-size: 14px; cursor: pointer; }
+/* The utility the admin markup already writes in 90 places. The token existed and
+   the class did not, so every `m-muted` paragraph and table placeholder rendered
+   at full ink and read like content (measured on /mark/settings/modules, Boot
+   47). One rule, next to the token's other consumers. */
+.m-muted { color: var(--m-muted); }
+.m-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; }
 .m-hint { font-size: 11px; color: var(--m-muted); margin-top: 4px; }
 .m-inline-form { display: inline; }
 .cba-inline-form { display: inline; }

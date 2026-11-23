@@ -16,12 +16,13 @@ import { initCodeHighlight } from './code-highlight';
 import { initInlineEditor } from './inline-editor';
 
 // The erik bundle carries the same three runtime helpers as the starter
-// bundle, byte-identical copies (FrontendPackageParityTest). Only
-// initCodeHighlight has markup to act on today: erik's article view renders
-// .er-toc__link without data-heading, and no erik surface emits data-cq. The
-// other two are wired so a future erik surface that needs them does not have
-// to touch the build — they cost nothing while idle (they return early
-// without their data-cq / data-heading selectors).
+// bundle, byte-identical copies (FrontendPackageParityTest). Two of them have
+// markup to act on: initCodeHighlight on fenced blocks, and initTocScrollspy
+// on the article rail's links (ErikTheme emits data-toc-link/data-heading with
+// the "On this page" aside). No erik surface emits data-cq yet, so the
+// container-query manager is wired and idle — it returns early without its
+// selector, and a future surface that needs it does not have to touch the
+// build.
 const onDomReady = (): void => {
   containerQueryManager.init()
   initTocScrollspy()

@@ -3,17 +3,17 @@
 Working rules for this repository. They are the constraints that are easy to
 break and hard to notice afterwards.
 
-## `modules/Themes/<Name>/` is the source of the theme
+## `modules/Themes/<Name>/` is generated from the kernel
 
-Six themes live here: `Boson`, `Erik`, `Griffe`, `Jednotka`, `Mono`, `Nativa`. Each is a kernel
-module — `Theme/<Name>Theme.php`, `assets/`, `tests/` — and this repository is where it is
-edited.
+Six themes exist: `Boson`, `Erik`, `Griffe`, `Jednotka`, `Mono`, `Nativa`. Each is a kernel
+module — `Theme/<Name>Theme.php`, `assets/`, `tests/` — and it is authored in
+`nativa-php-core`, not here.
 
-- A change ships in this order: edit here, sync into `nativa-php-core`, then
-  `php bin/cms module:add <Name>` there (the sync script is `bin/build/sync-themes.sh`; until
-  it lands, the kernel catalogue is a byte-identical copy that a sync would overwrite).
-- The tests travel with the module but **run in the kernel** (`phpunit` scans `modules/`
-  there). A change here is not verified until that suite runs.
+- A change ships there: edit `modules/Themes/<Name>/`, reinstall the slice and run the
+  kernel suite. `bin/build/publish-themes.sh` replaces this directory from that tree, and
+  `bin/build/render-theme-pages.php` re-renders the demo pages from it.
+- The tests run in the kernel (`phpunit` scans `modules/` there). A change here is
+  overwritten by the next publish, so this is not where a theme is verified.
 - No font files and no build output belong in a module: woff2 faces stay in the kernel's
   `public/fonts/`, bundles in its `public/dist/<theme>/`.
 
@@ -41,8 +41,9 @@ next render, which is exactly the drift `render --check` refuses to ship.
 `build/`. An edit there does not survive the next `pnpm run sync`. This is about the
 gallery only — it never touches `modules/`.
 
-- To change a gallery theme, change it in
-  [nativa-minimal](https://github.com/evan70/nativa-minimal) and sync.
+- To change a gallery theme, change it in `nativa-php-core`'s
+  `Frontend/packages/<theme>/src` and run `pnpm run sync`. `NATIVA_APP` points at another
+  kernel checkout.
 - To add code for this repository, put it in `entries/` or `scripts/` (or a theme module).
 
 `sync --check` compares a SHA-256 of every file's contents, so an edit two
@@ -51,20 +52,18 @@ directories deep is still caught. Committing a hand-edit to `src/` will fail
 
 ### What `sync:check` does and does not guard
 
-It is a **gallery freshness gate against `nativa-minimal`**, nothing more. The
-two copies in this repository are not interchangeable:
+It is a **gallery freshness gate against the kernel's frontend packages**,
+nothing more. The copies in this repository have different owners:
 
-| copy | source | guarded by |
+| copy | source | replaced by |
 |---|---|---|
-| `src/<theme>/`, `build/` | `nativa-minimal`'s `Frontend/packages/…` | `pnpm run sync:check` |
-| `modules/Themes/<Name>/` | this repository | `bin/build/sync-themes.sh --check` in `nativa-php-core` (planned there, not written yet) |
+| `src/<theme>/`, `build/` | `nativa-php-core`'s `Frontend/packages/…` | `pnpm run sync` |
+| `modules/Themes/<Name>/` | `nativa-php-core`'s `modules/Themes/…` | `bin/build/publish-themes.sh` |
 
-So a green `pnpm run verify` says the gallery still paints the app's current
-stylesheets. It says **nothing** about the six kernel theme modules, and it
-cannot: `starter`, `magazine` and `moonshine` are not kernel themes, and
-`erik`'s gallery CSS is the app's full stylesheet, not the module's 355-line
-critical fallback. Until the kernel gate lands, a change to a theme module is
-verified only by the kernel suite.
+So a green `pnpm run sync:check` says the gallery still paints the kernel's
+current stylesheets. It says **nothing** about the six theme modules' PHP:
+those are verified by the kernel suite, and the publisher replaces this copy
+from that tree. A change made here is a change the next publish erases.
 
 ## A demo page is evidence, so it must be faithful
 

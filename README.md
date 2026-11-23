@@ -4,9 +4,10 @@ Two things live here.
 
 1. **`modules/Themes/<Name>/` — the six themes of the Nativa kernel.** Each is a complete
    kernel module: a `Theme/<Name>Theme.php` class, its vendored CSS/JS under `assets/`, and its
-   tests. This repository is their source; once a theme is in the kernel's catalogue,
-   `php bin/cms module:add <Name>` installs it. Its **build source** (`Frontend/packages/<theme>/`)
-   still lives in the kernel for now — see "The theme modules are the source" below.
+   tests. They are authored in `nativa-php-core`, which installs them with
+   `php bin/cms module:add <Name>`; this directory is generated from there by
+   `bin/build/publish-themes.sh`. Its **build source** (`Frontend/packages/<theme>/`)
+   lives in the kernel too.
 
    | Module | Prefix | Surface | Files |
    |--------|--------|---------|-------|
@@ -46,30 +47,29 @@ each other (sidebar and Ctrl+K palette), and the design language is inspired by
 The fifth theme in the app, `minimal`, is unwired reference code with no build
 entry, so it has no page here.
 
-## The theme modules are the source, the kernel copy is a copy
+## The built-in themes come from the kernel
 
-`modules/Themes/<Name>/` here is the editable copy. `nativa-php-core` keeps a catalogue at
-`modules/Themes/<Name>/` and an installed slice at `src/Modules/Themes/<Name>/`; both are
-meant to be filled from this repository (the `bin/build/sync-themes.sh --check` gate is
-planned there, not written yet). **Until that script lands the two catalogues are
-byte-identical copies**, so a change typed into the kernel catalogue is a change that a
-later sync would overwrite.
+`nativa-php-core` is the source. Its `modules/Themes/<Name>/` is the theme module (PHP,
+vendored `assets/`, tests), and its `Frontend/packages/<theme>/src/` is the build source
+this gallery copies. A theme change is made there, once; nothing is typed into the
+gallery's `src/`, which `scripts/sync-themes.mjs` deletes and recopies.
 
-Two copies live here and they are not interchangeable. `modules/Themes/<Name>/` is the
-kernel theme module (PHP + vendored `assets/` + tests). `src/<theme>/` below is the
-gallery's copy of `nativa-minimal`'s frontend sources, and `pnpm run sync:check` only
-guards that second pair — a green gallery says nothing about a theme module.
+`evan70/nativa-themes`, where the gallery is published, is generated output: the
+`bin/build/publish-themes.sh` script in `nativa-php-core` replaces this gallery and its
+`modules/Themes/` on every master change to a theme. A hand edit here survives only until
+the next publish, and its history names the source commit.
 
-A theme's tests travel with it here, but they run in the kernel (`phpunit` scans `modules/`
-there and owns the harness). Packaging a change therefore means: edit here, sync into the
-kernel, `php bin/cms module:add <Name>`, run the suite there.
+`pnpm run sync:check` compares `src/` with the kernel's frontend packages and can run on
+CI, because both live in the same project now. The demo pages for `boson`, `jednotka` and
+`mono` are re-rendered by the publisher, so a stale static page cannot outlive a theme
+change either.
 
 ### Demo pages for the kernel themes are generated
 
-`boson/`, `jednotka/`, `mono/` and `nativa/` are rendered by `bin/build/render-theme-pages.php` in
+`boson/`, `jednotka/` and `mono/` are rendered by `bin/build/render-theme-pages.php` in
 `nativa-php-core` — the theme's own PHP against one fixture, wrapped by the kernel layout.
 Each theme gets **7 surfaces in English and the same 7 in Slovak**: home, blog, article,
-tags, categories, author, search, at `/boson/…` and `/boson/sk/…` (56 pages). Do not
+tags, categories, author, search, at `/boson/…` and `/boson/sk/…` (42 pages). Do not
 hand-edit them; re-render instead:
 
 ```bash
@@ -125,7 +125,7 @@ moonshine/index.html       the admin dashboard
 moonshine/articles/        the articles list, at the URL the admin serves it from
 moonshine/article/         the article editor
 moonshine/users/           the users list
-boson/…/index.html       GENERATED — 7 surfaces + 7 under sk/, same for jednotka, mono, nativa
+boson/…/index.html       GENERATED — 7 surfaces + 7 under sk/, same for jednotka, mono
 entries/                 hand-written code: gallery CSS, the admin entry
 src/<theme>/             SYNCED from the app — do not edit
 build/                   SYNCED from the app — the @layer stripping plugin
@@ -137,8 +137,9 @@ scripts/                 sync, page check, interaction check, CDP client
 
 `scripts/sync-themes.mjs` **deletes and recopies** `src/<theme>/` on every
 run. Anything you hand-write there is erased by the next sync, so demo-only
-entries live in `entries/` instead. This applies to the gallery only —
-`modules/Themes/` is hand-written source and is never touched by the sync.
+entries live in `entries/` instead. This applies to the gallery only:
+`modules/Themes/` is authored in the kernel and is replaced by the publish,
+never by the sync.
 
 ## Working on it
 
@@ -148,8 +149,8 @@ pnpm run sync          # pull the current theme sources out of the app
 pnpm run dev           # http://localhost:5177
 ```
 
-`sync` looks for `nativa-minimal` next to this repository; point it elsewhere
-with `NATIVA_MINIMAL=/path/to/nativa-minimal pnpm run sync`.
+`sync` reads the kernel this gallery sits in; point it at another checkout with
+`NATIVA_APP=/path/to/nativa-php-core pnpm run sync`.
 
 ### Checks
 
@@ -159,7 +160,7 @@ pnpm run verify        # everything below, in order
 
 | Command | What it proves |
 |---------|----------------|
-| `pnpm run sync:check` | the gallery's `src/` still matches the app (theme modules are **not** checked here) |
+| `pnpm run sync:check` | the gallery's `src/` still matches the kernel's frontend packages (theme modules are **not** checked here) |
 | `pnpm run typecheck` | `tsc --noEmit` over the entries, the build plugins and the synced sources |
 | `pnpm run build` | Vite builds the multi-page site |
 | `pnpm run check:dist` | `dist/` contains exactly the pages in `scripts/pages.mjs`, and every internal `href`/`src`/`action` on those pages resolves to a file the build produced |
@@ -184,23 +185,27 @@ pnpm run build && pnpm run preview &
 pnpm run shoot -- --scheme light --width 390 --height 844 --shots
 ```
 
-`sync:check` cannot run on CI — the app repository is private, so a fresh
-runner has no sibling checkout and the check can only report "skipped". It is
-a **local** gate; the workflow below deliberately does not pretend to run it.
+`sync:check` runs on CI: the sources live in the kernel checkout the workflow
+already has. `shoot` and `interactions` stay local because they need a preview
+server and a browser.
 
 ## Deployment
 
-`.github/workflows/pages.yml` builds `dist/` and deploys it to GitHub Pages on
-every push to `main`. Enable it once in the repository settings
-(*Settings → Pages → Source: GitHub Actions*).
+**This copy does not deploy.** Since 2026-11-22 the gallery is published from
+`evan70/nativa-themes` at `https://evan70.github.io/nativa-themes/`, by that
+repository's `pages.yml`, and its `pages-check.yml` re-checks the served pages
+weekly. `gallery-pages.yml` and `gallery-pages-check.yml` here are disabled and
+the `https://responsive-sk.github.io/nativa-php-core/` Pages site is removed:
+two publishers of one gallery diverged within days, so there is one. The files
+here stay as the local copy this tree can build and check.
 
 A deploy can succeed while the site serves something else — a stale artefact,
 a moved base path, a directory uploaded one level too deep. `shoot` cannot see
-that (it checks a local preview), so the workflow has a third job, `verify`,
-that runs after `deploy` and fetches the **published** URLs:
+that (it checks a local preview), so the publisher's workflow has a third job,
+`verify`, that runs after `deploy` and fetches the **published** URLs:
 
 ```bash
-pnpm run check:pages https://<user>.github.io/nativa-themes
+pnpm run check:pages https://evan70.github.io/nativa-themes
 ```
 
 Every page in `scripts/pages.mjs` must answer 200, be `text/html`, and still

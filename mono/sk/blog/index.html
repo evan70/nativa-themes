@@ -20,48 +20,31 @@
 
 
 </style>
-<!-- Sync theme init — FOUC prevention: restore the persisted theme
-     (or the OS preference) before first paint. Falls back to the
-     dark default when neither is available (Chrome 70 baseline). -->
-<script>
-    (function() {
-        try {
-            var theme = localStorage.getItem('nativa-theme');
-            if (!theme) {
-                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            document.documentElement.setAttribute('data-theme', theme);
-        } catch (e) {}
-    })();
-</script>
-<!-- Sync dev variant — same FOUC contract as the theme above:
-     unknown values are ignored, so a stale stored variant can
-     never leave the page unstyled. -->
-<script>
-    (function() {
-        try {
-            var variant = localStorage.getItem('nativa-variant');
-            if ('ember' === variant || 'glacier' === variant) {
-                document.documentElement.setAttribute('data-variant', variant);
-            }
-        } catch (e) {}
-    })();
-</script>
-<!-- Sync slider staging signal — same pre-paint contract as above:
-     the stylesheet stages a multi-slide hero the moment `mo-js`
-     is present, so the deferred bundle never reflows a stacked
-     opening frame. Skipped under reduced motion (the calm
-     fallback stays stacked) — `classList` and `matchMedia` are
-     both older than the Chrome 70 baseline. -->
-<script>
-    (function() {
-        try {
-            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                return;
-            }
-            document.documentElement.classList.add('mo-js');
-        } catch (e) {}
-    })();
+<script>(function() {
+    try {
+        var theme = localStorage.getItem('nativa-theme');
+        if (!theme) {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+})();
+</script><script>(function() {
+    try {
+        var variant = localStorage.getItem('nativa-variant');
+        if ('ember' === variant || 'glacier' === variant) {
+            document.documentElement.setAttribute('data-variant', variant);
+        }
+    } catch (e) {}
+})();
+</script><script>(function() {
+    try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+        document.documentElement.classList.add('mo-js');
+    } catch (e) {}
+})();
 </script>
 </head>
 <body class="mono-shell">

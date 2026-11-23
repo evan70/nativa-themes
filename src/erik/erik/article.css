@@ -14,6 +14,16 @@
   padding: clamp(1.25rem, 4vw, 3rem);
 }
 
+/* Measure. The article card is as wide as the layout gives it, which beside a
+   15rem rail is still ~90 characters a line on a wide display; body copy is
+   bounded at 68ch and code/tables opt out so a sample is not squashed. The
+   same rule the kernel's reader layout applies on /docs and /blog. */
+.er-article__body p,
+.er-article__body li,
+.er-article__body blockquote {
+  max-width: 68ch;
+}
+
 .er-article img {
   height: auto;
   max-width: 100%;

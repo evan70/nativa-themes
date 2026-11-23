@@ -34,8 +34,7 @@
  */
 
 :root {
-  
-/* --- palette (generated) --- */
+  /* --- palette (generated) --- */
   --questions-ink: var(--st-ink);
   --questions-muted: var(--st-muted);
   --questions-border: var(--st-border);
@@ -52,7 +51,7 @@
      spans the content column. */
   --questions-width: none;
   --questions-form-width: 520px;
-/* --- end palette --- */
+  /* --- end palette --- */
 }
 
 .mag-questions {

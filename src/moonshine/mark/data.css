@@ -75,7 +75,7 @@
 .m-table th { background: var(--m-surface-2); color: var(--m-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
 .m-table tr:last-child td { border-bottom: none; }
 .m-table tr:hover td { background: var(--m-surface-2); }
-/* Sortable column headers (AdminLayout::sortableHeader) */
+/* Sortable column headers (CardboardLayout::sortableHeader) */
 .m-th-sort a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
 .m-th-sort a:hover { color: var(--m-ink); }
 .m-th-sort__arrow { font-size: 10px; opacity: .55; }
@@ -200,7 +200,39 @@
 .m-folder-card:hover { border-color: var(--m-primary); }
 .m-folder-card--active { border-color: var(--m-primary); background: var(--m-surface-2); }
 .m-folder-card__icon { display: inline-flex; flex: none; color: var(--m-muted); }
+.m-folder-card__thumb { flex: none; width: 34px; height: 34px; border-radius: var(--m-r-sm); object-fit: cover; display: block; background: var(--m-surface-2); }
 .m-folder-card__name { flex: 1; min-width: 0; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* The folder manager: create, rename and delete in one card, so the tile grid
+   above stays plain links. Header, a create strip, then one row per folder,
+   which makes a long list read as a table instead of a pile of fields. */
+.m-folder-manage { padding: 0; overflow: hidden; }
+.m-folder-manage__summary { display: flex; align-items: center; gap: var(--m-sp-2); padding: 12px var(--m-sp-5); font-size: 13px; font-weight: 600; cursor: pointer; list-style: none; user-select: none; transition: background var(--m-transition); }
+.m-folder-manage__summary:hover { background: var(--m-surface-2); }
+.m-folder-manage__summary::-webkit-details-marker { display: none; }
+.m-folder-manage__summary::after { content: ""; width: 6px; height: 6px; margin-left: auto; border-right: 1.5px solid var(--m-muted); border-bottom: 1.5px solid var(--m-muted); transform: rotate(45deg); transition: transform var(--m-transition); }
+.m-folder-manage[open] > .m-folder-manage__summary { border-bottom: 1px solid var(--m-border); }
+.m-folder-manage[open] > .m-folder-manage__summary::after { transform: rotate(-135deg); }
+.m-folder-manage__create { display: grid; gap: var(--m-sp-1); padding: var(--m-sp-3) var(--m-sp-5); border-bottom: 1px solid var(--m-border); background: var(--m-surface-2); }
+.m-folder-manage__label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--m-muted); }
+.m-folder-manage__inline { display: flex; gap: var(--m-sp-2); }
+.m-folder-manage__inline .m-input { flex: 1; min-width: 0; }
+.m-folder-row { display: flex; align-items: center; gap: var(--m-sp-2); padding: var(--m-sp-2) var(--m-sp-5); border-bottom: 1px solid var(--m-border); }
+.m-folder-row:last-child { border-bottom: none; }
+.m-folder-row:focus-within { background: var(--m-surface-2); }
+.m-folder-row__rename { display: flex; align-items: center; gap: var(--m-sp-2); flex: 1; min-width: 0; margin: 0; }
+.m-folder-row__name { display: inline-flex; align-items: center; gap: 6px; flex: 0 1 260px; min-width: 0; font-size: 13px; font-weight: 500; cursor: text; }
+.m-folder-row__icon { display: inline-flex; flex: none; color: var(--m-muted); }
+.m-folder-row__path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.m-folder-row__input { flex: 1; min-width: 0; }
+.m-folder-row__delete { display: flex; align-items: center; gap: var(--m-sp-3); margin: 0; }
+.m-folder-row__cascade { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--m-muted); white-space: nowrap; cursor: pointer; }
+.m-folder-row__cascade input { margin: 0; }
+@media (max-width: 720px) {
+    .m-folder-row { flex-wrap: wrap; }
+    .m-folder-row__name { flex-basis: 100%; }
+    .m-folder-row__delete { margin-left: auto; }
+}
 
 /* ═══════════════════════════════════════════════════════════════════
    EDIT FORM

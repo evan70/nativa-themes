@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Griffe\Theme;
 
+use View\InlineJs;
+
 use Modules\Core\Domain\MarkRoutePolicy;
 use Shell\ShellNavItem;
 use Themes\ThemeSetting;
@@ -64,22 +66,9 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
      */
     public function themeInitScript(): string
     {
-        return <<<'HTML'
-            <!-- Sync theme init — FOUC prevention: restore the persisted theme
-                 (or the OS preference) before first paint. Falls back to the
-                 dark default when neither is available (Chrome 70 baseline). -->
-            <script nonce="__CSP_NONCE_PLACEHOLDER__">
-                (function() {
-                    try {
-                        var theme = localStorage.getItem('nativa-theme');
-                        if (!theme) {
-                            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                        }
-                        document.documentElement.setAttribute('data-theme', theme);
-                    } catch (e) {}
-                })();
-            </script>
-            HTML;
+        $script = InlineJs::file('Themes/assets/scripts/theme-init.js');
+
+        return '' === $script ? '' : '<script nonce="__CSP_NONCE_PLACEHOLDER__">' . $script . '</script>';
     }
 
     public function prefix(): string

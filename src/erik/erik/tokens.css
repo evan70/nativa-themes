@@ -1,29 +1,57 @@
 /*
- * Metric-matched fallback. Gilroy and the platform sans-serif disagree on
- * x-height (0.50 vs 0.53 em) and on the line box, so `font-display: swap`
- * reflowed every heading when the real font landed — measured 0.336 CLS on
- * the erik hero under Slow 4G, all of it in <section class="er-hero">.
+ * Metric-matched fallback. `font-display: swap` paints text at once in the
+ * local fallback and swaps Gilroy in later, and the first attempt at this
+ * block went by X-HEIGHT: size-adjust 94.64% (500/1000 against 1082/2048),
+ * ascent 97.21%, descent 25.36%. That matched the line box and still
+ * reflowed, because x-height says nothing about how wide a word is.
  *
- * These descriptors resize an Arial-class local() fallback to Gilroy's own
- * metrics: size-adjust 94.64% from the x-height ratio (1082/2048 against
- * 500/1000), ascent/descent overridden to Gilroy's 920/1000 and 240/1000.
- * Because ascent and descent are OVERRIDES rather than the local font's own
- * metrics, the line box is forced to Gilroy's height whichever local() hits
- * — Arial, Roboto, Noto or Segoe all land on the same box, so the swap
- * changes glyphs without moving anything.
+ * Measured in Chromium, 48 px in a 600 px box: Gilroy set the sentence in
+ * four lines of 56 px, the 94.64% fallback in three. The swap therefore GREW
+ * the block by one line, which is the shift the block exists to remove.
  *
- * Browsers without size-adjust (before Chrome 87) drop the whole face and
- * continue down the stack to plain Arial — today's behaviour, no
- * regression on the Chrome 70 baseline.
+ * The numbers below come from the average advance of
+ * `The quick brown fox jumps over the lazy dog 0123456789` against the
+ * Arial-class local() face they name (Liberation Sans measures the same as
+ * Arial):
+ *
+ *   size-adjust       = (webfont avg/upm) / (fallback avg/upm)
+ *   ascent-override   = (webfont ascent/upm) / size-adjust
+ *   descent-override  = (|webfont descent|/upm) / size-adjust
+ *   line-gap-override = (webfont lineGap/upm) / size-adjust
+ *
+ * Gilroy still ships one fallback per weight because the two faces it loads
+ * are not the same width: Regular 101.06%, Bold 102.72%. Sharing one face
+ * left the bold headings ~1.6% narrow and let the browser synthesise the
+ * weight, which widens them again by an amount no font table describes.
+ *
+ * Ascent and descent are OVERRIDES, so the line box is Gilroy's height
+ * whichever local() hits: Arial, Arimo, Liberation Sans, Roboto, Noto or
+ * Segoe all land on the same box, and the swap changes glyphs without
+ * moving anything. Browsers without size-adjust (before Chrome 87) drop the
+ * whole face and continue down the stack to plain Arial, which is the
+ * behaviour of the Chrome 70 baseline.
  */
 @font-face {
   font-family: 'Gilroy Fallback';
+  font-weight: 400;
   src: local('Arial'), local('Arimo'), local('Liberation Sans'),
     local('Roboto'), local('Noto Sans'), local('Segoe UI'),
     local('Helvetica Neue'), local('DejaVu Sans');
-  size-adjust: 94.64%;
-  ascent-override: 97.21%;
-  descent-override: 25.36%;
+  size-adjust: 101.06%;
+  ascent-override: 91.04%;
+  descent-override: 23.75%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Gilroy Fallback';
+  font-weight: 700 900;
+  src: local('Arial'), local('Arimo'), local('Liberation Sans'),
+    local('Roboto'), local('Noto Sans'), local('Segoe UI'),
+    local('Helvetica Neue'), local('DejaVu Sans');
+  size-adjust: 102.72%;
+  ascent-override: 92.10%;
+  descent-override: 25.60%;
   line-gap-override: 0%;
 }
 

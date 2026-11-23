@@ -20,19 +20,15 @@
 
 
 </style>
-<!-- Sync theme init — FOUC prevention: restore the persisted theme
-     (or the OS preference) before first paint. Falls back to the
-     light default when neither is available (Chrome 70 baseline). -->
-<script>
-    (function() {
-        try {
-            var theme = localStorage.getItem('nativa-theme');
-            if (!theme) {
-                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            document.documentElement.setAttribute('data-theme', theme);
-        } catch (e) {}
-    })();
+<script>(function() {
+    try {
+        var theme = localStorage.getItem('nativa-theme');
+        if (!theme) {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+})();
 </script>
 </head>
 <body class="nativa-shell">

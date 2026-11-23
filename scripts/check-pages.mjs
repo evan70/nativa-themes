@@ -7,8 +7,8 @@
  * symptoms of a deploy that published the wrong directory, an old commit, or a
  * base path that moved.
  *
- *   node scripts/check-pages.mjs https://evan70.github.io/nativa-themes
- *   node scripts/check-pages.mjs https://evan70.github.io/nativa-themes --dist dist
+ *   node scripts/check-pages.mjs https://responsive-sk.github.io/nativa-php-core
+ *   node scripts/check-pages.mjs https://responsive-sk.github.io/nativa-php-core --dist dist
  *   node scripts/check-pages.mjs --dist dist        # structure only, no network
  *
  * `--dist` also asserts the local build contains exactly the pages this list

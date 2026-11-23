@@ -34,8 +34,7 @@
  */
 
 :root {
-  
-/* --- palette (generated) --- */
+  /* --- palette (generated) --- */
   --questions-ink: var(--er-ink);
   --questions-muted: var(--er-muted);
   --questions-border: var(--er-border);
@@ -50,7 +49,7 @@
   --questions-radius: 8px;
   --questions-width: 720px;
   --questions-form-width: 520px;
-/* --- end palette --- */
+  /* --- end palette --- */
 }
 
 .er-questions {

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Mono\Theme;
 
+use View\InlineJs;
+
 use Shell\ShellNavItem;
 use Themes\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
@@ -61,51 +63,15 @@ final class MonoTheme implements ThemeModule, ThemeSettings
      */
     public function themeInitScript(): string
     {
-        return <<<'HTML'
-            <!-- Sync theme init — FOUC prevention: restore the persisted theme
-                 (or the OS preference) before first paint. Falls back to the
-                 dark default when neither is available (Chrome 70 baseline). -->
-            <script nonce="__CSP_NONCE_PLACEHOLDER__">
-                (function() {
-                    try {
-                        var theme = localStorage.getItem('nativa-theme');
-                        if (!theme) {
-                            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                        }
-                        document.documentElement.setAttribute('data-theme', theme);
-                    } catch (e) {}
-                })();
-            </script>
-            <!-- Sync dev variant — same FOUC contract as the theme above:
-                 unknown values are ignored, so a stale stored variant can
-                 never leave the page unstyled. -->
-            <script nonce="__CSP_NONCE_PLACEHOLDER__">
-                (function() {
-                    try {
-                        var variant = localStorage.getItem('nativa-variant');
-                        if ('ember' === variant || 'glacier' === variant) {
-                            document.documentElement.setAttribute('data-variant', variant);
-                        }
-                    } catch (e) {}
-                })();
-            </script>
-            <!-- Sync slider staging signal — same pre-paint contract as above:
-                 the stylesheet stages a multi-slide hero the moment `mo-js`
-                 is present, so the deferred bundle never reflows a stacked
-                 opening frame. Skipped under reduced motion (the calm
-                 fallback stays stacked) — `classList` and `matchMedia` are
-                 both older than the Chrome 70 baseline. -->
-            <script nonce="__CSP_NONCE_PLACEHOLDER__">
-                (function() {
-                    try {
-                        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                            return;
-                        }
-                        document.documentElement.classList.add('mo-js');
-                    } catch (e) {}
-                })();
-            </script>
-            HTML;
+        return self::scriptTag(InlineJs::file('Themes/assets/scripts/theme-init.js'))
+            . self::scriptTag(InlineJs::file('Modules/Themes/Mono/assets/scripts/theme-variant.js'))
+            . self::scriptTag(InlineJs::file('Modules/Themes/Mono/assets/scripts/hero-staging.js'));
+    }
+
+    /** One pre-paint block, or nothing when its asset is missing. */
+    private static function scriptTag(string $script): string
+    {
+        return '' === $script ? '' : '<script nonce="__CSP_NONCE_PLACEHOLDER__">' . $script . '</script>';
     }
 
     public function prefix(): string
