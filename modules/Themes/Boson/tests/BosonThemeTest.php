@@ -892,6 +892,29 @@ final class BosonThemeTest extends TestCase
     }
 
     /**
+     * Stacked, the search field keeps its own height. `flex: 1` is a basis of
+     * zero on the row axis, where the field's width comes from the free space.
+     * Turned into a column the same basis is a height, so the field collapsed
+     * to its 16 px content box and the submit button sat on its bottom edge,
+     * which is what the phone menu showed. Measured 2026-11-23 at 390 px: the
+     * field was 16 px tall against the button's 56 px before the reset.
+     */
+    #[Test]
+    public function theStackedSearchFormKeepsTheFieldsHeight(): void
+    {
+        $css = (string) file_get_contents(__DIR__ . '/../assets/critical/boson.css');
+
+        $stack = strpos($css, '@media (max-width: 900px)');
+        self::assertNotFalse($stack, 'The stacked form lives in the phone breakpoint.');
+
+        $column = strpos($css, 'flex-direction: column;', (int) $stack);
+        $reset = strpos($css, ".bo-search-form__input {\n    flex: 0 0 auto;\n  }", (int) $stack);
+
+        self::assertNotFalse($reset, 'A column form needs a basis that is not zero on the height axis.');
+        self::assertGreaterThan($column, $reset, 'The reset follows the direction it repairs.');
+    }
+
+    /**
      * A webfont that lands after the first paint must not repaint the text it
      * already painted. `optional` with the metric-matched fallbacks gives one
      * paint per pageview: the fallback keeps the box, the woff2 serves the

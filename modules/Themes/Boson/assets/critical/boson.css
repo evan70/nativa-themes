@@ -2909,6 +2909,15 @@ pre.bo-has-badge > code {
     flex-direction: column;
   }
 
+  /* `flex: 1` is a basis of zero in the row direction, where the field's
+   * width comes from the free space. Stacked, the main axis is the height,
+   * so the same basis collapsed the field to its content box and the
+   * submit sat right under a 16 px strip. The field keeps its own height
+   * and the button follows it. */
+  .bo-search-form__input {
+    flex: 0 0 auto;
+  }
+
   .bo-search-form__submit {
     border-left: 0;
     border-top: 1px solid var(--bo-line);
