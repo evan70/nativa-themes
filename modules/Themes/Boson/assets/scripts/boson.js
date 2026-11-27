@@ -94,6 +94,19 @@
         var inView = true;
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+        // Half a pixel is below the smallest displacement this field draws: a
+        // dot's push is `((radius - distance) / radius) * CONFIG.strength`, so
+        // half a pixel of pointer error moves it under 0.05 px. Arrival is the
+        // loop's stop condition. Without one the field drew every frame for as
+        // long as the hero was in the viewport, pointer or no pointer. The
+        // numbers behind that sentence are in the commit that added this guard.
+        var REST = 0.5;
+
+        function atRest() {
+            return Math.abs(target.x - pointer.x) < REST
+                && Math.abs(target.y - pointer.y) < REST;
+        }
+
         function place(element, x, y, size, opacity) {
             element.style.opacity = opacity;
             element.style.left = x + 'px';
@@ -216,7 +229,11 @@
                 dot.node.style.transform = 'translate(calc(-50% + ' + dx * inverse * push + 'px), calc(-50% + ' + dy * inverse * push + 'px))';
             }
 
-            schedule();
+            // Arrived: the field holds the pixels it just drew until the next
+            // pointer event asks for another frame.
+            if (!atRest()) {
+                schedule();
+            }
         }
 
         function schedule() {

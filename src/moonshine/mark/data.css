@@ -86,6 +86,11 @@
 .cba-table th { background: var(--m-surface-2); color: var(--m-muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
 .cba-table tr:last-child td { border-bottom: none; }
 
+/* Detail pages that pair a label with its value. */
+.m-dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 18px; margin: 0 0 20px; }
+.m-dl dt { color: var(--m-muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.m-dl dd { margin: 0; color: var(--m-ink); }
+
 /* ═══════════════════════════════════════════════════════════════════
    ALERTS / MESSAGES
    ═══════════════════════════════════════════════════════════════════ */

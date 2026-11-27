@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Griffe\Tests;
 
-use Themes\AssetManager;
-use View\InlineCss;
+use Modules\Core\Application\Services\AssetManager;
+use Modules\Core\Application\Services\View\InlineCss;
 use Modules\Core\Infrastructure\Paths\AppPaths;
 use Modules\Themes\Griffe\Theme\GriffeTheme;
 use PHPUnit\Framework\Attributes\Test;
@@ -155,6 +155,54 @@ final class GriffeBuildFreezeTest extends TestCase
         );
     }
 
+    /**
+     * Every JS entry in the frozen manifest is a classic script, not just the
+     * base one.
+     *
+     * The landing's two custom elements moved to `griffe-home` on 2026-11-25,
+     * so the manifest now names two scripts a page can tag
+     * (`griffe.js` + `griffe-home.js`). `theFrozenScriptIsASingleFileWithNoModuleSyntax`
+     * reads the base entry alone, which was enough while there was one script;
+     * a shared chunk leaking into the second entry would have passed it.
+     */
+    #[Test]
+    public function everyFrozenScriptEntryIsAClassicScript(): void
+    {
+        $entries = 0;
+
+        foreach ($this->manifest() as $key => $entry) {
+            $file = $entry['file'] ?? null;
+
+            if (!is_string($file) || !str_ends_with($file, '.js')) {
+                continue;
+            }
+
+            $path = AppPaths::instance()->public('dist/' . self::bundle() . '/' . $file);
+
+            $this->assertFileExists($path, sprintf('The manifest entry `%s` names a script that is not committed: %s.', (string) $key, $file));
+
+            $js = (string) file_get_contents($path);
+            $entries++;
+
+            $this->assertDoesNotMatchRegularExpression(
+                '/(^|[^.\w])import[\s(]/',
+                $js,
+                sprintf('`%s` carries an import — a shared chunk leaked in, and Chrome 70 cannot execute it.', $file),
+            );
+            $this->assertDoesNotMatchRegularExpression(
+                '/(^|[^.\w])export[\s{]/',
+                $js,
+                sprintf('`%s` carries an export — it is a module, not a classic script.', $file),
+            );
+        }
+
+        $this->assertGreaterThanOrEqual(
+            2,
+            $entries,
+            'The frozen manifest names fewer than two scripts: the base entry and the landing entry are both expected since the 2026-11-25 split.',
+        );
+    }
+
     #[Test]
     public function theFrozenBundleHoldsItsSizeBudget(): void
     {
@@ -263,6 +311,25 @@ final class GriffeBuildFreezeTest extends TestCase
         $maps = glob(AppPaths::instance()->public('dist/' . self::bundle() . '/assets/*.map') ?: []);
 
         $this->assertSame([], $maps, 'Sourcemaps are debug weight in a frozen production bundle.');
+    }
+
+    /**
+     * The frozen manifest, decoded.
+     *
+     * @return array<string, array{file?: string, css?: list<string>}>
+     */
+    private function manifest(): array
+    {
+        $path = AppPaths::instance()->public('dist/' . self::bundle() . '/manifest.json');
+
+        $this->assertFileExists($path, 'The frozen griffe manifest is not committed.');
+
+        $decoded = json_decode((string) file_get_contents($path), true);
+
+        $this->assertIsArray($decoded);
+
+        /** @var array<string, array{file?: string, css?: list<string>}> $decoded */
+        return $decoded;
     }
 
     private function frozenJs(): string

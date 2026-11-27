@@ -2,7 +2,9 @@
 @import './shell.css';
 @import './content.css';
 @import './blog.css';
-@import './article.css';
+
+/* The article surface's block (reading layout, contents rail, comments) is a
+   separate entry, `src/erik-article.css`, so a homepage pays none of it. */
 
 /* Owner edit affordance + the author's inline editor (module markup, er-). */
 @import './editor.css';

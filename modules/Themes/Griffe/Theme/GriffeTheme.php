@@ -4,16 +4,17 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Griffe\Theme;
 
-use View\InlineJs;
+use Modules\Core\Application\Services\View\InlineJs;
 
 use Modules\Core\Domain\MarkRoutePolicy;
-use Shell\ShellNavItem;
-use Themes\ThemeSetting;
+use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeModule;
-use Themes\ThemeSettings;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Domain\Contracts\ThemeModule;
+use Modules\Core\Domain\Contracts\ThemeSettings;
 
 /**
  * GriffeTheme — the webgriffe.com agency idiom as a kernel theme module.
@@ -49,9 +50,9 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
     /**
      * @return list<string> src/-relative, resolved by InlineCss
      */
-    public function criticalCss(): array
+    public function criticalCss(?string $surface = null): array
     {
-        return ['Modules/Griffe/assets/critical/griffe.css'];
+        return FrontendLayout::themeCriticalCss(['Modules/Griffe/assets/critical/griffe.css'], $surface);
     }
 
     /**
@@ -66,7 +67,7 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
      */
     public function themeInitScript(): string
     {
-        $script = InlineJs::file('Themes/assets/scripts/theme-init.js');
+        $script = InlineJs::file('Modules/Core/Interfaces/HTTP/assets/scripts/theme-init.js');
 
         return '' === $script ? '' : '<script nonce="__CSP_NONCE_PLACEHOLDER__">' . $script . '</script>';
     }
@@ -623,7 +624,7 @@ final class GriffeTheme implements ThemeModule, ThemeSettings
         $cover = '' !== $context->coverUrl ? $context->coverUrl : $context->coverImage;
 
         if ('' !== $cover) {
-            $article .= '<p><img src="' . self::e($cover) . '" alt=""></p>';
+            $article .= '<p><img src="' . self::e($cover) . '" alt="' . self::e($context->coverAlt) . '"></p>';
         }
 
         $article .= '<div class="gr-article__body">' . $context->bodyHtml . '</div>';

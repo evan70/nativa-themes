@@ -5,16 +5,17 @@ declare(strict_types = 1);
 namespace Modules\Themes\Boson\Tests;
 
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Themes\AssetManager;
-use View\InlineCss;
-use View\InlineJs;
+use Modules\Core\Application\Services\AssetManager;
+use Modules\Core\Application\Services\View\InlineCss;
+use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\MarkRoutePolicy;
-use Shell\ShellNavItem;
+use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
-use Themes\FrontendLayout;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeRegistry;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Domain\PageSurface;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Interfaces\HTTP\ThemeRegistry;
 use Modules\Themes\Boson\Theme\BosonTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -207,7 +208,7 @@ final class BosonThemeTest extends TestCase
     }
 
     #[Test]
-    public function theHeaderRendersTheShellNavAndTheAdminPrefix(): void
+    public function theHeaderRendersTheShellNavForAGuest(): void
     {
         $header = (new BosonTheme())->header(self::shell());
 
@@ -216,10 +217,37 @@ final class BosonThemeTest extends TestCase
         $this->assertStringContainsString('href="/blog"', $header);
         $this->assertStringContainsString('aria-current="page"', $header, 'The active nav item is announced.');
         $this->assertStringContainsString('bo-nav__sub', $header, 'Children render as a ruled submenu.');
-        $this->assertStringContainsString('href="' . MarkRoutePolicy::prefix() . '"', $header, 'The admin link comes from the policy, never a literal.');
         $this->assertStringContainsString('bo-locale__link--active', $header);
         $this->assertStringContainsString('bo-search__input', $header);
         $this->assertStringContainsString('bo-mobile__link', $header);
+    }
+
+    /**
+     * Measured on responsive.sk 2026-11-25: `/mark` was in the header, the
+     * phone menu and the footer of every anonymous page. A guest got an
+     * admin shortcut whose only answer is a 302 to the login form.
+     */
+    #[Test]
+    public function anAnonymousVisitorIsNotSentToTheAdminPanel(): void
+    {
+        $theme = new BosonTheme();
+        $shell = self::shell();
+
+        $this->assertStringNotContainsString(MarkRoutePolicy::prefix(), $theme->header($shell));
+        $this->assertStringNotContainsString(MarkRoutePolicy::prefix(), $theme->footer($shell));
+    }
+
+    #[Test]
+    public function aSignedInEditorKeepsTheAdminShortcut(): void
+    {
+        $theme = new BosonTheme();
+        $shell = self::shell('', true);
+        $href = 'href="' . MarkRoutePolicy::prefix() . '"';
+
+        $this->assertStringContainsString($href, $theme->header($shell), 'The shortcut comes from the policy, never a literal.');
+        $this->assertStringContainsString('bo-actions__mark', $theme->header($shell));
+        $this->assertStringContainsString('bo-mobile__mark', $theme->header($shell));
+        $this->assertStringContainsString('bo-footer__social" ' . $href, $theme->footer($shell));
     }
 
     /**
@@ -303,7 +331,7 @@ final class BosonThemeTest extends TestCase
         $this->assertStringContainsString('<img class="bo-orbit__mark" src="/favicon.svg"', $html);
         $this->assertStringNotContainsString('bo-orbit__mark">', $html, 'The orbit mark is an image, not a text node.');
 
-        $css = InlineCss::file('Modules/Boson/assets/critical/boson.css');
+        $css = InlineCss::files((new BosonTheme())->criticalCss(PageSurface::HOME));
 
         $this->assertStringContainsString('.bo-orbit__mark {', $css);
         $this->assertStringContainsString('.bo-header__mark-img {', $css);
@@ -875,6 +903,32 @@ final class BosonThemeTest extends TestCase
         );
     }
 
+    /**
+     * The loop rescheduled itself on every frame, so the field kept drawing for
+     * as long as the hero was in the viewport, pointer or no pointer. Measured
+     * 2026-11-23 with a forced fine pointer: 257 ms of script and 526 ms of
+     * main-thread task per 10 s of an idle hero, 301 dots; with the bundle
+     * blocked the same window cost 0 ms and 1 ms. The loop stops once the
+     * pointer has arrived, and the guarded call is what keeps it stopped.
+     */
+    #[Test]
+    public function theOrbStopsDrawingWhenTheFieldIsAtRest(): void
+    {
+        $script = (string) file_get_contents(__DIR__ . '/../assets/scripts/boson.js');
+
+        self::assertStringContainsString('function atRest()', $script, 'The loop needs a stop condition.');
+        self::assertStringContainsString('var REST = 0.5;', $script, 'Half a pixel is the threshold the field settles within.');
+
+        preg_match('/function step\(\) \{(.*?)\n        \}\n/s', $script, $match);
+        self::assertNotEmpty($match, 'The loop body is still one function.');
+        self::assertSame(
+            1,
+            substr_count($match[1], 'schedule()'),
+            'The loop reschedules once, and only through the guard.',
+        );
+        self::assertStringContainsString('if (!atRest()) {', $match[1], 'The reschedule is conditional on the field having work.');
+    }
+
     #[Test]
     public function theStylesheetIsSelfContained(): void
     {
@@ -1059,7 +1113,7 @@ final class BosonThemeTest extends TestCase
     #[Test]
     public function theModuleSurfacesAndTheActiveTocLinkAreStyled(): void
     {
-        $css = InlineCss::file('Modules/Boson/assets/critical/boson.css');
+        $css = InlineCss::files((new BosonTheme())->criticalCss(PageSurface::ARTICLE));
         $script = InlineJs::file('Modules/Boson/assets/scripts/boson.js');
 
         foreach ([
@@ -1226,7 +1280,7 @@ final class BosonThemeTest extends TestCase
     /**
      * @param string $icon stored `nav_toggle_icon`; '' means "nothing stored"
      */
-    private static function shell(string $icon = ''): ShellContext
+    private static function shell(string $icon = '', bool $signedIn = false): ShellContext
     {
         return ShellContext::from(
             'Boson Test',
@@ -1241,7 +1295,7 @@ final class BosonThemeTest extends TestCase
             ['sk' => '/blog', 'en' => '/en/blog'],
             'sk',
             ['sk', 'en'],
-            false,
+            $signedIn,
             '' === $icon ? [] : ['nav_toggle_icon' => $icon],
         );
     }

@@ -4,18 +4,20 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Boson\Theme;
 
-use Themes\AssetManager;
-use View\InlineJs;
+use Modules\Core\Application\Services\AssetManager;
+use Modules\Core\Application\Services\View\InlineJs;
 use Modules\Core\Domain\MarkRoutePolicy;
-use Shell\ShellNavItem;
-use Themes\ThemeSetting;
+use Modules\Core\Application\Services\ShellContextProviderRegistry;
+use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\AuthPageTheme;
-use Themes\DocsPageTheme;
-use Themes\ThemeModule;
-use Themes\ThemeSettings;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Domain\Contracts\AuthPageTheme;
+use Modules\Core\Domain\Contracts\DocsPageTheme;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Domain\Contracts\ThemeModule;
+use Modules\Core\Domain\Contracts\ThemeSettings;
 
 /**
  * BosonTheme — the boson-php marketing site's design as a kernel theme module.
@@ -148,9 +150,9 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
     /**
      * @return list<string> src/-relative, resolved by InlineCss
      */
-    public function criticalCss(): array
+    public function criticalCss(?string $surface = null): array
     {
-        return ['Modules/Boson/assets/critical/boson.css'];
+        return FrontendLayout::themeCriticalCss(['Modules/Boson/assets/critical/boson.css'], $surface);
     }
 
     /**
@@ -225,15 +227,23 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
      * Escape. The input is the header's FIRST child, because the panel and the
      * label are both reached with `~` — the order is a contract, pinned by the
      * test.
+     *
+     * The Mark action follows `ShellContext::$signedIn`. Measured on
+     * responsive.sk 2026-11-25: the header linked `/mark` to every anonymous
+     * reader, so the panel's own 302-to-login was the first thing a visitor
+     * could click. The shell provider already drops the stored admin row for
+     * the same reason; the theme's own shortcut had no such gate.
      */
     public function header(ShellContext $context): string
     {
         $hasNav = [] !== $context->headerNav;
         $blog = self::urlPrefix($context->activeLocale) . '/blog';
+        $copy = self::shellCopy($context);
         $search = '<form class="bo-search" method="get" action="' . self::e($blog) . '" role="search">'
-            . '<label class="bo-sr-only" for="bo-search-input">Search</label>'
+            . '<label class="bo-sr-only" for="bo-search-input">'
+            . self::e($copy['nav.search_articles'] ?? 'Search articles') . '</label>'
             . '<input class="bo-search__input" id="bo-search-input" type="search" name="q"'
-            . ' placeholder="Search" autocomplete="off">'
+            . ' placeholder="' . self::e($copy['nav.search'] ?? 'Search') . '" autocomplete="off">'
             . '</form>';
 
         return '<header class="bo-header" data-bo-header>' . "\n"
@@ -248,8 +258,10 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . $search
             . '<div class="bo-actions">' . "\n"
             . $this->localeLinks($context)
-            . '<a class="bo-btn bo-btn--ghost bo-actions__mark" href="'
-            . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>' . "\n"
+            . ($context->signedIn
+                ? '<a class="bo-btn bo-btn--ghost bo-actions__mark" href="'
+                    . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>' . "\n"
+                : '')
             . self::burgerLabel($hasNav, self::navIcon($context))
             . '</div>' . "\n"
             . '<span class="bo-header__dots" aria-hidden="true"></span>' . "\n"
@@ -268,11 +280,16 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
      * the footer was the one place on an `/en` page that switched language
      * under the visitor. `self::urlPrefix()` is '' for the default locale, so
      * Slovak markup is unchanged.
+     *
+     * `Home` and `Blog` are read from the `nav` copy for the same reason the
+     * menu is: the literal pair was English on a Slovak page. `Mark` follows
+     * `$context->signedIn`, like the header's.
      */
     public function footer(ShellContext $context): string
     {
         $admin = MarkRoutePolicy::prefix();
         $blog = self::urlPrefix($context->activeLocale) . '/blog';
+        $copy = self::shellCopy($context);
         $secondary = '';
 
         foreach ($context->footerNav as $item) {
@@ -285,10 +302,14 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             . '<div class="bo-footer__content">' . "\n"
             . '<div class="bo-footer__top">' . "\n"
             . '<span class="bo-footer__holder" aria-hidden="true"></span>' . "\n"
-            . '<a class="bo-footer__social" href="' . self::e($blog) . '">Blog</a>' . "\n"
-            . '<a class="bo-footer__social" href="' . self::e($admin) . '">Mark</a>' . "\n"
+            . '<a class="bo-footer__social" href="' . self::e($blog) . '">'
+            . self::e($copy['nav.blog'] ?? 'Blog') . '</a>' . "\n"
+            . ($context->signedIn
+                ? '<a class="bo-footer__social" href="' . self::e($admin) . '">Mark</a>' . "\n"
+                : '')
             . '<span class="bo-footer__dots" aria-hidden="true"></span>' . "\n"
-            . '<a class="bo-footer__aside" href="/">Home</a>' . "\n"
+            . '<a class="bo-footer__aside" href="/">'
+            . self::e($copy['nav.home'] ?? 'Home') . '</a>' . "\n"
             . $this->localeLinks($context, 'bo-footer__aside')
             . '<span class="bo-footer__holder" aria-hidden="true"></span>' . "\n"
             . '</div>' . "\n"
@@ -432,7 +453,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
                     . self::e($context->editUrl) . '">' . self::e($context->editLabel) . '</a></p>')
             . ('' === $cover
                 ? ''
-                : '<img class="bo-article__cover" src="' . self::e($cover) . '" alt="" loading="eager" decoding="async">')
+                : '<img class="bo-article__cover" src="' . self::e($cover) . '" alt="' . self::e($context->coverAlt) . '" loading="eager" decoding="async">')
             . '</header>'
             . $context->inlineEditHtml
             . '<div class="bo-article__body">' . $context->bodyHtml . '</div>'
@@ -1057,7 +1078,7 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
             $cards .= '<article class="bo-card">'
                 . (null === $pair['image']
                     ? ''
-                    : '<img class="bo-card__cover" src="' . self::e($pair['image']) . '" alt=""'
+                    : '<img class="bo-card__cover" src="' . self::e($pair['image']) . '" alt="' . self::e($pair['title']) . '"'
                         . ' loading="' . $loading . '"' . $priority . ' decoding="async"'
                         . ' width="720" height="360"' . ($pair['imageSrcset'] ?? '') . '>')
                 . ('' === $meta ? '' : '<p class="bo-card__meta">' . $meta . '</p>')
@@ -1379,16 +1400,21 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         }
 
         $blog = $this->blogBaseFor($context->activeLocale);
+        $copy = self::shellCopy($context);
 
         return '<div class="bo-mobile" id="bo-mobile-menu">'
             . '<nav class="bo-mobile__nav" aria-label="Mobile">' . $links . '</nav>'
             . '<form class="bo-search-form bo-mobile__search" method="get" action="' . self::e($blog) . '" role="search">'
-            . '<label class="bo-sr-only" for="bo-mobile-search">Search articles</label>'
+            . '<label class="bo-sr-only" for="bo-mobile-search">'
+            . self::e($copy['nav.search_articles'] ?? 'Search articles') . '</label>'
             . '<input class="bo-search-form__input" id="bo-mobile-search" type="search" name="q"'
-            . ' placeholder="Search" autocomplete="off">'
-            . '<button class="bo-search-form__submit" type="submit">Search</button>'
+            . ' placeholder="' . self::e($copy['nav.search'] ?? 'Search') . '" autocomplete="off">'
+            . '<button class="bo-search-form__submit" type="submit">'
+            . self::e($copy['nav.search'] ?? 'Search') . '</button>'
             . '</form>'
-            . '<a class="bo-mobile__mark" href="' . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>'
+            . ($context->signedIn
+                ? '<a class="bo-mobile__mark" href="' . self::e(MarkRoutePolicy::prefix()) . '">Mark</a>'
+                : '')
             . '<div class="bo-mobile__locale">'
             . $this->localeLinks($context, 'bo-mobile__link bo-mobile__link--locale')
             . '</div>'
@@ -1473,6 +1499,22 @@ final class BosonTheme implements ThemeModule, AuthPageTheme, DocsPageTheme, The
         }
 
         return self::DEFAULT_COPY[$key] ?? '';
+    }
+
+    /**
+     * The shell chrome's words in the request's language.
+     *
+     * Page surfaces get their copy through `PageContext`; the header and the
+     * footer are rendered from a `ShellContext`, which carries no copy map, so
+     * they ask the shell port directly — the same `nav` group the menu labels
+     * are resolved from. An empty map (no Locales module) keeps the call
+     * sites' English floors.
+     *
+     * @return array<string, string>
+     */
+    private static function shellCopy(ShellContext $context): array
+    {
+        return ShellContextProviderRegistry::copy('nav', $context->activeLocale);
     }
 
     /**

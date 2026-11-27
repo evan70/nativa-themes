@@ -4,18 +4,19 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Erik\Tests;
 
-use Themes\AssetManager;
-use View\InlineCss;
+use Modules\Core\Application\Services\AssetManager;
+use Modules\Core\Application\Services\View\InlineCss;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Shell\PageContext;
-use Themes\FrontendLayout;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Domain\PageSurface;
 use Modules\Core\Interfaces\HTTP\Kernel;
 use Modules\Core\Interfaces\HTTP\Router;
-use Themes\ThemeKernel;
-use Themes\ThemeRegistry;
-use Themes\ThemeResolver;
+use Modules\Core\Interfaces\HTTP\ThemeKernel;
+use Modules\Core\Interfaces\HTTP\ThemeRegistry;
+use Modules\Core\Interfaces\HTTP\ThemeResolver;
 use Modules\Themes\Erik\Theme\ErikTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -519,7 +520,10 @@ final class ErikThemeTest extends TestCase
      * The markup above is what a tree WITHOUT a built bundle renders (the
      * critical subset is the fallback), so the fallback has to carry a rule for
      * every class the article emits — the Mono audit's assertion, applied to
-     * the one surface it could not see before.
+     * the one surface it could not see before. The fallback is the ARTICLE
+     * surface's list, base sheet plus the surface sheet: the reading rail moved
+     * out of the base, and asking for the base alone would now fail a page that
+     * renders the rail.
      */
     #[Test]
     public function theArticleVocabularyIsCoveredByTheCriticalStylesheet(): void
@@ -529,7 +533,7 @@ final class ErikThemeTest extends TestCase
             ['level' => 2, 'text' => 'Two', 'anchor' => 'two'],
         ]));
 
-        $css = InlineCss::file('Modules/Erik/assets/critical/erik.css');
+        $css = InlineCss::files((new ErikTheme())->criticalCss(PageSurface::ARTICLE));
 
         preg_match_all('/class="([^"]*)"/', $html, $matches);
 

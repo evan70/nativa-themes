@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Nativa\Tests;
 
-use Shell\ShellNavItem;
+use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
-use Themes\FrontendLayout;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeKernel;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Interfaces\HTTP\ThemeKernel;
 use Modules\Themes\Nativa\Theme\NativaTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

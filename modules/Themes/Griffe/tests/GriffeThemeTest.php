@@ -4,14 +4,14 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Griffe\Tests;
 
-use View\InlineCss;
-use Shell\ShellNavItem;
+use Modules\Core\Application\Services\View\InlineCss;
+use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Themes\FrontendLayout;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeRegistry;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Interfaces\HTTP\ThemeRegistry;
 use Modules\Themes\Griffe\Theme\GriffeTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

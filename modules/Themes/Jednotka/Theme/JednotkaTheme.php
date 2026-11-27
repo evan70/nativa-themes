@@ -5,15 +5,15 @@ declare(strict_types = 1);
 namespace Modules\Themes\Jednotka\Theme;
 
 use Modules\Markdown\Application\Services\MarkdownRenderer;
-use View\InlineJs;
-use Shell\ShellNavItem;
-use Themes\ThemeSetting;
+use Modules\Core\Application\Services\View\InlineJs;
+use Modules\Core\Domain\ShellNavItem;
+use Modules\Core\Domain\ThemeSetting;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Themes\FrontendLayout;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeModule;
-use Themes\ThemeSettings;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Domain\Contracts\ThemeModule;
+use Modules\Core\Domain\Contracts\ThemeSettings;
 
 /**
  * JednotkaTheme — the `jednotka` design, carried as a kernel theme module.
@@ -185,9 +185,9 @@ final class JednotkaTheme implements ThemeModule, ThemeSettings
      *
      * @return list<string>
      */
-    public function criticalCss(): array
+    public function criticalCss(?string $surface = null): array
     {
-        return FrontendLayout::BASE_CRITICAL_CSS;
+        return FrontendLayout::criticalCssFiles($surface);
     }
 
     /**

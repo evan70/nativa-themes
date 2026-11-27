@@ -4,12 +4,13 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Mono\Tests;
 
-use View\InlineCss;
-use Shell\ShellNavItem;
+use Modules\Core\Application\Services\View\InlineCss;
+use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
-use Themes\FrontendLayout;
-use Shell\PageContext;
-use Shell\ShellContext;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Domain\PageSurface;
 use Modules\Themes\Mono\Theme\MonoTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -493,7 +494,7 @@ final class MonoThemeTest extends TestCase
     {
         $this->assertStringContainsString(
             '.mo-toc__link--active',
-            InlineCss::file('Modules/Mono/assets/critical/mono.css'),
+            InlineCss::files((new MonoTheme())->criticalCss(PageSurface::ARTICLE)),
             'The active rule must ship in the stylesheet — a tracker with no style highlights invisibly.',
         );
     }

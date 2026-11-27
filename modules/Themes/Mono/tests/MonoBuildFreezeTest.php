@@ -4,9 +4,11 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Mono\Tests;
 
-use Themes\AssetManager;
-use View\InlineCss;
+use Modules\Core\Application\Services\AssetManager;
+use Modules\Core\Domain\PageSurface;
+use Modules\Core\Application\Services\View\InlineCss;
 use Modules\Core\Infrastructure\Paths\AppPaths;
+use Modules\Themes\Mono\Theme\MonoTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -138,9 +140,14 @@ final class MonoBuildFreezeTest extends TestCase
     #[Test]
     public function theBuiltStylesheetCoversEveryCriticalFallbackClass(): void
     {
-        $fallback = InlineCss::file('Modules/Mono/assets/critical/mono.css')
-            . InlineCss::file('Modules/Mono/assets/critical/mo-variants.css');
-        $css = $this->frozenCss();
+        $theme = new MonoTheme();
+        $fallback = InlineCss::files($theme->criticalCss());
+
+        foreach (PageSurface::all() as $surface) {
+            $fallback .= InlineCss::files($theme->criticalCss($surface));
+        }
+
+        $css = $this->frozenCssAll();
 
         preg_match_all('/\.mo-[a-z0-9-]+/', $fallback, $matches);
 
@@ -226,10 +233,30 @@ final class MonoBuildFreezeTest extends TestCase
         return $js;
     }
 
+    /** The base entry's stylesheet, the bytes a page without a surface gets. */
     private function frozenCss(): string
     {
-        $urls = (new AssetManager(self::BUNDLE))->cssUrls(self::BUNDLE);
+        return $this->frozenCssFrom((new AssetManager(self::BUNDLE))->cssUrls(self::BUNDLE));
+    }
 
+    /** Every stylesheet a page can resolve: base plus each named surface. */
+    private function frozenCssAll(): string
+    {
+        $assets = new AssetManager(self::BUNDLE);
+        $urls = $assets->cssUrls(self::BUNDLE);
+
+        foreach (PageSurface::all() as $surface) {
+            $urls = array_merge($urls, $assets->cssUrlsForSurface(self::BUNDLE, $surface));
+        }
+
+        return $this->frozenCssFrom(array_values(array_unique($urls)));
+    }
+
+    /**
+     * @param list<string> $urls
+     */
+    private function frozenCssFrom(array $urls): string
+    {
         $this->assertNotSame([], $urls, 'The frozen manifest names no `mono` CSS.');
 
         $css = '';

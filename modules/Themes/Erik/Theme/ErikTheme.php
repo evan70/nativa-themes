@@ -4,11 +4,12 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Erik\Theme;
 
-use Shell\ShellNavItem;
+use Modules\Core\Domain\ShellNavItem;
 use Modules\ContentLocale\Interfaces\HTTP\ContentLocaleServices;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeModule;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Domain\Contracts\ThemeModule;
 
 /**
  * ErikTheme — the dark-first public theme (er-* vocabulary), trimmed for the
@@ -48,9 +49,9 @@ final class ErikTheme implements ThemeModule
     /**
      * @return list<string> src/-relative, resolved by InlineCss
      */
-    public function criticalCss(): array
+    public function criticalCss(?string $surface = null): array
     {
-        return ['Modules/Erik/assets/critical/erik.css'];
+        return FrontendLayout::themeCriticalCss(['Modules/Erik/assets/critical/erik.css'], $surface);
     }
 
     public function themeInitScript(): string
@@ -286,7 +287,7 @@ final class ErikTheme implements ThemeModule
         }
 
         $media = null !== $fields['image']
-            ? '<img src="' . self::e($fields['image']) . '" alt="" loading="lazy">'
+            ? '<img src="' . self::e($fields['image']) . '" alt="' . self::e($fields['title']) . '" loading="lazy">'
             : '<span class="er-news-card__placeholder" aria-hidden="true"></span>';
 
         $meta = implode(' · ', array_filter([

@@ -4,15 +4,15 @@ declare(strict_types = 1);
 
 namespace Modules\Themes\Jednotka\Tests;
 
-use Themes\AssetManager;
-use View\InlineJs;
-use Shell\ShellNavItem;
+use Modules\Core\Application\Services\AssetManager;
+use Modules\Core\Application\Services\View\InlineJs;
+use Modules\Core\Domain\ShellNavItem;
 use Modules\Core\Infrastructure\Http\Request;
 use Modules\Core\Infrastructure\Paths\AppPaths;
-use Themes\FrontendLayout;
-use Shell\PageContext;
-use Shell\ShellContext;
-use Themes\ThemeRegistry;
+use Modules\Core\Interfaces\HTTP\FrontendLayout;
+use Modules\Core\Interfaces\HTTP\PageContext;
+use Modules\Core\Interfaces\HTTP\ShellContext;
+use Modules\Core\Interfaces\HTTP\ThemeRegistry;
 use Modules\Themes\Jednotka\Theme\JednotkaTheme;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -680,13 +680,45 @@ final class JednotkaThemeTest extends TestCase
         }
 
         $entries = json_decode((string) file_get_contents($manifest), true);
-        $file = is_array($entries) ? ($entries['src/' . self::ENTRY . '.ts']['css'][0] ?? null) : null;
 
-        if (!is_string($file)) {
+        if (!is_array($entries)) {
+            $this->markTestSkipped('The `jednotka` manifest is unreadable — rebuild the bundle.');
+        }
+
+        // Every stylesheet the bundle emits, base and each surface entry: the
+        // design is one vocabulary spread over two files since the article
+        // surface moved out of the base entry (2026-11-24).
+        $files = [];
+
+        foreach ($entries as $entry) {
+            if (!is_array($entry)) {
+                continue;
+            }
+
+            foreach ($entry['css'] ?? [] as $css) {
+                $files[] = $css;
+            }
+
+            $file = $entry['file'] ?? null;
+
+            if (is_string($file) && str_ends_with($file, '.css')) {
+                $files[] = $file;
+            }
+        }
+
+        $files = array_values(array_unique($files));
+
+        if ([] === $files) {
             $this->markTestSkipped(sprintf('The `jednotka` build declares no CSS for entry `%s`.', self::ENTRY));
         }
 
-        return (string) file_get_contents(AppPaths::instance()->public('dist/' . self::THEME . '/' . $file));
+        $css = '';
+
+        foreach ($files as $file) {
+            $css .= (string) file_get_contents(AppPaths::instance()->public('dist/' . self::THEME . '/' . $file));
+        }
+
+        return $css;
     }
 
     /**

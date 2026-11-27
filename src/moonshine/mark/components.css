@@ -38,6 +38,7 @@
 .m-btn-group .m-btn:last-child { border-radius: 0 var(--m-r-sm) var(--m-r-sm) 0; }
 .m-btn-group .m-btn:only-child { border-radius: var(--m-r-sm); }
 .m-btn-group .m-inline-form { display: inline-flex; align-items: stretch; margin: 0; padding: 0; border: none; }
+.m-btn-group .m-inline-form:only-child .m-btn { border-radius: var(--m-r-sm); }
 
 /* cba-* backward compat aliases */
 .cba__action {
@@ -79,11 +80,18 @@
 
 .m-form { display: grid; gap: 14px; max-width: 520px; }
 .m-form label { font-size: 13px; font-weight: 600; color: var(--m-ink); }
+.m-form .m-field { display: grid; gap: 4px; }
 .m-form input[type=text], .m-form input[type=email], .m-form input[type=password],
-.m-form select, .m-form textarea {
+.m-form input[type=datetime-local], .m-form select, .m-form textarea {
     width: 100%; padding: 9px 12px; border: 1px solid var(--m-border);
     border-radius: var(--m-r-md); font-size: 14px; font-family: inherit;
     background: var(--m-surface); color: var(--m-ink);
+}
+/* The native date/time picker follows the page theme, including its icon. */
+.m-form input[type=datetime-local] { color-scheme: dark; }
+:root[data-theme=light] .m-form input[type=datetime-local] { color-scheme: light; }
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme=dark]) .m-form input[type=datetime-local] { color-scheme: light; }
 }
 .m-form input:focus, .m-form select:focus, .m-form textarea:focus {
     outline: 2px solid var(--m-primary); outline-offset: 1px; border-color: transparent;
@@ -91,6 +99,7 @@
 .m-form .m-check { display: flex; align-items: center; gap: 8px; }
 .m-form .m-check input { width: auto; }
 .m-input { padding: 6px 10px; border: 1px solid var(--m-border); border-radius: var(--m-r-sm); background: var(--m-surface); color: var(--m-ink); }
+.m-form .m-input { padding: 9px 12px; }
 .m-input--filter { flex: 1; min-width: 160px; padding: 8px 12px; border: 1px solid var(--m-border); border-radius: var(--m-r-md); background: var(--m-surface); color: var(--m-ink); font-size: 14px; }
 .m-input--filter:focus { outline: none; border-color: var(--m-primary); box-shadow: 0 0 0 2px var(--m-accent-soft-alpha, var(--m-primary-soft)); }
 .m-input--compact { width: auto; padding: 4px 8px; font-size: 13px; }

@@ -1,0 +1,183 @@
+/**
+ * boson-listing.css — the index, search and author surfaces.
+ *
+ * Built from the same module catalogue stylesheet as the base sheet and listed
+ * after it in the manifest, so the cascade order is the order the blocks had
+ * inside the single sheet: base first, surface second.
+ */
+
+.bo-author {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+  padding: 3em 0;
+  border-bottom: 1px solid var(--bo-line);
+  margin-bottom: 3em;
+}
+
+.bo-author__avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--bo-line);
+  object-fit: cover;
+}
+
+.bo-author__name {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.bo-author__meta {
+  margin: 0.5em 0 0;
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  border-top: 1px solid var(--bo-line);
+  border-left: 1px solid var(--bo-line);
+}
+
+.bo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 2.5em;
+  border-right: 1px solid var(--bo-line);
+  border-bottom: 1px solid var(--bo-line);
+  transition: background 0.2s ease;
+}
+
+.bo-card:hover {
+  background: var(--bo-layer);
+}
+
+.bo-card__cover {
+  width: 100%;
+  height: 196px;
+  object-fit: cover;
+  border: 1px solid var(--bo-line);
+}
+
+.bo-card__meta {
+  margin: 0;
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bo-muted);
+}
+
+.bo-card__title {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.bo-card__title a:hover {
+  color: var(--bo-brand);
+}
+
+.bo-card__text {
+  margin: 0;
+  color: var(--bo-muted);
+  font-size: 15px;
+}
+
+.bo-card__more {
+  margin-top: auto;
+  padding-top: 1em;
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bo-brand);
+}
+
+.bo-empty {
+  padding: 3em 0;
+  color: var(--bo-muted);
+}
+
+.bo-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 2em 0;
+}
+
+.bo-chip {
+  padding: 0.5em 1em;
+  border: 1px solid var(--bo-line);
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bo-chip:hover {
+  border-color: var(--bo-brand);
+  color: var(--bo-brand);
+}
+
+.bo-chip--active {
+  background: var(--bo-brand);
+  border-color: var(--bo-brand);
+  color: #fff;
+}
+
+.bo-pager {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin: 3em 0 0;
+}
+
+.bo-pager__link,
+.bo-pager__page {
+  padding: 0.65em 1em;
+  border: 1px solid var(--bo-line);
+  font-family: var(--bo-font-title), sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bo-muted);
+}
+
+.bo-pager__link:hover,
+.bo-pager__page:hover {
+  border-color: var(--bo-brand);
+  color: var(--bo-brand);
+}
+
+.bo-pager__page--current {
+  background: var(--bo-brand);
+  border-color: var(--bo-brand);
+  color: #fff;
+}
+
+.bo-pager__page--current:hover {
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------------------
+ * Auth surfaces — statement left, one bordered panel right
+ * ------------------------------------------------------------------------ */
+
+/* The index surfaces at the phone breakpoint. */
+@media (max-width: 900px) {
+
+  .bo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bo-card {
+    padding: 1.75em;
+  }}

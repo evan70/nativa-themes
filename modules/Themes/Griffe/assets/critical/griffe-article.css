@@ -1,0 +1,26 @@
+/**
+ * griffe-article.css — the article surface sheet.
+ *
+ * Moved out of the base sheet with the surface that reads it. The
+ * build lists it after the base, so cascade order is unchanged.
+ */
+
+.gr-article { max-width: 46rem; }
+.gr-article__body :is(h2, h3) { letter-spacing: -.01em; }
+.gr-article__body a { color: var(--gr-accent); }
+.gr-article__meta { color: var(--gr-muted); }
+.gr-article pre {
+    background: var(--gr-ink);
+    color: var(--gr-ink-inv);
+    padding: 1rem 1.25rem;
+    border-radius: var(--gr-radius);
+    overflow-x: auto;
+}
+.gr-article code { font-size: .9em; }
+
+.gr-toc { border: 1px solid var(--gr-line); border-radius: var(--gr-radius); padding: 1rem 1.25rem; }
+.gr-toc__title { font-weight: 700; margin: 0 0 .5rem; }
+.gr-toc__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .35rem; }
+.gr-toc__link { color: var(--gr-muted); text-decoration: none; }
+.gr-toc__link:hover, .gr-toc__link--active { color: var(--gr-accent); }
+.gr-toc__item--sub { padding-left: 1rem; }

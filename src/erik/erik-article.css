@@ -1,0 +1,13 @@
+/**
+ * erik-article.css — the article surface entry, built from the theme source.
+ *
+ * A CSS-only input: no script wraps it, because the manifest names a
+ * stylesheet-only entry in `file` (measured 2026-11-24). The reading layout,
+ * the contents rail and the comment list are the only blocks moved here, and
+ * the homepage and every listing stop paying for them.
+ *
+ * The source is `src/erik/article.css` rather than a copy: one design, one
+ * file. `erik/index.css` no longer imports it, which is what makes the base
+ * entry smaller.
+ */
+@import './erik/article.css';

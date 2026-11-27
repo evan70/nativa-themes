@@ -1,0 +1,575 @@
+/**
+ * boson-article.css — the rules only a long-form reading page reads.
+ *
+ * The reading rail, the article heading scale, the ruled comment list and the
+ * prose primitives (lists, code fences, the syntax tokens they carry) live
+ * here, not in `boson.css`. A homepage, a listing and a search page made no use
+ * of any of them, and inlining them was 13 kB of rules that could not match a
+ * single element.
+ *
+ * Cascade: the build emits this file after `boson.css`, in the order the blocks
+ * had inside the single sheet, so specificity and order are what they were. The
+ * `boson.css` header's contract still holds: no @import, no remote font, no
+ * image request, and no rule reads `[data-theme]`.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Article
+ * ------------------------------------------------------------------------ */
+
+.bo-page--article {
+  padding-top: 3em;
+}
+
+.bo-article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 4em;
+}
+
+.bo-article-layout__main {
+  min-width: 0;
+}
+
+/* Comments and reader questions are composed by the action, not by the
+   article method, so they arrive as a tail. The theme places them in the
+   article's own reading column here; appended raw they sit outside the page
+   container and run to the viewport edge. */
+.bo-page--article-tail {
+  padding-top: 0;
+}
+
+.bo-page--article-tail .bo-comments,
+.bo-page--article-tail .bo-questions {
+  margin-top: 0;
+}
+
+.bo-page--article-tail .bo-questions {
+  margin-top: 4em;
+}
+
+.bo-article__head {
+  padding: 3em 0;
+  border-bottom: 1px solid var(--bo-line);
+  margin-bottom: 3em;
+}
+
+.bo-article__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.bo-article__meta {
+  margin: 1.5em 0 0;
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bo-muted);
+}
+
+.bo-article__views {
+  margin-left: 1em;
+}
+
+.bo-article__edit {
+  margin: 0.75em 0 0;
+}
+
+.bo-article__edit-link {
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bo-brand);
+}
+
+.bo-article__cover {
+  width: 100%;
+  margin-top: 2em;
+  border: 1px solid var(--bo-line);
+}
+
+.bo-article__body {
+  font-size: 1.05rem;
+}
+
+.bo-article__body h2,
+.bo-article__body h3,
+.bo-article__body h4 {
+  margin: 2em 0 0.6em;
+  line-height: 1.15;
+}
+
+/* Article headings are section markers, not the homepage display scale:
+   a 4rem `h2` per section burns a screen of height and makes six sections
+   read as six identical walls. */
+.bo-article__body h2 {
+  margin: 2.25em 0 0.65em;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+}
+
+/* A `Časť I — Title` heading carries the numbering as a label and spends the
+   display scale on the title, matching the contents rail. MarkdownRenderer
+   emits the two spans; the dash between them is only for the TOC text. */
+.bo-article__body h2 [data-heading-prefix] {
+  display: block;
+  margin-bottom: 0.35em;
+  color: var(--bo-brand);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 0.48em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bo-article__body h2 [data-heading-prefix]::before {
+  content: "//";
+  margin-right: 0.5em;
+}
+
+.bo-article__body h2 [data-heading-dash] {
+  display: none;
+}
+
+.bo-article__body h2 [data-heading-title] {
+  display: block;
+}
+
+.bo-article__body h3 {
+  margin: 1.6em 0 0.45em;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.bo-article__body h4 {
+  margin: 1.3em 0 0.4em;
+  font-size: 1.1rem;
+}
+
+.bo-article__body a {
+  color: var(--bo-brand);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bo-article__body img {
+  border: 1px solid var(--bo-line);
+}
+
+.bo-article__body hr {
+  border: 0;
+  border-top: 1px solid var(--bo-line);
+  margin: 3em 0;
+}
+
+.bo-article__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 3em;
+  padding-top: 2em;
+  border-top: 1px solid var(--bo-line);
+}
+
+.bo-article__tags a {
+  padding: 0.4em 0.9em;
+  border: 1px solid var(--bo-line);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bo-muted);
+}
+
+.bo-article__tags a:hover {
+  border-color: var(--bo-brand);
+  color: var(--bo-brand);
+}
+
+.bo-toc {
+  position: sticky;
+  top: calc(var(--bo-header) + 2em);
+  align-self: flex-start;
+  border: 1px solid var(--bo-line);
+  padding: 1.5em;
+}
+
+.bo-toc__disclosure {
+  margin: 0;
+}
+
+.bo-toc__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  min-height: 44px;
+  margin: 0 0 1em;
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bo-muted);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.bo-toc__title::-webkit-details-marker {
+  display: none;
+}
+
+.bo-toc__title::after {
+  content: "+";
+  color: var(--bo-brand);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.bo-toc__disclosure[open] .bo-toc__title::after {
+  content: "\2212";
+}
+
+.bo-toc__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bo-toc__item {
+  margin: 0.5em 0;
+}
+
+.bo-toc__item--group {
+  margin: 0.65em 0;
+}
+
+.bo-toc__item--sub {
+  margin: 0.3em 0;
+  padding-left: 0.8em;
+}
+
+/* The section's sublinks stay folded until that section is the one being
+   read, so the rail is a handful of sections, not a flat list of every
+   heading in the article. */
+.bo-toc__sublist {
+  display: none;
+  margin: 0.35em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bo-toc__item--group[data-toc-active] .bo-toc__sublist {
+  display: block;
+}
+
+.bo-toc__link {
+  display: block;
+  padding-left: 0.6em;
+  border-left: 2px solid transparent;
+  color: var(--bo-muted);
+  font-size: 14px;
+  line-height: 1.4;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+/* `Časť I — Title` on every line is the same words six times. The kicker
+   keeps the numbering as a label and lets the title carry the line. */
+.bo-toc__kicker {
+  display: block;
+  margin-bottom: 0.15em;
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.bo-toc__text {
+  display: block;
+}
+
+.bo-toc__link--sub {
+  font-size: 13px;
+}
+
+.bo-toc__link:hover,
+.bo-toc__link--active,
+.bo-toc__link[aria-current="true"] {
+  border-left-color: var(--bo-brand);
+  color: var(--bo-brand);
+}
+
+.bo-toc__link--active .bo-toc__kicker,
+.bo-toc__link[aria-current="true"] .bo-toc__kicker {
+  color: var(--bo-brand);
+}
+
+/* ---------------------------------------------------------------------------
+ * Lists and code
+ * ------------------------------------------------------------------------ */
+
+.bo-copy {
+  position: absolute;
+  top: 0.75em;
+  right: 0.75em;
+  padding: 0.35em 0.7em;
+  border: 1px solid var(--bo-line);
+  background: var(--bo-layer);
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.bo-copy:hover {
+  border-color: var(--bo-brand);
+  color: var(--bo-brand);
+}
+
+.bo-copy--done {
+  border-color: var(--bo-brand);
+  color: var(--bo-brand);
+}
+
+.bo-code-badge {
+  position: absolute;
+  top: 0.75em;
+  left: 0.75em;
+  padding: 0.2em 0.5em;
+  border: 1px solid var(--bo-line);
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.bo-code-badge + code,
+pre.bo-has-badge > code {
+  display: block;
+  padding-top: 1.5em;
+}
+
+/* Syntax-highlight markers — the shared contract every theme carries. */
+.tok-keyword { color: #ff8a65; }
+.tok-string { color: #a5d6a7; }
+.tok-comment { color: #8b8fa3; font-style: italic; }
+.tok-number { color: #ffd54f; }
+.tok-function { color: #82b1ff; }
+.tok-operator { color: #ffab91; }
+.tok-property { color: #b0bec5; }
+.tok-type { color: #80cbc4; }
+.tok-variable { color: #ce93d8; }
+.tok-punctuation { color: #90a4ae; }
+.tok-tag { color: #ff8a65; }
+
+/* Comments and questions share the article's ruled list vocabulary. */
+.bo-comments,
+.bo-questions {
+  margin-top: 4em;
+  padding-top: 3em;
+  border-top: 1px solid var(--bo-line);
+}
+
+.bo-comments__title,
+.bo-questions__title {
+  margin: 0 0 1.5em;
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.bo-comments__count,
+.bo-questions__count {
+  color: var(--bo-brand);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 13px;
+}
+
+.bo-comments__empty,
+.bo-questions__empty {
+  color: var(--bo-muted);
+}
+
+.bo-comments__list,
+.bo-questions__list {
+  margin: 0 0 3em;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--bo-line);
+}
+
+.bo-comments__item,
+.bo-questions__item {
+  padding: 1.5em 0;
+  border-bottom: 1px solid var(--bo-line);
+}
+
+.bo-comments__meta,
+.bo-questions__meta {
+  margin-bottom: 0.75em;
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bo-comments__body,
+.bo-questions__body,
+.bo-questions__answer {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.bo-questions__answer {
+  margin-top: 0.5em;
+  padding-left: 1em;
+  border-left: 2px solid var(--bo-line-strong);
+  color: var(--bo-muted);
+}
+
+.bo-comments__form,
+.bo-questions__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  max-width: 640px;
+}
+
+.bo-comments__identity,
+.bo-questions__hint {
+  margin: 0 0 0.5em;
+  color: var(--bo-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.bo-comments__label,
+.bo-questions__label {
+  margin-top: 0.5em;
+  color: var(--bo-muted);
+  font-family: var(--bo-font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.bo-comments__input,
+.bo-questions__input,
+.bo-comments__textarea,
+.bo-questions__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.9em 1em;
+  border: 1px solid var(--bo-line-strong);
+  background: var(--bo-bg);
+  color: var(--bo-text);
+  font-family: var(--bo-font-main), sans-serif;
+  font-size: 15px;
+}
+
+.bo-comments__input:focus,
+.bo-questions__input:focus,
+.bo-comments__textarea:focus,
+.bo-questions__textarea:focus {
+  outline: none;
+  border-color: var(--bo-brand);
+}
+
+.bo-comments__textarea,
+.bo-questions__textarea {
+  resize: vertical;
+}
+
+.bo-comments__button,
+.bo-questions__button {
+  align-self: flex-start;
+  margin-top: 1em;
+  height: var(--bo-ui);
+  padding: 0 2em;
+  border: 0;
+  background: var(--bo-btn);
+  color: var(--bo-brand);
+  font-family: var(--bo-font-title), sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.bo-comments__button:hover,
+.bo-questions__button:hover {
+  background: var(--bo-btn-hover);
+}
+
+.bo-comments__error,
+.bo-questions__error {
+  margin: 0 0 1em;
+  padding: 0.75em 1em;
+  border: 1px solid var(--bo-brand-deep);
+  background: rgba(249, 57, 4, 0.08);
+  color: var(--bo-text);
+  font-size: 14px;
+}
+
+.bo-questions__sent {
+  margin: 0 0 1.5em;
+  padding: 0.75em 1em;
+  border-left: 2px solid var(--bo-brand);
+  color: var(--bo-muted);
+  font-size: 14px;
+}
+
+/* The reading rail keeps its column down to 1024px — the breakpoint the
+   kernel's reader layout uses — so on a 1024px window it still floats beside
+   the prose instead of moving above the article at 1100px. The chrome above
+   (search, burger) keeps switching at 1100px: that is header space, not the
+   rail's. */
+@media (max-width: 1023px) {
+  .bo-article-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bo-toc {
+    position: static;
+    order: -1;
+    margin-bottom: 2em;
+  }
+}
+
+@media (max-width: 900px) {
+
+  .bo-article-layout {
+    gap: 2em;
+  }
+
+  .bo-article__head {
+    padding: 2em 0;
+    margin-bottom: 2em;
+  }
+
+  .bo-comments,
+  .bo-questions {
+    margin-top: 3em;
+    padding-top: 2em;
+  }
+
+  .bo-toc {
+    padding: 1em 1.25em;
+    border-color: var(--bo-line-strong);
+  }
+
+  .bo-toc__title {
+    margin-bottom: 0;
+  }
+
+  .bo-toc__disclosure[open] .bo-toc__title {
+    margin-bottom: 1em;
+  }
+}
