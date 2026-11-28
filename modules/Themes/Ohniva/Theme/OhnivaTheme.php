@@ -194,7 +194,7 @@ final class OhnivaTheme implements AuthPageTheme, ThemeModule
         }
 
         return '<a class="oh-skip" href="#content">Preskočiť na obsah</a>' . "\n"
-            . '<div class="oh-backdrop" aria-hidden="true">' . $slides . '</div>' . "\n"
+            . '<div class="oh-backdrop" aria-hidden="true">' . $slides . '<div class="oh-backdrop__veil"></div></div>' . "\n"
             . '<header class="oh-header">' . "\n"
             . '<div class="oh-header__inner">' . "\n"
             . '<a class="oh-brand" href="/">'

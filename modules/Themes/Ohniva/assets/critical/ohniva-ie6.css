@@ -49,6 +49,10 @@
     display: block;
 }
 
+.oh-ie6 .oh-backdrop__veil {
+    display: none;
+}
+
 .oh-ie6 .oh-header,
 .oh-ie6 .oh-main,
 .oh-ie6 .oh-footer {

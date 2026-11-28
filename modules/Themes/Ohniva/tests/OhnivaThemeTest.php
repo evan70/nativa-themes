@@ -292,6 +292,44 @@ final class OhnivaThemeTest extends TestCase
     }
 
     #[Test]
+    public function theBackdropVeilKeepsTheHeaderReadable(): void
+    {
+        $header = (new OhnivaTheme())->header(self::shell());
+        $css = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva.css');
+        $ie6 = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva-ie6.css');
+
+        $this->assertMatchesRegularExpression(
+            '/class="oh-slide[^"]*"[^>]*>.*<div class="oh-backdrop__veil"><\/div>\s*<\/div>/s',
+            $header,
+            'The veil follows the slides inside the backdrop.',
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\.oh-backdrop__veil\s*\{[^}]*rgba\s*\([^}]*repeating-linear-gradient[^}]*linear-gradient/s',
+            $css,
+            'The modern sheet darkens the photograph and draws the grid and the top gradient.',
+        );
+
+        $this->assertMatchesRegularExpression(
+            '/\.oh-ie6 \.oh-backdrop__veil\s*\{[^}]*display\s*:\s*none/s',
+            $ie6,
+            'IE6 hides the veil, because it cannot draw rgba or a gradient.',
+        );
+    }
+
+    #[Test]
+    public function theBackdropPhotoFillsTheViewport(): void
+    {
+        $css = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva.css');
+
+        $this->assertMatchesRegularExpression(
+            '/\.oh-slide\s*\{[^}]*width\s*:\s*100%[^}]*height\s*:\s*100%[^}]*object-fit\s*:\s*cover/s',
+            $css,
+            'The 600 x 400 photograph covers the fixed backdrop instead of sitting in a corner.',
+        );
+    }
+
+    #[Test]
     public function theBackdropStopsForReducedMotion(): void
     {
         $script = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/scripts/ohniva.js');
