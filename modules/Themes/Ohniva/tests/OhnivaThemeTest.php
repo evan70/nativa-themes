@@ -122,9 +122,84 @@ final class OhnivaThemeTest extends TestCase
     }
 
     #[Test]
-    public function theThemeStylesheetStaysInsideTheIe6Baseline(): void
+    public function theHomepageCarriesTheTemplateRailAndBanners(): void
     {
-        $css = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva.css');
+        $theme = new OhnivaTheme();
+        $home = $theme->homepage(self::homepageContext());
+
+        $this->assertMatchesRegularExpression(
+            '#<h1[^>]*>[^<]*<b>[^<]+</b>#',
+            $home,
+            'The page header carries its bold second clause.',
+        );
+        $this->assertStringContainsString('oh-welcome', $home);
+        $this->assertSame(1, substr_count($home, 'oh-welcome__header'), 'One welcome panel header.');
+        $this->assertStringContainsString('oh-welcome__body', $home);
+        $this->assertStringContainsString('oh-welcome__footer', $home);
+        $this->assertSame(8, substr_count($home, 'oh-gallery__link'), 'The gallery lists eight thumbnails.');
+        $this->assertSame(4, substr_count($home, 'oh-rail__group'), 'The rail holds four groups.');
+        $this->assertSame(9, substr_count($home, 'oh-rail__link'), 'The rail holds nine show links.');
+        $this->assertSame(4, substr_count($home, 'oh-banner '), 'Four order banners.');
+
+        foreach (OhnivaTheme::BANNERS as [$kicker, $title, $page, $form]) {
+            $this->assertStringContainsString(self::e($kicker), $home);
+            $this->assertStringContainsString(self::e($title), $home);
+            $this->assertStringContainsString('href="/' . $page . '#form-' . $form . '"', $home);
+        }
+
+        $own = $theme->homepage(PageContext::forHomepage(
+            Request::create('GET', '/'),
+            OhnivaTheme::NAME,
+            'sk',
+            copy: [
+                'home.hero_title' => 'Minimálny PHP 8.5 starter kit',
+                'home.ohniva_title' => 'Klientsky nadpis',
+            ],
+        ));
+
+        $this->assertStringContainsString('Klientsky nadpis', $own, 'The theme reads its own title key.');
+        $this->assertStringNotContainsString('starter kit', $own, 'The starter kit title never reaches the client page.');
+    }
+
+    #[Test]
+    public function theTemplateLinksNameSeededPages(): void
+    {
+        $seed = APP_BASE_PATH . '/bin/export/ohniva-show/seed/pages';
+
+        if (!is_dir($seed)) {
+            $this->markTestSkipped('The ohniva-show seed is pruned; the export carries no bin/export.');
+        }
+
+        $slugs = [];
+
+        foreach (glob($seed . '/*.md') ?: [] as $file) {
+            $slugs[] = basename($file, '.md');
+        }
+
+        $theme = new OhnivaTheme();
+
+        $home = $theme->homepage(self::homepageContext());
+
+        foreach (OhnivaTheme::RAIL as $label => $links) {
+            $this->assertStringContainsString(self::e($label), $home, 'The rail names its group ' . $label . '.');
+
+            foreach ($links as $slug => $text) {
+                $this->assertContains($slug, $slugs, 'The rail names the seeded page ' . $slug . '.');
+                $this->assertStringContainsString('href="/' . $slug . '"', $home);
+                $this->assertStringContainsString(self::e($text), $home);
+            }
+        }
+
+        foreach (OhnivaTheme::BANNERS as [, , $slug]) {
+            $this->assertContains($slug, $slugs, 'The banner names the seeded page ' . $slug . '.');
+        }
+    }
+
+    #[Test]
+    public function theIe6StylesheetStaysInsideTheIe6Baseline(): void
+    {
+        $css = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva-ie6.css');
+        $css = (string) preg_replace('!/\*.*?\*/!s', '', $css);
         $forbidden = [
             '/display\s*:\s*(inline-)?(flex|grid)/i',
             '/grid-template/i',
@@ -152,7 +227,103 @@ final class OhnivaThemeTest extends TestCase
         ];
 
         foreach ($forbidden as $pattern) {
-            $this->assertDoesNotMatchRegularExpression($pattern, $css, 'The theme layer uses an IE6-forbidden construct: ' . $pattern);
+            $this->assertDoesNotMatchRegularExpression($pattern, $css, 'The IE6 sheet uses a construct IE6 cannot lay out: ' . $pattern);
+        }
+
+        $this->assertFalse(str_contains($css, 'expression('), 'No expression() rule, the old site used one for glyphs.');
+        $this->assertStringContainsString('.oh-ie6', $css, 'The sheet is scoped to the class the init script sets.');
+
+        $selectors = (string) preg_replace('!/\*.*?\*/!s', '', $css);
+        $selectors = (string) preg_replace('/\{[^}]*\}/', "}\n", $selectors);
+
+        foreach (explode("}\n", $selectors) as $ruleset) {
+            $ruleset = trim($ruleset);
+
+            if ('' === $ruleset) {
+                continue;
+            }
+
+            foreach (explode(',', $ruleset) as $selector) {
+                $selector = trim($selector);
+
+                if ('' === $selector || str_starts_with($selector, '@')) {
+                    continue;
+                }
+
+                $this->assertStringContainsString(
+                    '.oh-ie6',
+                    $selector,
+                    'Every IE6 selector is scoped by .oh-ie6: ' . $selector,
+                );
+            }
+        }
+    }
+
+    #[Test]
+    public function theModernStylesheetKeepsTheTemplateLook(): void
+    {
+        $css = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva.css');
+
+        foreach (['latolight', 'latobold', 'latin_modern_roman_dunhil10Rg', 'engebrechtreregular'] as $family) {
+            $this->assertStringContainsString($family, $css, 'The modern sheet declares ' . $family . '.');
+        }
+
+        $this->assertMatchesRegularExpression('/position\s*:\s*fixed/i', $css, 'The backdrop is fixed.');
+        $this->assertMatchesRegularExpression('/text-shadow\s*:/i', $css);
+        $this->assertMatchesRegularExpression('/border-radius\s*:/i', $css);
+        $this->assertMatchesRegularExpression('/linear-gradient/i', $css);
+        $this->assertMatchesRegularExpression('/box-shadow\s*:/i', $css);
+        $this->assertMatchesRegularExpression('/rgba\s*\(/i', $css);
+        $this->assertMatchesRegularExpression('/transition\s*:/i', $css);
+    }
+
+    #[Test]
+    public function theBackdropShipsEverySlide(): void
+    {
+        $this->assertCount(8, OhnivaTheme::SLIDES, 'The template backdrop carries eight photographs.');
+
+        $header = (new OhnivaTheme())->header(self::shell());
+
+        foreach (OhnivaTheme::SLIDES as $slide) {
+            $path = '/themes/ohniva/slides/' . $slide . '.jpg';
+            $this->assertFileExists(APP_BASE_PATH . '/public' . $path, 'The slide ' . $slide . ' is shipped.');
+            $this->assertStringContainsString('src="' . $path . '"', $header, 'The backdrop names ' . $slide . '.');
+        }
+    }
+
+    #[Test]
+    public function theBackdropStopsForReducedMotion(): void
+    {
+        $script = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/scripts/ohniva.js');
+        $css = (string) file_get_contents(APP_BASE_PATH . '/modules/Themes/Ohniva/assets/critical/ohniva.css');
+
+        $this->assertStringContainsString('prefers-reduced-motion: reduce', $script, 'The rotation asks the reader first.');
+        $this->assertMatchesRegularExpression('/matchMedia\s*\(/', $script);
+        $this->assertMatchesRegularExpression(
+            '/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[^}]*transition/i',
+            $css,
+            'The stylesheet motion sits behind the same query.',
+        );
+
+        $header = (new OhnivaTheme())->header(self::shell());
+        $this->assertStringContainsString('oh-slide--active', $header, 'The first slide is the no-JavaScript backdrop.');
+    }
+
+    #[Test]
+    public function theGalleryShipsEveryThumbnail(): void
+    {
+        $this->assertCount(8, OhnivaTheme::THUMBS);
+
+        $home = (new OhnivaTheme())->homepage(self::homepageContext());
+
+        foreach (OhnivaTheme::THUMBS as $thumb) {
+            $path = APP_BASE_PATH . '/public/themes/ohniva/thumbs/' . $thumb . '.jpg';
+            $this->assertFileExists($path, 'The thumbnail ' . $thumb . ' is shipped.');
+
+            $size = getimagesize($path);
+            $this->assertIsArray($size);
+            $this->assertSame([140, 105], [$size[0], $size[1]], 'The thumbnail ' . $thumb . ' is 140 x 105.');
+            $this->assertStringContainsString('src="/themes/ohniva/thumbs/' . $thumb . '.jpg"', $home);
         }
     }
 
@@ -177,7 +348,8 @@ final class OhnivaThemeTest extends TestCase
 
         preg_match_all('#(?:url\(["\']?|src=["\'])(/themes/ohniva/[^"\')]+)#', $html . $css, $matches);
 
-        foreach (array_unique($matches[1]) as $path) {
+        foreach (array_unique($matches[1]) as $raw) {
+            $path = (string) preg_replace('/[?#].*$/', '', $raw);
             $named[] = $path;
             $this->assertFileExists(APP_BASE_PATH . '/public' . $path, sprintf('The theme names %s but does not ship it.', $path));
         }
@@ -194,8 +366,11 @@ final class OhnivaThemeTest extends TestCase
         $theme = new OhnivaTheme();
         $css = InlineCss::files($theme->criticalCss());
 
+        $this->assertCount(3, $theme->criticalCss(), 'Cascade, the modern sheet and the IE6 sheet.');
         $this->assertStringContainsString('.oh-header', $css);
         $this->assertStringContainsString('.oh-panel', $css);
+        $this->assertStringContainsString('.oh-backdrop', $css);
+        $this->assertStringContainsString('.oh-ie6', $css);
         $this->assertStringContainsString('oh-c-site-center', $css);
         $this->assertGreaterThan(20_000, strlen($css), 'The no-build stylesheet is the complete design, not a subset.');
     }
@@ -234,6 +409,11 @@ final class OhnivaThemeTest extends TestCase
         $this->assertSame(OhnivaTheme::NAME, $theme->bundle());
         $this->assertSame(OhnivaTheme::NAME, $theme->jsKey());
         $this->assertSame('oh', $theme->prefix());
+    }
+
+    private static function e(string $value): string
+    {
+        return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     private static function afterModules(string $path): string

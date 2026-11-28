@@ -1,0 +1,240 @@
+/*
+ * ohniva-ie6.css > the template's IE6 rules, scoped to the browser.
+ *
+ * The original page wrapped <html> in conditional comments and gave IE6 its
+ * own class. The kernel owns <html>, so the init script sets `oh-ie6` instead
+ * and every rule here is scoped under it: a modern browser inlines the file
+ * and matches nothing.
+ *
+ * The rules are CSS2.1 with the star and underscore hacks the template used.
+ * No expression rule, no fixed positioning, no transparency, no shadows and no
+ * min-width or min-height. The star and underscore hacks are kept on purpose:
+ * they are what makes a float layout in IE6 work.
+ */
+
+.oh-ie6 {
+    *zoom: 1;
+}
+
+.oh-ie6 body {
+    font-size: 17px;
+    text-align: center;
+}
+
+.oh-ie6 .oh-skip {
+    position: absolute;
+    left: -9999px;
+}
+
+.oh-ie6 .oh-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.oh-ie6 .oh-slide {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    width: 600px;
+    height: 400px;
+}
+
+.oh-ie6 .oh-slide--active {
+    display: block;
+}
+
+.oh-ie6 .oh-header,
+.oh-ie6 .oh-main,
+.oh-ie6 .oh-footer {
+    position: relative;
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-header__inner,
+.oh-ie6 .oh-content,
+.oh-ie6 .oh-footer__inner {
+    width: 920px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.oh-ie6 .oh-shadow {
+    height: 79px;
+    background: transparent url("/themes/ohniva/header-shadow.png") no-repeat center top;
+}
+
+.oh-ie6 .oh-brand {
+    float: left;
+    display: inline;
+    width: 125px;
+    height: 125px;
+}
+
+.oh-ie6 .oh-brand__logo {
+    display: block;
+    width: 125px;
+    height: 125px;
+}
+
+.oh-ie6 .oh-nav {
+    float: right;
+    padding: 40px 0 0 0;
+    _padding: 38px 0 0 0;
+}
+
+.oh-ie6 .oh-nav__item {
+    float: left;
+    display: inline;
+    margin: 0 0 0 14px;
+}
+
+.oh-ie6 .oh-nav__link {
+    display: block;
+    _height: 1%;
+    color: #fcedc0;
+}
+
+.oh-ie6 .oh-layout {
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-main-col {
+    float: left;
+    display: inline;
+    width: 600px;
+}
+
+.oh-ie6 .oh-rail {
+    float: right;
+    display: inline;
+    width: 290px;
+}
+
+.oh-ie6 .oh-panel,
+.oh-ie6 .oh-rail__group,
+.oh-ie6 .oh-banner,
+.oh-ie6 .oh-card,
+.oh-ie6 .oh-section {
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-panel__header,
+.oh-ie6 .oh-rail__head,
+.oh-ie6 .oh-section__title {
+    background: #3d5f78 url("/themes/ohniva/panel-blue.jpg") repeat;
+}
+
+.oh-ie6 .oh-panel__body,
+.oh-ie6 .oh-welcome__body {
+    _height: 1%;
+}
+
+.oh-ie6 .oh-panel__footer,
+.oh-ie6 .oh-rail__foot {
+    background: #24282b url("/themes/ohniva/pattern.gif") repeat;
+}
+
+.oh-ie6 .oh-gallery {
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-gallery__link {
+    float: left;
+    display: inline;
+    margin: 0 5px 5px 0;
+    border: 1px solid #1b1b1b;
+}
+
+.oh-ie6 .oh-gallery__thumb {
+    display: block;
+    width: 140px;
+    height: 105px;
+}
+
+.oh-ie6 .oh-banner {
+    float: left;
+    display: inline;
+    width: 140px;
+    _width: 142px;
+    margin: 0 6px 0 0;
+    border: 1px solid #1b1b1b;
+    background: #2f3336 url("/themes/ohniva/panel-blue.jpg") repeat;
+}
+
+.oh-ie6 .oh-banner__head {
+    padding: 10px 10px 6px 10px;
+    border-bottom: 1px solid #1b1b1b;
+    text-align: center;
+}
+
+.oh-ie6 .oh-banner--yellow .oh-banner__head {
+    background: #f7bf09;
+}
+
+.oh-ie6 .oh-banner--orange .oh-banner__head {
+    background: #ff7f00;
+}
+
+.oh-ie6 .oh-banner--red .oh-banner__head {
+    background: #d54b23;
+}
+
+.oh-ie6 .oh-banner--green .oh-banner__head {
+    background: #778d48;
+}
+
+.oh-ie6 .oh-banner__title {
+    display: block;
+    font-size: 28px;
+}
+
+.oh-ie6 .oh-banner__note {
+    margin: 8px 10px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.oh-ie6 .oh-banner__cta {
+    display: block;
+    margin: 0 10px 10px 10px;
+    padding: 6px 0;
+    border: 1px solid #208bbe;
+    background: #42acdf;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+}
+
+.oh-ie6 .oh-page-header {
+    text-align: center;
+}
+
+.oh-ie6 .oh-page-title {
+    font-size: 40px;
+}
+
+.oh-ie6 .oh-auth {
+    width: 520px;
+    margin: 30px auto 0 auto;
+    text-align: left;
+}
+
+.oh-ie6 .oh-clear {
+    clear: both;
+    height: 1px;
+    overflow: hidden;
+}
+
+.oh-ie6 .oh-footer {
+    text-align: center;
+}
+
+.oh-ie6 .oh-footer__inner {
+    text-align: left;
+}

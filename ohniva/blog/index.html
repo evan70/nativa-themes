@@ -1249,16 +1249,54 @@ sub,sup,.oh-c-label {
     }
 }
 /*
- * ohniva.css > the client design, written for the IE6 baseline first.
+ * ohniva.css > the template's look for every modern browser.
  *
- * The reference is the live ohniva-show.sk page measured on 2026-11-27: a
- * fixed 920 px stage, a black patterned ground, one fire photograph, textured
- * blue-grey panels, Georgia display type, gold headings and cyan links.
+ * The reference is the live ohniva-show.sk page measured on 2026-11-27 and
+ * 2026-11-28: a 920 px stage, a fixed fire backdrop, textured blue-grey
+ * panels, the production rail, four order banners, an eight-photo gallery,
+ * Lato body copy and Latin Modern display type.
  *
- * No flex, grid, custom properties, calc, pseudo-elements, fixed positioning,
- * transparency or shadows. The layout is floats and fixed pixel widths, the
- * same tools the 2013 reference used, and every class carries oh-.
+ * This sheet is not written for IE6. Those rules live in ohniva-ie6.css,
+ * scoped under .oh-ie6, the class the init script sets when it recognises
+ * IE6. The modern sheet keeps the shadows, gradients and rounded corners the
+ * template had.
  */
+
+@font-face {
+    font-family: "latolight";
+    src: url("/themes/ohniva/fonts/lato-light-responsive.eot");
+    src: local("Lato Light"),
+        url("/themes/ohniva/fonts/lato-light-responsive.eot?#iefix") format("embedded-opentype"),
+        url("/themes/ohniva/fonts/lato-light-responsive.woff") format("woff"),
+        url("/themes/ohniva/fonts/lato-light-responsive.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "latobold";
+    src: url("/themes/ohniva/fonts/lato-bold-responsive.eot");
+    src: local("Lato Bold"),
+        url("/themes/ohniva/fonts/lato-bold-responsive.eot?#iefix") format("embedded-opentype"),
+        url("/themes/ohniva/fonts/lato-bold-responsive.woff") format("woff"),
+        url("/themes/ohniva/fonts/lato-bold-responsive.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "latin_modern_roman_dunhil10Rg";
+    src: url("/themes/ohniva/fonts/lmromandunh10-regular-resp.eot");
+    src: local("Latin Modern Roman Dunhill"),
+        url("/themes/ohniva/fonts/lmromandunh10-regular-resp.eot?#iefix") format("embedded-opentype"),
+        url("/themes/ohniva/fonts/lmromandunh10-regular-resp.woff") format("woff"),
+        url("/themes/ohniva/fonts/lmromandunh10-regular-resp.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "engebrechtreregular";
+    src: url("/themes/ohniva/fonts/engebrechtre.eot");
+    src: local("Engebrechtre"),
+        url("/themes/ohniva/fonts/engebrechtre.eot?#iefix") format("embedded-opentype"),
+        url("/themes/ohniva/fonts/engebrechtre.woff") format("woff"),
+        url("/themes/ohniva/fonts/engebrechtre.ttf") format("truetype");
+}
 
 html {
     background: #000;
@@ -1269,7 +1307,7 @@ body {
     padding: 0;
     background: #000 url("/themes/ohniva/pattern.gif") repeat;
     color: #c9d2d6;
-    font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 17px;
     line-height: 1.55;
 }
@@ -1277,11 +1315,13 @@ body {
 a {
     color: #74c2e1;
     text-decoration: none;
+    transition: color .31s, text-shadow .31s;
 }
 
 a:hover {
     color: #d9ecee;
-    text-decoration: underline;
+    text-decoration: none;
+    text-shadow: 1px 0 0 #300;
 }
 
 img {
@@ -1298,7 +1338,7 @@ img {
 
 h1, h2, h3, h4, h5, h6 {
     margin: 0 0 14px 0;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: "latin_modern_roman_dunhil10Rg", Georgia, "Times New Roman", Times, serif;
     font-weight: normal;
     color: #f4f1e8;
     line-height: 1.15;
@@ -1313,12 +1353,15 @@ h2 {
 }
 
 h3 {
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 24px;
     color: #c6a460;
-    letter-spacing: 1px;
+    letter-spacing: 1.3px;
+    text-shadow: 1px 0 0 #300;
 }
 
 h4 {
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 19px;
     color: #e7cc7e;
 }
@@ -1344,7 +1387,7 @@ blockquote {
 }
 
 code, pre {
-    font-family: "Courier New", Courier, monospace;
+    font-family: Menlo, Monaco, "Courier New", monospace;
     font-size: 14px;
     color: #e7cc7e;
 }
@@ -1383,9 +1426,10 @@ hr {
 input, textarea, select {
     padding: 8px;
     border: 1px solid #5a6a73;
+    border-radius: 3px;
     background: #171b1e;
     color: #f4f1e8;
-    font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
 }
 
@@ -1401,11 +1445,14 @@ label {
 button, .oh-button {
     padding: 9px 18px;
     border: 1px solid #208bbe;
+    border-radius: 3px;
     background: #42acdf;
+    background: linear-gradient(#42acdf, #2295cc);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2);
     color: #fff;
-    font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-family: "latobold", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
-    font-weight: bold;
+    text-shadow: 0 1px #1b75a0;
     cursor: pointer;
 }
 
@@ -1415,22 +1462,34 @@ button:hover, .oh-button:hover {
     text-decoration: none;
 }
 
-.oh-backdrop {
+.oh-skip {
     position: absolute;
+    left: -9999px;
+    top: 0;
+}
+
+.oh-backdrop {
+    position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    bottom: 0;
+    right: 0;
     overflow: hidden;
     z-index: 0;
 }
 
-.oh-backdrop__photo {
+.oh-slide {
     position: absolute;
     left: 0;
     top: 0;
-    float: none;
-    width: 40%;
+    width: 600px;
+    height: 400px;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+}
+
+.oh-slide--active {
+    opacity: 1;
 }
 
 .oh-header {
@@ -1480,18 +1539,20 @@ button:hover, .oh-button:hover {
 .oh-nav__link {
     display: block;
     padding: 4px 0;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 21px;
+    font-family: "latin_modern_roman_dunhil10Rg", Georgia, "Times New Roman", Times, serif;
+    font-size: 25px;
     color: #fcedc0;
 }
 
 .oh-nav__link:hover {
     color: #d9ecee;
     text-decoration: none;
+    text-shadow: 1px 0 0 #300;
 }
 
 .oh-nav__item--current .oh-nav__link {
     color: #e7cc7e;
+    text-shadow: 0 0 15px #b7fbff;
 }
 
 .oh-actions {
@@ -1516,6 +1577,13 @@ button:hover, .oh-button:hover {
     margin: 0 0 0 12px;
 }
 
+.oh-shadow {
+    float: none;
+    width: 100%;
+    height: 79px;
+    background: transparent url("/themes/ohniva/header-shadow.png") no-repeat center top;
+}
+
 .oh-main {
     position: relative;
     float: none;
@@ -1526,41 +1594,265 @@ button:hover, .oh-button:hover {
 .oh-content {
     width: 920px;
     margin: 0 auto;
-    padding: 20px 0 50px 0;
+    padding: 10px 0 50px 0;
 }
 
 .oh-stage {
     float: none;
-    width: 614px;
-    margin-left: 306px;
+    width: 920px;
 }
 
-.oh-hero {
-    float: none;
-    padding: 44px 0 30px 0;
+.oh-page-header {
+    margin: 18px 0;
     text-align: center;
 }
 
-.oh-hero__title {
-    margin: 0 auto;
+.oh-page-title {
+    margin: 0;
     font-size: 40px;
     color: #f4f1e8;
 }
 
-.oh-hero__lede {
-    margin: 16px auto 0 auto;
-    width: 620px;
-    color: #c6a460;
-    font-size: 18px;
+.oh-page-title b {
+    font-family: "latobold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    color: #f4f1e8;
 }
 
-.oh-eyebrow {
+.oh-layout {
+    float: none;
+    width: 100%;
+}
+
+.oh-main-col {
+    float: left;
+    display: inline;
+    width: 600px;
+}
+
+.oh-rail {
+    float: right;
+    display: inline;
+    width: 290px;
+}
+
+.oh-panel {
+    float: none;
+    margin: 0 0 20px 0;
+    border: 1px solid #1b1b1b;
+    background: #2f3336 url("/themes/ohniva/panel-blue.jpg") repeat;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .9);
+}
+
+.oh-panel__header {
+    padding: 12px 16px;
+    background: #3d5f78 url("/themes/ohniva/panel-blue.jpg") repeat;
+    border-bottom: 1px solid #1b1b1b;
+}
+
+.oh-panel__title {
+    margin: 0;
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    color: #e7cc7e;
+    letter-spacing: 1px;
+}
+
+.oh-panel__body {
+    padding: 18px 22px;
+    color: #c9d2d6;
+}
+
+.oh-panel__footer {
+    padding: 10px 16px;
+    background: #24282b url("/themes/ohniva/pattern.gif") repeat -70% 0;
+    border-top: 1px solid #000;
+    color: #aeb8bd;
+    font-size: 13px;
+    text-align: right;
+}
+
+.oh-welcome {
+    margin: 0 0 20px 0;
+}
+
+.oh-welcome__lead {
+    font-size: 21px;
+    color: #c6a460;
+}
+
+.oh-welcome__sign {
+    margin: 0;
+    text-align: right;
+    color: #9fb6c2;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.oh-welcome__footer .oh-welcome__mark {
+    color: #e7cc7e;
+}
+
+.oh-gallery {
+    margin: 18px 0 5px 0;
+}
+
+.oh-gallery__link {
+    float: left;
+    display: block;
+    margin: 0 5px 5px 0;
+    border: 1px solid #1b1b1b;
+}
+
+.oh-gallery__link:hover {
+    border-color: #74c2e1;
+}
+
+.oh-gallery__thumb {
+    display: block;
+    width: 140px;
+    height: 105px;
+}
+
+.oh-banners {
+    margin: 10px 0 0 0;
+}
+
+.oh-banner {
+    float: left;
+    display: inline;
+    width: 140px;
+    margin: 0 6px 0 0;
+    border: 1px solid #1b1b1b;
+    border-radius: 0 0 8px 8px;
+    background: #2f3336 url("/themes/ohniva/panel-blue.jpg") repeat;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+}
+
+.oh-banner--yellow .oh-banner__head {
+    background: #f7bf09;
+    background: linear-gradient(#ffe177, #f7bf09);
+    border-color: #d8b538;
+}
+
+.oh-banner--orange .oh-banner__head {
+    background: #ff7f00;
+    background: linear-gradient(#ffa14f, #ff7f00);
+    border-color: #e57300;
+}
+
+.oh-banner--red .oh-banner__head {
+    background: #d54b23;
+    background: linear-gradient(#ef5f54, #d54b23);
+    border-color: #b43d1b;
+}
+
+.oh-banner--green .oh-banner__head {
+    background: #778d48;
+    background: linear-gradient(#9ca46b, #778d48);
+    border-color: #697c41;
+}
+
+.oh-banner__head {
+    padding: 10px 10px 6px 10px;
+    border-bottom: 1px solid #1b1b1b;
+    text-align: center;
+}
+
+.oh-banner__kicker {
+    display: block;
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #3b2a10;
+}
+
+.oh-banner__title {
+    display: block;
+    font-family: "engebrechtreregular", Georgia, "Times New Roman", Times, serif;
+    font-size: 28px;
+    font-weight: normal;
+    color: #3b2a10;
+    line-height: 1.05;
+    text-shadow: 0 0 1px #fff;
+}
+
+.oh-banner__note {
+    margin: 8px 10px;
+    color: #c9d2d6;
+    font-size: 12px;
+    text-align: center;
+}
+
+.oh-banner__cta {
+    display: block;
+    margin: 0 10px 10px 10px;
+    padding: 6px 0;
+    border: 1px solid #208bbe;
+    border-radius: 3px;
+    background: #42acdf;
+    background: linear-gradient(#42acdf, #2295cc);
+    box-shadow: inset 0 11px 0 -10px #61b9e4;
+    color: #fff;
+    font-family: "latobold", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    text-align: center;
+    text-shadow: 0 1px #1b75a0;
+}
+
+.oh-banner__cta:hover {
+    color: #fff;
+    border-color: #1b75a0;
+}
+
+.oh-rail__group {
+    float: none;
     margin: 0 0 14px 0;
+    border: 1px solid #1b1b1b;
+    background: #2a3034 url("/themes/ohniva/panel-dark.jpg") repeat;
+}
+
+.oh-rail__head {
+    padding: 8px 12px;
+    background: #3d5f78 url("/themes/ohniva/panel-blue.jpg") repeat;
+    border-bottom: 1px solid #1b1b1b;
+}
+
+.oh-rail__title {
+    margin: 0;
+    font-family: "latolight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    letter-spacing: 1px;
+    color: #e7cc7e;
+}
+
+.oh-rail__body {
+    padding: 9px 12px;
+}
+
+.oh-rail__body p {
+    margin: 0 0 6px 0;
+}
+
+.oh-rail__link {
+    display: block;
+    padding: 3px 0;
+    border-top: 1px solid #5c5c5c;
     color: #74c2e1;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 16px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 15px;
+}
+
+.oh-rail__link:hover {
+    color: #d9ecee;
+}
+
+.oh-rail__foot {
+    padding: 5px 12px;
+    background: #24282b url("/themes/ohniva/pattern.gif") repeat -70% 0;
+    border-top: 1px solid #000;
+    color: #aeb8bd;
+    font-size: 11px;
+    text-align: right;
 }
 
 .oh-section {
@@ -1592,6 +1884,7 @@ button:hover, .oh-button:hover {
     border: 0;
     border-bottom: 1px solid #394247;
     background: transparent;
+    box-shadow: none;
 }
 
 .oh-section .oh-card__body {
@@ -1604,66 +1897,6 @@ button:hover, .oh-button:hover {
 
 .oh-section .oh-pager {
     padding: 0 22px 18px 22px;
-}
-
-.oh-panel {
-    float: none;
-    margin: 0 0 20px 0;
-    border: 1px solid #1b1b1b;
-    background: #2f3336 url("/themes/ohniva/panel-blue.jpg") repeat;
-}
-
-.oh-panel__header {
-    padding: 12px 16px;
-    background: #3d5f78 url("/themes/ohniva/panel-blue.jpg") repeat;
-    border-bottom: 1px solid #1b1b1b;
-}
-
-.oh-panel__title {
-    margin: 0;
-    font-size: 24px;
-    color: #e7cc7e;
-    letter-spacing: 1px;
-}
-
-.oh-panel__body {
-    padding: 18px 22px;
-    color: #c9d2d6;
-}
-
-.oh-panel__footer {
-    padding: 10px 16px;
-    background: #24282b url("/themes/ohniva/panel-dark.jpg") repeat;
-    border-top: 1px solid #1b1b1b;
-    color: #aeb8bd;
-    font-size: 13px;
-    text-align: right;
-}
-
-.oh-panel__toggle {
-    float: right;
-    display: inline;
-    width: 34px;
-    height: 26px;
-    padding: 4px 0 0 0;
-    background: #42acdf;
-    border: 1px solid #208bbe;
-    text-align: center;
-}
-
-.oh-bars {
-    display: block;
-    width: 18px;
-    margin: 0 auto;
-    padding: 2px 0 0 0;
-}
-
-.oh-bars__bar {
-    display: block;
-    width: 18px;
-    height: 2px;
-    margin: 0 0 3px 0;
-    background: #fff;
 }
 
 .oh-grid {
@@ -1738,6 +1971,7 @@ button:hover, .oh-button:hover {
     margin: 0 8px 8px 0;
     padding: 3px 9px;
     border: 1px solid #4f82b4;
+    border-radius: 3px;
     color: #74c2e1;
     font-size: 13px;
 }
@@ -1855,6 +2089,7 @@ button:hover, .oh-button:hover {
     margin: 0 0 16px 0;
     padding: 12px 16px;
     border: 1px solid #9c3f35;
+    border-radius: 3px;
     background: #3a1f1c;
     color: #f3c8c1;
 }
@@ -1876,8 +2111,9 @@ button:hover, .oh-button:hover {
     float: none;
     width: 100%;
     padding: 20px 0 28px 0;
-    border-top: 1px solid #24282b;
+    border-top: 1px solid rgba(255, 255, 255, .2);
     background: #0b0c0d url("/themes/ohniva/panel-dark.jpg") repeat;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .5);
     color: #9fb6c2;
     font-size: 13px;
     z-index: 2;
@@ -1900,12 +2136,6 @@ button:hover, .oh-button:hover {
     float: left;
 }
 
-.oh-skip {
-    position: absolute;
-    left: -9999px;
-    top: 0;
-}
-
 .oh-error {
     padding: 40px 0;
     text-align: center;
@@ -1914,7 +2144,7 @@ button:hover, .oh-button:hover {
 .oh-error__status {
     margin: 0 0 10px 0;
     color: #c6a460;
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: "latin_modern_roman_dunhil10Rg", Georgia, "Times New Roman", Times, serif;
     font-size: 64px;
 }
 
@@ -1922,6 +2152,12 @@ button:hover, .oh-button:hover {
     clear: both;
     height: 1px;
     overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .oh-slide {
+        transition: none;
+    }
 }
 
 @media (max-width: 960px) {
@@ -1932,7 +2168,12 @@ button:hover, .oh-button:hover {
 
     .oh-stage {
         width: auto;
-        margin: 0;
+    }
+
+    .oh-main-col, .oh-rail {
+        float: none;
+        display: block;
+        width: auto;
     }
 
     .oh-stage p img,
@@ -1945,8 +2186,8 @@ button:hover, .oh-button:hover {
         height: 100px;
     }
 
-    .oh-backdrop__photo {
-        width: 100%;
+    .oh-backdrop {
+        display: none;
     }
 
     .oh-nav {
@@ -1959,10 +2200,6 @@ button:hover, .oh-button:hover {
 
     .oh-nav__link {
         font-size: 18px;
-    }
-
-    .oh-hero__lede {
-        width: auto;
     }
 
     .oh-auth {
@@ -2001,11 +2238,11 @@ button:hover, .oh-button:hover {
         padding: 9px 0;
     }
 
-    .oh-hero {
-        padding: 26px 0 18px 0;
+    .oh-page-header {
+        margin: 10px 0;
     }
 
-    .oh-hero__title {
+    .oh-page-title {
         font-size: 30px;
     }
 
@@ -2015,6 +2252,17 @@ button:hover, .oh-button:hover {
 
     .oh-panel__body {
         padding: 14px 16px;
+    }
+
+    .oh-banner {
+        float: none;
+        display: block;
+        width: auto;
+        margin: 0 0 10px 0;
+    }
+
+    .oh-gallery__link {
+        margin: 0 3px 3px 0;
     }
 
     .oh-footer__nav, .oh-footer__copy {
@@ -2027,17 +2275,262 @@ button:hover, .oh-button:hover {
         margin: 0 12px 0 0;
     }
 }
+/*
+ * ohniva-ie6.css > the template's IE6 rules, scoped to the browser.
+ *
+ * The original page wrapped <html> in conditional comments and gave IE6 its
+ * own class. The kernel owns <html>, so the init script sets `oh-ie6` instead
+ * and every rule here is scoped under it: a modern browser inlines the file
+ * and matches nothing.
+ *
+ * The rules are CSS2.1 with the star and underscore hacks the template used.
+ * No expression rule, no fixed positioning, no transparency, no shadows and no
+ * min-width or min-height. The star and underscore hacks are kept on purpose:
+ * they are what makes a float layout in IE6 work.
+ */
+
+.oh-ie6 {
+    *zoom: 1;
+}
+
+.oh-ie6 body {
+    font-size: 17px;
+    text-align: center;
+}
+
+.oh-ie6 .oh-skip {
+    position: absolute;
+    left: -9999px;
+}
+
+.oh-ie6 .oh-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.oh-ie6 .oh-slide {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    width: 600px;
+    height: 400px;
+}
+
+.oh-ie6 .oh-slide--active {
+    display: block;
+}
+
+.oh-ie6 .oh-header,
+.oh-ie6 .oh-main,
+.oh-ie6 .oh-footer {
+    position: relative;
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-header__inner,
+.oh-ie6 .oh-content,
+.oh-ie6 .oh-footer__inner {
+    width: 920px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.oh-ie6 .oh-shadow {
+    height: 79px;
+    background: transparent url("/themes/ohniva/header-shadow.png") no-repeat center top;
+}
+
+.oh-ie6 .oh-brand {
+    float: left;
+    display: inline;
+    width: 125px;
+    height: 125px;
+}
+
+.oh-ie6 .oh-brand__logo {
+    display: block;
+    width: 125px;
+    height: 125px;
+}
+
+.oh-ie6 .oh-nav {
+    float: right;
+    padding: 40px 0 0 0;
+    _padding: 38px 0 0 0;
+}
+
+.oh-ie6 .oh-nav__item {
+    float: left;
+    display: inline;
+    margin: 0 0 0 14px;
+}
+
+.oh-ie6 .oh-nav__link {
+    display: block;
+    _height: 1%;
+    color: #fcedc0;
+}
+
+.oh-ie6 .oh-layout {
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-main-col {
+    float: left;
+    display: inline;
+    width: 600px;
+}
+
+.oh-ie6 .oh-rail {
+    float: right;
+    display: inline;
+    width: 290px;
+}
+
+.oh-ie6 .oh-panel,
+.oh-ie6 .oh-rail__group,
+.oh-ie6 .oh-banner,
+.oh-ie6 .oh-card,
+.oh-ie6 .oh-section {
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-panel__header,
+.oh-ie6 .oh-rail__head,
+.oh-ie6 .oh-section__title {
+    background: #3d5f78 url("/themes/ohniva/panel-blue.jpg") repeat;
+}
+
+.oh-ie6 .oh-panel__body,
+.oh-ie6 .oh-welcome__body {
+    _height: 1%;
+}
+
+.oh-ie6 .oh-panel__footer,
+.oh-ie6 .oh-rail__foot {
+    background: #24282b url("/themes/ohniva/pattern.gif") repeat;
+}
+
+.oh-ie6 .oh-gallery {
+    *zoom: 1;
+}
+
+.oh-ie6 .oh-gallery__link {
+    float: left;
+    display: inline;
+    margin: 0 5px 5px 0;
+    border: 1px solid #1b1b1b;
+}
+
+.oh-ie6 .oh-gallery__thumb {
+    display: block;
+    width: 140px;
+    height: 105px;
+}
+
+.oh-ie6 .oh-banner {
+    float: left;
+    display: inline;
+    width: 140px;
+    _width: 142px;
+    margin: 0 6px 0 0;
+    border: 1px solid #1b1b1b;
+    background: #2f3336 url("/themes/ohniva/panel-blue.jpg") repeat;
+}
+
+.oh-ie6 .oh-banner__head {
+    padding: 10px 10px 6px 10px;
+    border-bottom: 1px solid #1b1b1b;
+    text-align: center;
+}
+
+.oh-ie6 .oh-banner--yellow .oh-banner__head {
+    background: #f7bf09;
+}
+
+.oh-ie6 .oh-banner--orange .oh-banner__head {
+    background: #ff7f00;
+}
+
+.oh-ie6 .oh-banner--red .oh-banner__head {
+    background: #d54b23;
+}
+
+.oh-ie6 .oh-banner--green .oh-banner__head {
+    background: #778d48;
+}
+
+.oh-ie6 .oh-banner__title {
+    display: block;
+    font-size: 28px;
+}
+
+.oh-ie6 .oh-banner__note {
+    margin: 8px 10px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.oh-ie6 .oh-banner__cta {
+    display: block;
+    margin: 0 10px 10px 10px;
+    padding: 6px 0;
+    border: 1px solid #208bbe;
+    background: #42acdf;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+}
+
+.oh-ie6 .oh-page-header {
+    text-align: center;
+}
+
+.oh-ie6 .oh-page-title {
+    font-size: 40px;
+}
+
+.oh-ie6 .oh-auth {
+    width: 520px;
+    margin: 30px auto 0 auto;
+    text-align: left;
+}
+
+.oh-ie6 .oh-clear {
+    clear: both;
+    height: 1px;
+    overflow: hidden;
+}
+
+.oh-ie6 .oh-footer {
+    text-align: center;
+}
+
+.oh-ie6 .oh-footer__inner {
+    text-align: left;
+}
 
 
 </style>
 <script>/*
- * ohniva.js > the pre-body shiv IE6 needs.
+ * ohniva.js > the pre-body shiv IE6 needs, and the backdrop rotation.
  *
  * The kernel writes an HTML5 document and a theme cannot wrap <html> in a
  * conditional comment, so the element names are created here, before the
  * parser reaches the body. IE6 is identified by the three capabilities it
- * lacks; the class lets the stylesheet apply GIF mattes and fixed widths
- * without a selector hack.
+ * lacks; the class lets the IE6 stylesheet apply its rules and lets a modern
+ * browser match nothing from it.
+ *
+ * The rotation is classic DOM script on purpose: no bundle, no dependency and
+ * no work at all when the reader asked for less motion. The first slide is
+ * marked active in the markup, so a document without JavaScript still has a
+ * backdrop.
  */
 (function () {
     var d = document;
@@ -2051,12 +2544,74 @@ button:hover, .oh-button:hover {
     if (d.all && !window.XMLHttpRequest && !d.querySelector) {
         d.documentElement.className += ' oh-ie6';
     }
+
+    function slides() {
+        var found = [];
+        var all;
+        var n;
+
+        if (d.querySelectorAll) {
+            all = d.querySelectorAll('.oh-slide');
+
+            for (n = 0; n < all.length; n++) {
+                found.push(all[n]);
+            }
+
+            return found;
+        }
+
+        all = d.getElementsByTagName('img');
+
+        for (n = 0; n < all.length; n++) {
+            if ((' ' + all[n].className + ' ').indexOf(' oh-slide ') !== -1) {
+                found.push(all[n]);
+            }
+        }
+
+        return found;
+    }
+
+    function start() {
+        var list = slides();
+        var current = 0;
+        var tick;
+
+        if (list.length < 2) {
+            return;
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+
+        tick = function () {
+            list[current].className = list[current].className.replace(' oh-slide--active', '');
+            current = (current + 1) % list.length;
+            list[current].className += ' oh-slide--active';
+        };
+
+        window.setInterval(tick, 6000);
+    }
+
+    if (window.addEventListener) {
+        window.addEventListener('load', start, false);
+    } else if (window.attachEvent) {
+        window.attachEvent('onload', start);
+    }
 })();
 </script>
 </head>
 <body class="ohniva-shell">
     <a class="oh-skip" href="#content">Preskočiť na obsah</a>
-<div class="oh-backdrop" aria-hidden="true"><img class="oh-backdrop__photo" src="../../themes/ohniva/fire.jpg" alt="" width="600" height="400"></div>
+<div class="oh-backdrop" aria-hidden="true"><img class="oh-slide oh-slide--active" src="../../themes/ohniva/slides/01-ohen.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/02-chodule.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/03-opera.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/04-saso.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/05-zonglovanie.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/06-serm.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/07-svetelna-show.jpg" alt="" width="600" height="400">
+<img class="oh-slide" src="../../themes/ohniva/slides/08-fakir.jpg" alt="" width="600" height="400">
+</div>
 <header class="oh-header">
 <div class="oh-header__inner">
 <a class="oh-brand" href="../"><img class="oh-brand__logo" src="../../themes/ohniva/logo.gif" alt="Nativa PHP Core" width="125" height="125"></a>
@@ -2065,10 +2620,15 @@ button:hover, .oh-button:hover {
 <div class="oh-clear"></div>
 </div>
 </header>
+<div class="oh-shadow" aria-hidden="true"></div>
 <main class="oh-main" id="content">
 <div class="oh-content">
 <div class="oh-stage">
-<section class="oh-section"><h1 class="oh-section__title">Články</h1><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">Themes as modules, not as a folder</a></h2><p class="oh-card__meta">2026-10-18</p><p class="oh-card__excerpt">A theme is a slice with a class, assets and tests — installed and removed by the same tool as anything else.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">A contract without customers</a></h2><p class="oh-card__meta">2026-10-15</p><p class="oh-card__excerpt">What a kernel port promises when there is nobody to ask: the shape of the answer, not the answer.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">The last sudo I needed</a></h2><p class="oh-card__meta">2026-10-12</p><p class="oh-card__excerpt">One command, one reason, and the deploy that no longer asks for either.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">A philosophy of fewer layers</a></h2><p class="oh-card__meta">2026-10-09</p><p class="oh-card__excerpt">Every layer you add is a place a request can stop being yours.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">OPcache and the JIT, measured</a></h2><p class="oh-card__meta">2026-10-05</p><p class="oh-card__excerpt">What a warm opcode cache actually buys on one module, and where the JIT does not help at all.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">The C API is not the only extension point</a></h2><p class="oh-card__meta">2026-10-01</p><p class="oh-card__excerpt">A module can be a directory. That is the whole extension model, and it is enough.</p></div></div></section>
+<div class="oh-page-header"><h1 class="oh-page-title">Články</h1></div><div class="oh-layout">
+<div class="oh-main-col"><div class="oh-panel"><div class="oh-panel__body"><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">Themes as modules, not as a folder</a></h2><p class="oh-card__meta">2026-10-18</p><p class="oh-card__excerpt">A theme is a slice with a class, assets and tests — installed and removed by the same tool as anything else.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">A contract without customers</a></h2><p class="oh-card__meta">2026-10-15</p><p class="oh-card__excerpt">What a kernel port promises when there is nobody to ask: the shape of the answer, not the answer.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">The last sudo I needed</a></h2><p class="oh-card__meta">2026-10-12</p><p class="oh-card__excerpt">One command, one reason, and the deploy that no longer asks for either.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">A philosophy of fewer layers</a></h2><p class="oh-card__meta">2026-10-09</p><p class="oh-card__excerpt">Every layer you add is a place a request can stop being yours.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">OPcache and the JIT, measured</a></h2><p class="oh-card__meta">2026-10-05</p><p class="oh-card__excerpt">What a warm opcode cache actually buys on one module, and where the JIT does not help at all.</p></div></div><div class="oh-card"><div class="oh-card__body"><h2 class="oh-card__title"><a href="../article/">The C API is not the only extension point</a></h2><p class="oh-card__meta">2026-10-01</p><p class="oh-card__excerpt">A module can be a directory. That is the whole extension model, and it is enough.</p></div></div></div></div></div>
+<aside class="oh-rail" aria-label="Produkcie"><div class="oh-rail__group"><div class="oh-rail__head"><h4 class="oh-rail__title">ŠAŠO</h4></div><div class="oh-rail__body"><p><a class="oh-rail__link" href="../../renesancny-saso">Renesančný šašo</a></p><p><a class="oh-rail__link" href="../../stredoveky-saso">Stredoveký šašo</a></p></div><div class="oh-rail__foot">&copy; ohniva-show.sk</div></div><div class="oh-rail__group"><div class="oh-rail__head"><h4 class="oh-rail__title">CHODULIARI</h4></div><div class="oh-rail__body"><p><a class="oh-rail__link" href="../../najvyssi-remeselnici">Najvyšší remeselníci</a></p><p><a class="oh-rail__link" href="../../iny-choduliari">Iní choduliari</a></p></div><div class="oh-rail__foot">&copy; ohniva-show.sk</div></div><div class="oh-rail__group"><div class="oh-rail__head"><h4 class="oh-rail__title">ŽONGLÉRSKO-SVETELNÉ SHOW</h4></div><div class="oh-rail__body"><p><a class="oh-rail__link" href="../../denna-zonglerska-show">Denná show</a></p><p><a class="oh-rail__link" href="../../svetelna-show">Svetelná show</a></p></div><div class="oh-rail__foot">&copy; ohniva-show.sk</div></div><div class="oh-rail__group"><div class="oh-rail__head"><h4 class="oh-rail__title">OHŇOVÁ SHOW</h4></div><div class="oh-rail__body"><p><a class="oh-rail__link" href="../../ohnova-show">Vážna ohňová show</a></p><p><a class="oh-rail__link" href="../../vesela-ohnova-show">Veselá ohňová show</a></p><p><a class="oh-rail__link" href="../../bojova-ohnova-show">Bojová ohňová show</a></p></div><div class="oh-rail__foot">&copy; ohniva-show.sk</div></div></aside><div class="oh-clear"></div>
+</div>
+
 </div>
 </div>
 </main>
